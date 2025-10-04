@@ -7,6 +7,10 @@ Get your Global Sharks website running in 5 minutes!
 ## ⚡ Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/sharks-from-space.git
+cd sharks-from-space
+
 # Install dependencies
 npm install
 ```
@@ -20,7 +24,7 @@ npm install
 npm run dev
 ```
 
-Open browser to: **http://localhost:3000**
+Open browser to: **http://localhost:5173**
 
 ---
 
@@ -36,33 +40,33 @@ npm run preview
 
 ---
 
-## 🌐 Deploy to globalsharks.wiki
+## 🌐 Deploy to Your Domain
 
-### Option 1: Netlify (Easiest)
+### Option 1: GitHub Pages (Recommended)
 
 1. Push code to GitHub (already done ✅)
-2. Go to [netlify.com](https://netlify.com)
-3. Click "Add new site" → "Import from Git"
-4. Select your repository
-5. Build settings:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-6. Click "Deploy"
-7. Add custom domain: `globalsharks.wiki`
-8. Update DNS at Porkbun with Netlify's records
+2. GitHub Actions will automatically deploy
+3. Configure DNS in your domain registrar:
+   ```
+   A     @     185.199.108.153
+   A     @     185.199.109.153
+   A     @     185.199.110.153
+   A     @     185.199.111.153
+   CNAME  www   YOUR_USERNAME.github.io
+   ```
+4. Add custom domain in GitHub Pages settings
 
 ### Option 2: One-Command Deploy
 
 ```bash
-# Install Netlify CLI
-npm install -g netlify-cli
+# Make deploy script executable
+chmod +x deploy.sh
 
-# Login
-netlify login
-
-# Deploy
-netlify deploy --prod
+# Run interactive deployment
+./deploy.sh
 ```
+
+Choose your platform (Netlify, Vercel, or GitHub Pages) and follow the prompts.
 
 ---
 
@@ -70,18 +74,18 @@ netlify deploy --prod
 
 ```
 src/
-├── components/
-│   ├── Navigation.jsx      # Top navigation bar
-│   └── Hero.jsx            # Landing page
-├── pages/
+├── components/          # Reusable UI components
+│   ├── Navigation.jsx   # Top navigation bar
+│   └── Hero.jsx         # Landing page
+├── pages/               # Main application pages
 │   ├── MathematicalModel.jsx   # SFI equations & validation
 │   ├── DataVisualization.jsx   # Interactive maps & charts
 │   ├── TagSensor.jsx           # Tag architecture & specs
 │   └── About.jsx               # Project information
 ├── styles/
-│   └── index.css           # Global styles
-├── App.jsx                 # Main app component
-└── main.jsx               # Entry point
+│   └── index.css        # Global styles
+├── App.jsx              # Main app component
+└── main.jsx            # Entry point
 ```
 
 ---
@@ -91,6 +95,7 @@ src/
 ### Update Colors
 
 Edit `tailwind.config.js`:
+
 ```javascript
 colors: {
   ocean: { /* your ocean colors */ },
@@ -105,28 +110,22 @@ colors: {
 3. Add route in `renderPage()` function
 4. Add navigation item in `Navigation.jsx`
 
-### Modify Mathematical Model
-
-Edit `src/pages/MathematicalModel.jsx` to update:
-- Equations
-- Charts
-- Performance metrics
-- Validation data
-
 ---
 
 ## 🐛 Troubleshooting
 
-### Port 3000 already in use
+### Port 5173 already in use
+
 ```bash
-# Kill process on port 3000
-npx kill-port 3000
+# Kill process on port 5173
+npx kill-port 5173
 
 # Or use different port
-npm run dev -- --port 3001
+npm run dev -- --port 3000
 ```
 
 ### Dependencies not installing
+
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules package-lock.json
@@ -134,6 +133,7 @@ npm install
 ```
 
 ### Build errors
+
 ```bash
 # Check Node version (need 18+)
 node --version
@@ -148,27 +148,31 @@ nvm use 18
 ## 📊 Features Overview
 
 ### Page 1: Home
+
 - Hero section with project overview
-- Feature cards (clickable)
+- Feature cards for each pipeline
 - Project statistics
-- Call-to-action button
+- Call-to-action buttons
 
 ### Page 2: Mathematical Model
+
 - SFI equation display
 - Stochastic model explanation
-- Interactive charts (Eddy profiles, Temperature)
+- Interactive charts
 - Performance metrics
 - Cross-validation results
 
 ### Page 3: Data Visualization
+
 - Real-time foraging hotspot map
-- Satellite data overlays (SWOT, MODIS, PACE)
+- Satellite data overlays
 - 3D ocean profile analysis
 - Temporal trends
 - Correlation analysis
 - Statistical heatmaps
 
 ### Page 4: Tag Sensor
+
 - 3D capsule architecture diagram
 - Sensing principle explanation
 - Real-time feeding event simulation
@@ -177,6 +181,7 @@ nvm use 18
 - Species applications
 
 ### Page 5: About
+
 - Project mission statement
 - Challenge description
 - Three-pipeline architecture
@@ -186,32 +191,25 @@ nvm use 18
 
 ---
 
-## 🎯 Next Steps
-
-1. **Customize Content**: Update team info in `About.jsx`
-2. **Add Real Data**: Replace synthetic data with actual NASA datasets
-3. **Deploy**: Push to production using Netlify/Vercel
-4. **Test**: Verify all pages load correctly
-5. **Share**: Submit to NASA Space Apps Challenge
-
----
-
 ## 📚 Resources
 
 - [React Documentation](https://react.dev)
 - [Vite Documentation](https://vitejs.dev)
 - [Tailwind CSS](https://tailwindcss.com)
-- [Recharts](https://recharts.org)
-- [Framer Motion](https://www.framer.com/motion)
+- [NASA APIs](https://api.nasa.gov)
+- [Deployment Guide](./DEPLOYMENT.md)
+- [Project Summary](./PROJECT-SUMMARY.md)
 
 ---
+
+<div align="center">
 
 ## 🎉 You're Ready!
 
 Your professional data visualization website is ready to showcase your NASA Space Apps project!
 
-**Live URL**: https://globalsharks.wiki
+**Live URL**: [example.com](https://example.com)
 
----
+[Back to Documentation](./README.md)
 
-**Need help?** Check `DEPLOYMENT.md` for detailed deployment instructions.
+</div>

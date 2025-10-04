@@ -2,7 +2,7 @@
 
 **Team:** Space Pirates  
 **Challenge:** NASA Space Apps Challenge 2025  
-**Domain:** [globalsharks.wiki](https://globalsharks.wiki)  
+**Domain:** [example.com](https://example.com)  
 **Date:** September 2025
 
 ---
@@ -13,12 +13,12 @@ All three pipelines are fully implemented and ready for deployment!
 
 ### Pipeline Status
 
-| Pipeline | Status | Completion |
-|----------|--------|------------|
-| 📐 Mathematical Model | ✅ Complete | 100% |
-| 🗺️ Data Visualization | ✅ Complete | 100% |
-| 🔬 Tag Sensor | ✅ Complete | 100% |
-| 🌐 Website & Deployment | ✅ Complete | 100% |
+| Pipeline                | Status      | Completion |
+| ----------------------- | ----------- | ---------- |
+| 📐 Mathematical Model   | ✅ Complete | 100%       |
+| 🗺️ Data Visualization   | ✅ Complete | 100%       |
+| 🔬 Tag Sensor           | ✅ Complete | 100%       |
+| 🌐 Website & Deployment | ✅ Complete | 100%       |
 
 ---
 
@@ -29,6 +29,7 @@ All three pipelines are fully implemented and ready for deployment!
 **Shark Foraging Index (SFI) - 3D Spatiotemporal Prediction**
 
 A novel stochastic model that predicts shark foraging locations using:
+
 - **Prey Availability (45%)** - Chlorophyll-a based, depth-scaled
 - **Temperature Suitability (30%)** - Gaussian thermal preference
 - **Eddy Energy (25%)** - 3D mesoscale eddy field
@@ -36,6 +37,7 @@ A novel stochastic model that predicts shark foraging locations using:
 **Key Innovation:** First model to integrate vertical ocean structure with dynamic thermocline adjustment.
 
 **Performance:**
+
 - R² = 0.83
 - AUC = 0.87
 - Precision = 0.82
@@ -48,6 +50,7 @@ A novel stochastic model that predicts shark foraging locations using:
 **Real-time NASA Satellite Data Platform**
 
 Interactive web-based visualization system displaying:
+
 - Foraging hotspot prediction maps
 - 3D ocean depth profiles (0-1000m)
 - Temporal trend analysis
@@ -55,6 +58,7 @@ Interactive web-based visualization system displaying:
 - Real-time satellite data feeds
 
 **Data Sources:**
+
 - NASA SWOT (Sea Surface Height)
 - NASA MODIS (Chlorophyll-a)
 - NASA PACE (Phytoplankton)
@@ -69,6 +73,7 @@ Interactive web-based visualization system displaying:
 Revolutionary non-invasive capsule for real-time feeding detection:
 
 **Hardware:**
+
 - pH sensor (ISFET) - Feeding event detection
 - NH₄⁺ sensor (ISE) - Prey type classification
 - STM32L0 MCU - Ultra-low-power processing
@@ -76,11 +81,13 @@ Revolutionary non-invasive capsule for real-time feeding detection:
 - Li-SOCl₂ battery - 6-12 month deployment
 
 **Sensing Principle:**
+
 - Baseline shark stomach pH: ~1.5
 - Feeding event pH rise: ~3.0
 - NH₄⁺ from protein digestion classifies prey type
 
 **Data Output:**
+
 - Event timestamp & GPS location
 - Prey type (fish/squid/crustacean)
 - Feeding intensity
@@ -94,17 +101,18 @@ Revolutionary non-invasive capsule for real-time feeding detection:
 
 ### Pages Implemented
 
-| Page | Route | Description |
-|------|-------|-------------|
-| Home | `/` | Hero page with project overview |
-| Mathematical Model | `/model` | SFI equations & validation |
-| Data Visualization | `/visualization` | NASA satellite data displays |
-| Tag Sensor | `/tag` | Hardware design & specifications |
-| About | `/about` | Complete project information |
+| Page               | Route            | Description                      |
+| ------------------ | ---------------- | -------------------------------- |
+| Home               | `/`              | Hero page with project overview  |
+| Mathematical Model | `/model`         | SFI equations & validation       |
+| Data Visualization | `/visualization` | NASA satellite data displays     |
+| Tag Sensor         | `/tag`           | Hardware design & specifications |
+| About              | `/about`         | Complete project information     |
 
 ### Technology Stack
 
 **Frontend:**
+
 - React 18
 - Vite (build tool)
 - Tailwind CSS
@@ -113,9 +121,10 @@ Revolutionary non-invasive capsule for real-time feeding detection:
 - Three.js (3D graphics)
 
 **Deployment:**
+
 - GitHub Actions (CI/CD)
 - Netlify/Vercel/GitHub Pages support
-- Custom domain: globalsharks.wiki
+- Custom domain configured
 
 ---
 
@@ -134,12 +143,12 @@ deploy.sh                        # Interactive deploy script
 
 ### Deployment Options
 
-| Platform | Cost | SSL | CDN | Setup Difficulty |
-|----------|------|-----|-----|------------------|
-| **GitHub Pages** | Free | ✅ Auto | ✅ Yes | Easy |
-| **Netlify** | Free | ✅ Auto | ✅ Yes | Easy |
-| **Vercel** | Free | ✅ Auto | ✅ Yes | Easy |
-| **Porkbun Hosting** | Paid | ✅ Available | ❌ No | Medium |
+| Platform           | Cost | SSL          | CDN    | Setup Difficulty |
+| ------------------ | ---- | ------------ | ------ | ---------------- |
+| **GitHub Pages**   | Free | ✅ Auto      | ✅ Yes | Easy             |
+| **Netlify**        | Free | ✅ Auto      | ✅ Yes | Easy             |
+| **Vercel**         | Free | ✅ Auto      | ✅ Yes | Easy             |
+| **Direct Hosting** | Paid | ✅ Available | ❌ No  | Medium           |
 
 **Recommended:** GitHub Pages (already configured with Actions)
 
@@ -156,7 +165,7 @@ git commit -m "Deploy Sharks from Space"
 git push origin main
 
 # 2. GitHub Actions automatically deploys
-# 3. Configure DNS in Porkbun (see DNS-SETUP.md)
+# 3. Configure DNS in your registrar (see DNS-SETUP.md)
 # 4. Enable custom domain in GitHub Pages settings
 ```
 
@@ -171,11 +180,11 @@ Choose your platform and follow prompts!
 
 ---
 
-## 📋 DNS Configuration for Porkbun
+## 📋 DNS Configuration
 
 ### For GitHub Pages
 
-Add these records in Porkbun DNS:
+Add these records in your DNS settings:
 
 ```
 Type    Host    Answer                  TTL
@@ -191,7 +200,7 @@ Replace `USERNAME` with your GitHub username.
 ### Enable HTTPS
 
 1. GitHub repo → Settings → Pages
-2. Custom domain: `globalsharks.wiki`
+2. Custom domain configured
 3. Check "Enforce HTTPS"
 4. Wait 5-15 minutes for SSL certificate
 
@@ -202,16 +211,19 @@ Replace `USERNAME` with your GitHub username.
 ## 📚 Documentation Created
 
 ### User Documentation
+
 - ✅ **README.md** - Complete project overview
 - ✅ **QUICKSTART.md** - 5-minute setup guide
 - ✅ **DEPLOYMENT.md** - Full deployment instructions
 - ✅ **PROJECT-SUMMARY.md** - This file!
 
 ### Technical Documentation
+
 - ✅ **docs/DNS-SETUP.md** - DNS configuration guide
 - ✅ **docs/project-overview.md** - Project specifications
 
 ### Configuration Files
+
 - ✅ **package.json** - Dependencies & scripts
 - ✅ **vite.config.js** - Build configuration
 - ✅ **tailwind.config.js** - Styling configuration
@@ -224,6 +236,7 @@ Replace `USERNAME` with your GitHub username.
 ## 🎨 Design Features
 
 ### Visual Design
+
 - Modern, professional dark theme
 - Gradient text effects
 - Animated components (Framer Motion)
@@ -231,6 +244,7 @@ Replace `USERNAME` with your GitHub username.
 - Glassmorphism UI elements
 
 ### User Experience
+
 - Smooth page transitions
 - Interactive charts & graphs
 - Hover tooltips with detailed info
@@ -238,6 +252,7 @@ Replace `USERNAME` with your GitHub username.
 - Clear navigation
 
 ### Accessibility
+
 - Semantic HTML
 - ARIA labels
 - Keyboard navigation support
@@ -251,11 +266,13 @@ Replace `USERNAME` with your GitHub username.
 ### Novel Contributions
 
 1. **3D Shark Foraging Model**
+
    - First spatiotemporal SFI with vertical structure
    - Dynamic thermocline integration
    - Stochastic intensity framework
 
 2. **Gastric Bio-Sensor**
+
    - Non-invasive feeding detection
    - Prey type classification via chemistry
    - Ultra-low-power (6-12 month deployment)
@@ -271,24 +288,28 @@ Replace `USERNAME` with your GitHub username.
 ## 🌍 Impact & Applications
 
 ### Marine Conservation
+
 - Identify critical habitats
 - Design marine protected areas
 - Monitor ecosystem health
 - Track climate change impacts
 
 ### Coastal Safety
+
 - Predict shark activity zones
 - Real-time coastal warnings
 - Reduce human-shark conflicts
 - Public education
 
 ### Fisheries Management
+
 - Minimize shark bycatch
 - Optimize fishing zones
 - Sustainable practices
 - Eco-tourism support
 
 ### Scientific Research
+
 - Validate ocean models
 - Advance bio-logging tech
 - Cross-species applications
@@ -299,6 +320,7 @@ Replace `USERNAME` with your GitHub username.
 ## 📊 Project Metrics
 
 ### Code Statistics
+
 - **Pages:** 5 (Home, Model, Viz, Tag, About)
 - **Components:** 50+ React components
 - **Lines of Code:** ~3,500 LOC
@@ -306,6 +328,7 @@ Replace `USERNAME` with your GitHub username.
 - **Build Size:** ~500 KB (minified + gzipped)
 
 ### Content
+
 - **Mathematical Equations:** 15+ displayed
 - **Visualizations:** 10+ interactive charts
 - **Documentation:** 2,000+ lines
@@ -335,13 +358,15 @@ Replace `USERNAME` with your GitHub username.
 ## 🚀 Next Steps (Post-Deployment)
 
 ### Immediate (Week 1)
-1. ✅ Deploy to globalsharks.wiki
-2. ✅ Configure DNS in Porkbun
+
+1. ✅ Deploy to custom domain
+2. ✅ Configure DNS
 3. ✅ Enable SSL/HTTPS
 4. ✅ Test on multiple devices
 5. ✅ Submit to NASA Space Apps
 
 ### Short-term (Month 1)
+
 - [ ] Add Google Analytics
 - [ ] Set up uptime monitoring
 - [ ] Add social media meta tags (Open Graph)
@@ -349,6 +374,7 @@ Replace `USERNAME` with your GitHub username.
 - [ ] Write blog post
 
 ### Medium-term (6 Months)
+
 - [ ] Connect to real NASA APIs
 - [ ] Add real-time satellite data updates
 - [ ] Implement user accounts
@@ -356,6 +382,7 @@ Replace `USERNAME` with your GitHub username.
 - [ ] Mobile app prototype
 
 ### Long-term (1 Year)
+
 - [ ] Field test tag sensors
 - [ ] Deploy pilot study (50 tags)
 - [ ] Publish scientific paper
@@ -367,33 +394,36 @@ Replace `USERNAME` with your GitHub username.
 ## 💡 Key Achievements
 
 ### Technical
+
 ✅ Built professional React web application  
 ✅ Integrated NASA satellite data visualization  
 ✅ Designed novel hardware system  
 ✅ Created mathematical prediction model  
 ✅ Implemented CI/CD pipeline  
-✅ Comprehensive documentation  
+✅ Comprehensive documentation
 
 ### Scientific
+
 ✅ 3D spatiotemporal foraging model  
 ✅ Multi-mission satellite data fusion  
 ✅ Novel bio-sensor design  
 ✅ Prey classification algorithm  
-✅ Validation framework  
+✅ Validation framework
 
 ### Impact
+
 ✅ Marine conservation tool  
 ✅ Coastal safety application  
 ✅ Fisheries management support  
 ✅ Scientific research platform  
-✅ Educational resource  
+✅ Educational resource
 
 ---
 
 ## 📞 Project Information
 
-**Website:** https://globalsharks.wiki  
-**Domain Registrar:** Porkbun  
+**Website:** https://example.com  
+**Domain Registrar:** [Your registrar]  
 **Hosting:** GitHub Pages / Netlify / Vercel  
 **Repository:** [Add your GitHub repo URL]
 
@@ -423,7 +453,8 @@ Replace `USERNAME` with your GitHub username.
 
 This project represents a complete, production-ready solution for shark foraging prediction using NASA satellite data. All three pipelines (mathematical model, data visualization, and tag sensor) are fully implemented and documented.
 
-The website is ready for deployment to **globalsharks.wiki** and includes:
+The website is ready for deployment and includes:
+
 - Professional, modern UI
 - Interactive visualizations
 - Comprehensive documentation
@@ -461,8 +492,8 @@ chmod +x deploy.sh       # Make deploy script executable
 ```
 
 For detailed instructions, see:
+
 - **Setup:** QUICKSTART.md
 - **Deployment:** DEPLOYMENT.md
 - **DNS:** docs/DNS-SETUP.md
 - **Project Info:** README.md
-
