@@ -14,6 +14,7 @@ Your NASA Space Apps Challenge project is now fully built and ready to deploy!
 **Total Size:** ~850 KB (gzipped: ~218 KB)
 
 ### Build Artifacts:
+
 - ✅ `dist/index.html` (1.17 KB)
 - ✅ CSS bundles (92.46 KB → 14.45 KB gzipped)
 - ✅ JavaScript bundles (755 KB → 204 KB gzipped)
@@ -28,15 +29,19 @@ Your NASA Space Apps Challenge project is now fully built and ready to deploy!
 **Status:** Configured and ready!
 
 #### What's Set Up:
+
 - ✅ GitHub Actions workflow (`.github/workflows/deploy.yml`)
 - ✅ CNAME file for custom domain (`globalsharks.wiki`)
 - ✅ All code pushed to `main` branch
 
 #### Next Steps:
+
 1. Go to your GitHub repository settings:
+
    - **URL:** https://github.com/Kso6/Space-Pirates-NASA-Hackathon-2025/settings/pages
 
 2. Configure GitHub Pages:
+
    - **Source:** GitHub Actions
    - **Branch:** Leave as default (Actions will handle it)
 
@@ -51,6 +56,7 @@ Your NASA Space Apps Challenge project is now fully built and ready to deploy!
 ### Option 2: Netlify (Easy One-Click Deploy)
 
 #### Steps:
+
 1. Go to [netlify.com](https://netlify.com) and sign in with GitHub
 
 2. Click "Add new site" → "Import an existing project"
@@ -58,6 +64,7 @@ Your NASA Space Apps Challenge project is now fully built and ready to deploy!
 3. Select your repository: `Space-Pirates-NASA-Hackathon-2025`
 
 4. Build settings:
+
    ```
    Build command: npm run build
    Publish directory: dist
@@ -77,17 +84,21 @@ Your NASA Space Apps Challenge project is now fully built and ready to deploy!
 ### Option 3: Vercel (Fast & Easy)
 
 #### Steps:
+
 1. Install Vercel CLI (if not installed):
+
    ```bash
    npm install -g vercel
    ```
 
 2. Deploy:
+
    ```bash
    vercel --prod
    ```
 
 3. Add custom domain:
+
    ```bash
    vercel domains add globalsharks.wiki
    ```
@@ -101,6 +112,7 @@ Your NASA Space Apps Challenge project is now fully built and ready to deploy!
 ## 🌐 DNS Configuration for globalsharks.wiki
 
 ### Current Status:
+
 - ✅ Domain registered: `globalsharks.wiki`
 - ✅ Registrar: Porkbun
 - ✅ Nameservers configured
@@ -133,6 +145,7 @@ TTL: 600
 ```
 
 3. Add CNAME record:
+
 ```
 Type: CNAME
 Host: www
@@ -143,6 +156,7 @@ TTL: 600
 4. Wait 10-60 minutes for DNS propagation
 
 ### For Netlify/Vercel:
+
 - Follow the DNS instructions provided by the platform
 - They will give you specific nameservers or CNAME records
 
@@ -167,6 +181,7 @@ TTL: 600
 ## 📊 What's Included
 
 ### Pages (5 Total):
+
 1. ✅ **Home** - Hero section with project overview
 2. ✅ **Mathematical Model** - Interactive SFI equations and validation
 3. ✅ **Data Visualization** - NASA satellite data with 3D ocean profiles
@@ -174,6 +189,7 @@ TTL: 600
 5. ✅ **About** - Detailed project information and team
 
 ### Features:
+
 - ✅ Responsive design (mobile, tablet, desktop)
 - ✅ Interactive charts (Recharts)
 - ✅ Smooth animations (Framer Motion)
@@ -205,6 +221,7 @@ npm run deploy:vercel       # Deploy to Vercel
 ## 📈 Performance Metrics
 
 ### Bundle Sizes (Gzipped):
+
 - HTML: 0.56 KB
 - CSS: 14.45 KB
 - JavaScript: 204 KB total
@@ -213,6 +230,7 @@ npm run deploy:vercel       # Deploy to Vercel
   - Application code: 53.41 KB
 
 ### Optimizations:
+
 - ✅ Code splitting (5 chunks)
 - ✅ Tree shaking
 - ✅ Minification
@@ -225,12 +243,14 @@ npm run deploy:vercel       # Deploy to Vercel
 ## 🎯 Post-Deployment Tasks
 
 ### Immediate (0-1 hour):
+
 1. Enable GitHub Pages in repository settings
 2. Update DNS records at Porkbun
 3. Verify site loads at temporary GitHub Pages URL
 4. Check all pages and links work
 
 ### Short-term (1-24 hours):
+
 1. Wait for DNS propagation
 2. Verify custom domain works (globalsharks.wiki)
 3. Enable HTTPS (automatic with GitHub Pages)
@@ -238,6 +258,7 @@ npm run deploy:vercel       # Deploy to Vercel
 5. Share link with team
 
 ### Before NASA Space Apps Submission:
+
 1. Take screenshots of each page
 2. Record demo video (3-5 minutes)
 3. Test all interactive features
@@ -249,6 +270,7 @@ npm run deploy:vercel       # Deploy to Vercel
 ## 🐛 Troubleshooting
 
 ### Site not loading after deployment:
+
 - Check GitHub Actions tab for workflow status
 - Verify DNS records are correct
 - Clear browser cache (Ctrl+Shift+Delete)
@@ -256,15 +278,18 @@ npm run deploy:vercel       # Deploy to Vercel
 - Try incognito/private browsing
 
 ### Pages show 404 on refresh:
+
 - ✅ Already fixed with `_redirects` file in `public/`
 - GitHub Pages should handle SPA routing automatically
 
 ### Build fails on GitHub Actions:
+
 - Check the Actions tab for error logs
 - Verify `package.json` has all dependencies
 - Ensure Node version is 18+ in workflow
 
 ### Custom domain not working:
+
 - Verify CNAME file exists in `public/` directory
 - Check DNS records at Porkbun
 - Wait for propagation (up to 48 hours)
@@ -287,36 +312,41 @@ npm run deploy:vercel       # Deploy to Vercel
 Your NASA Space Apps Challenge project is production-ready!
 
 ### Final URLs:
+
 - **GitHub Repo:** https://github.com/Kso6/Space-Pirates-NASA-Hackathon-2025
 - **GitHub Pages:** https://kso6.github.io/Space-Pirates-NASA-Hackathon-2025/
 - **Custom Domain:** https://globalsharks.wiki (after DNS setup)
 
 ### What You've Built:
+
 ✅ Professional data visualization website  
 ✅ Three integrated pipelines (Model + Visualization + Tag)  
 ✅ Interactive charts and 3D ocean profiles  
 ✅ Complete technical documentation  
 ✅ Production-optimized build  
-✅ Automated deployment pipeline  
+✅ Automated deployment pipeline
 
 ---
 
 ## 🚀 Next Action Items:
 
 1. **Enable GitHub Pages** (2 minutes)
+
    - Go to repository settings
    - Enable Pages with GitHub Actions source
 
 2. **Update DNS** (5 minutes)
+
    - Add A records and CNAME at Porkbun
    - Wait for propagation
 
 3. **Verify Deployment** (10 minutes)
+
    - Check site loads
    - Test all pages
    - Verify mobile responsive
 
-4. **Share with Team** 
+4. **Share with Team**
    - Send link to teammates
    - Prepare for NASA Space Apps submission
 
@@ -325,4 +355,3 @@ Your NASA Space Apps Challenge project is production-ready!
 **You're ready to launch! 🦈🛰️🌊**
 
 Made with ❤️ by Team Space Pirates
-

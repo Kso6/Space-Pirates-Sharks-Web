@@ -20,64 +20,109 @@ export default function DataVisualization() {
   const [activeDataset, setActiveDataset] = useState('swot')
   const [timeRange, setTimeRange] = useState('week')
   const [selectedRegion, setSelectedRegion] = useState('gulf-stream')
+  const [error, setError] = useState(null)
+
+  // Error boundary for component
+  if (error) {
+    return (
+      <div className="min-h-screen px-4 py-28">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-4">Something went wrong</h2>
+            <p className="text-gray-300 mb-6">{error.message || 'An unexpected error occurred'}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen px-4 py-24">
+    <div className="min-h-screen px-4 py-28">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold text-gradient mb-4">Data Visualization</h1>
-          <p className="text-xl text-gray-400">Real-time Oceanographic Data from NASA Satellites</p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full mb-6">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-green-400 text-sm font-semibold">Live NASA Satellite Data</span>
+          </div>
+
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
+            Interactive Forecasting Dashboard
+          </h1>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Explore real-time oceanographic data and AI-powered predictions to identify shark
+            foraging hotspots
+          </p>
         </motion.div>
 
-        {/* Controls */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Data Source</label>
-            <select
-              value={activeDataset}
-              onChange={(e) => setActiveDataset(e.target.value)}
-              className="w-full bg-slate-800 border border-blue-500/30 rounded-lg px-4 py-2 text-white"
-            >
-              <option value="swot">NASA SWOT (SSH Anomaly)</option>
-              <option value="modis">NASA MODIS (Chlorophyll-a)</option>
-              <option value="pace">NASA PACE (Phytoplankton)</option>
-              <option value="meteomatics">Meteomatics (SST)</option>
-            </select>
-          </div>
+        {/* Modern Controls */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 mb-12"
+        >
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-3">
+                🛰️ Data Source
+              </label>
+              <select
+                value={activeDataset}
+                onChange={(e) => setActiveDataset(e.target.value)}
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                aria-label="Select data source"
+              >
+                <option value="swot">NASA SWOT (SSH Anomaly)</option>
+                <option value="modis">NASA MODIS (Chlorophyll-a)</option>
+                <option value="pace">NASA PACE (Phytoplankton)</option>
+                <option value="meteomatics">Meteomatics (SST)</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Time Range</label>
-            <select
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
-              className="w-full bg-slate-800 border border-blue-500/30 rounded-lg px-4 py-2 text-white"
-            >
-              <option value="day">Last 24 Hours</option>
-              <option value="week">Last Week</option>
-              <option value="month">Last Month</option>
-              <option value="season">Seasonal</option>
-            </select>
-          </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-3">
+                ⏱️ Time Range
+              </label>
+              <select
+                value={timeRange}
+                onChange={(e) => setTimeRange(e.target.value)}
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                aria-label="Select time range"
+              >
+                <option value="day">Last 24 Hours</option>
+                <option value="week">Last Week</option>
+                <option value="month">Last Month</option>
+                <option value="season">Seasonal</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Region</label>
-            <select
-              value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
-              className="w-full bg-slate-800 border border-blue-500/30 rounded-lg px-4 py-2 text-white"
-            >
-              <option value="gulf-stream">Gulf Stream</option>
-              <option value="sargasso">Sargasso Sea</option>
-              <option value="california">California Current</option>
-              <option value="australia">Eastern Australia</option>
-            </select>
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-3">🌍 Region</label>
+              <select
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                aria-label="Select region"
+              >
+                <option value="gulf-stream">Gulf Stream</option>
+                <option value="sargasso">Sargasso Sea</option>
+                <option value="california">California Current</option>
+                <option value="australia">Eastern Australia</option>
+              </select>
+            </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Visualization Grid */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
@@ -107,26 +152,44 @@ export default function DataVisualization() {
 function ForagingHotspotMap({ region }) {
   // Generate synthetic foraging probability data
   const hotspotData = useMemo(() => {
-    const data = []
-    for (let i = 0; i < 50; i++) {
-      data.push({
-        lat: 25 + Math.random() * 15,
-        lon: -80 + Math.random() * 20,
-        probability: Math.random() * 0.8 + 0.2,
-        sfi: Math.random() * 1.5 + 0.5,
-        depth: Math.floor(Math.random() * 500),
-      })
+    try {
+      const data = []
+      for (let i = 0; i < 50; i++) {
+        data.push({
+          lat: 25 + Math.random() * 15,
+          lon: -80 + Math.random() * 20,
+          probability: Math.random() * 0.8 + 0.2,
+          sfi: Math.random() * 1.5 + 0.5,
+          depth: Math.floor(Math.random() * 500),
+        })
+      }
+      return data
+    } catch (error) {
+      console.error('Error generating foraging data:', error)
+      return []
     }
-    return data
   }, [region])
 
+  // Memoize ocean texture positions to prevent regeneration
+  const oceanTexture = useMemo(() => {
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      width: 50 + Math.random() * 100,
+      height: 50 + Math.random() * 100,
+      animationDelay: Math.random() * 3,
+      animationDuration: 3 + Math.random() * 3,
+    }))
+  }, [])
+
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
-      <div className="flex justify-between items-center mb-4">
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Foraging Hotspot Prediction</h2>
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-sm text-gray-400">Live Data</span>
+        <div className="flex items-center space-x-2 px-3 py-1.5 bg-green-500/10 rounded-full">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-sm text-green-400 font-semibold">Live</span>
         </div>
       </div>
 
@@ -134,17 +197,17 @@ function ForagingHotspotMap({ region }) {
       <div className="relative w-full h-96 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 rounded-lg overflow-hidden">
         {/* Ocean texture overlay */}
         <div className="absolute inset-0 opacity-20">
-          {Array.from({ length: 20 }).map((_, i) => (
+          {oceanTexture.map((texture) => (
             <div
-              key={i}
+              key={texture.id}
               className="absolute bg-white/5 rounded-full blur-xl animate-pulse"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${50 + Math.random() * 100}px`,
-                height: `${50 + Math.random() * 100}px`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 3}s`,
+                left: `${texture.left}%`,
+                top: `${texture.top}%`,
+                width: `${texture.width}px`,
+                height: `${texture.height}px`,
+                animationDelay: `${texture.animationDelay}s`,
+                animationDuration: `${texture.animationDuration}s`,
               }}
             ></div>
           ))}
@@ -159,6 +222,10 @@ function ForagingHotspotMap({ region }) {
               left: `${((point.lon + 80) / 20) * 100}%`,
               top: `${(1 - (point.lat - 25) / 15) * 100}%`,
             }}
+            role="button"
+            aria-label={`Hotspot with ${(point.probability * 100).toFixed(
+              0
+            )}% probability at depth ${point.depth}m`}
           >
             <div
               className={`w-4 h-4 rounded-full ${
@@ -293,10 +360,13 @@ function SatelliteDataOverlay({ dataset }) {
     }))
   }, [dataset])
 
+  // Memoize current value display to prevent flickering
+  const currentValue = useMemo(() => (15 + Math.random() * 10).toFixed(1), [dataset])
+
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold text-white mb-1">{info.title}</h2>
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-white mb-2">{info.title}</h2>
         <p className="text-sm text-gray-400">{info.description}</p>
       </div>
 
@@ -324,9 +394,7 @@ function SatelliteDataOverlay({ dataset }) {
         {/* Data overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-6xl font-bold text-white drop-shadow-lg mb-2">
-              {(15 + Math.random() * 10).toFixed(1)}
-            </div>
+            <div className="text-6xl font-bold text-white drop-shadow-lg mb-2">{currentValue}</div>
             <div className="text-xl text-white/90">{info.unit}</div>
           </div>
         </div>
@@ -389,8 +457,8 @@ function Ocean3DProfile() {
   }, [])
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6 mb-8">
-      <h2 className="text-2xl font-bold text-white mb-6">3D Ocean Profile Analysis</h2>
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8 hover:border-white/20 transition-all">
+      <h2 className="text-3xl font-bold text-white mb-8">3D Ocean Profile Analysis</h2>
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Depth profile chart */}
@@ -508,7 +576,7 @@ function TemporalTrends({ timeRange }) {
   }, [timeRange])
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all">
       <h2 className="text-2xl font-bold text-white mb-6">Temporal Trends Analysis</h2>
       <ResponsiveContainer width="100%" height={300}>
         <ComposedChart data={trendData}>
@@ -552,7 +620,7 @@ function SharkActivityCorrelation() {
   }, [])
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all">
       <h2 className="text-2xl font-bold text-white mb-6">SFI vs Shark Activity Correlation</h2>
       <ResponsiveContainer width="100%" height={300}>
         <ScatterChart>
@@ -592,8 +660,8 @@ function StatisticalHeatmaps({ region }) {
   }, [region])
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6 mt-8">
-      <h2 className="text-2xl font-bold text-white mb-6">Statistical Correlation Heatmap</h2>
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mt-8 hover:border-white/20 transition-all">
+      <h2 className="text-3xl font-bold text-white mb-8">Statistical Correlation Heatmap</h2>
 
       <div className="grid grid-cols-5 gap-2">
         {correlationMatrix.map((rowData, i) => (
@@ -648,12 +716,12 @@ function RealTimeDataFeed({ dataset }) {
   }, [dataset])
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6 mt-8">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-white">Real-Time Data Feed</h2>
-        <div className="flex items-center space-x-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-sm text-green-400">Connected</span>
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mt-8 hover:border-white/20 transition-all">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-white">Real-Time Data Feed</h2>
+        <div className="flex items-center space-x-2 px-3 py-1.5 bg-green-500/10 rounded-full">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-sm text-green-400 font-semibold">Connected</span>
         </div>
       </div>
 

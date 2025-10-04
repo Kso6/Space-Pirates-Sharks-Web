@@ -517,6 +517,7 @@ function PowerSection() {
             <Tooltip
               contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
               labelStyle={{ color: '#e2e8f0' }}
+              formatter={(value, name) => [value, name === 'power' ? 'Power (µW)' : name]}
             />
             <Area
               type="monotone"
@@ -524,6 +525,7 @@ function PowerSection() {
               stroke="#3b82f6"
               fill="#3b82f6"
               fillOpacity={0.6}
+              name="Power"
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -531,8 +533,8 @@ function PowerSection() {
         <div className="mt-6 bg-slate-700/50 rounded-lg p-6">
           <div className="grid md:grid-cols-3 gap-6 mb-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-400">{avgPower.toFixed(1)} µA</div>
-              <div className="text-sm text-gray-400">Average Current</div>
+              <div className="text-3xl font-bold text-blue-400">{avgPower.toFixed(1)} µW</div>
+              <div className="text-sm text-gray-400">Average Power</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-green-400">1200 mAh</div>
