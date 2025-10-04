@@ -452,3 +452,4 @@ function StatBox({ number, label }) {
     </div>
   )
 }
+

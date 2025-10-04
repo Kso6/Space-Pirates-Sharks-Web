@@ -325,3 +325,4 @@ A: "Students learn: Earth science (ocean currents), Biology (food webs), Data sc
 ---
 
 **FINAL TIP:** Practice showing the Education page first in your demo. Lead with the educational mission, then show the technical innovation. Judges need to see that this isn't just a cool tech project – it's a platform that will genuinely educate and empower students worldwide.
+
