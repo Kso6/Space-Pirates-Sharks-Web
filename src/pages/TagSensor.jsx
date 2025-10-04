@@ -426,9 +426,9 @@ function DataSection() {
           </div>
 
           <div className="bg-gradient-to-br from-blue-600/20 to-cyan-600/20 rounded-lg p-6 border-2 border-blue-500">
-            <h3 className="text-lg font-bold text-white mb-4">Feeding Event Mode</h3>
-            <ul className="space-y-2 text-gray-300">
-              <li>• Trigger: ΔpH ≥ 0.4 or pH > 2.5</li>
+              <h3 className="text-lg font-bold text-white mb-4">Feeding Event Mode</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Trigger: ΔpH ≥ 0.4 or pH &gt; 2.5</li>
               <li>• pH sampling: 1 Hz (high-rate)</li>
               <li>• NH₄⁺ sampling: 0.2 Hz</li>
               <li>• Duration: 30-45 minutes</li>

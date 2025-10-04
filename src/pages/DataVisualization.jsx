@@ -1,6 +1,20 @@
 import { motion } from 'framer-motion'
 import { useState, useMemo } from 'react'
-import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, Area, Line, Bar } from 'recharts'
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ZAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  ComposedChart,
+  Area,
+  Line,
+  Bar,
+} from 'recharts'
 
 export default function DataVisualization() {
   const [activeDataset, setActiveDataset] = useState('swot')
@@ -100,7 +114,7 @@ function ForagingHotspotMap({ region }) {
         lon: -80 + Math.random() * 20,
         probability: Math.random() * 0.8 + 0.2,
         sfi: Math.random() * 1.5 + 0.5,
-        depth: Math.floor(Math.random() * 500)
+        depth: Math.floor(Math.random() * 500),
       })
     }
     return data
@@ -115,13 +129,13 @@ function ForagingHotspotMap({ region }) {
           <span className="text-sm text-gray-400">Live Data</span>
         </div>
       </div>
-      
+
       {/* Simulated Map */}
       <div className="relative w-full h-96 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 rounded-lg overflow-hidden">
         {/* Ocean texture overlay */}
         <div className="absolute inset-0 opacity-20">
           {Array.from({ length: 20 }).map((_, i) => (
-            <div 
+            <div
               key={i}
               className="absolute bg-white/5 rounded-full blur-xl animate-pulse"
               style={{
@@ -130,7 +144,7 @@ function ForagingHotspotMap({ region }) {
                 width: `${50 + Math.random() * 100}px`,
                 height: `${50 + Math.random() * 100}px`,
                 animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 3}s`
+                animationDuration: `${3 + Math.random() * 3}s`,
               }}
             ></div>
           ))}
@@ -143,28 +157,34 @@ function ForagingHotspotMap({ region }) {
             className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
             style={{
               left: `${((point.lon + 80) / 20) * 100}%`,
-              top: `${(1 - (point.lat - 25) / 15) * 100}%`
+              top: `${(1 - (point.lat - 25) / 15) * 100}%`,
             }}
           >
-            <div 
+            <div
               className={`w-4 h-4 rounded-full ${
-                point.probability > 0.7 ? 'bg-red-500' : 
-                point.probability > 0.5 ? 'bg-yellow-500' : 
-                'bg-green-500'
+                point.probability > 0.7
+                  ? 'bg-red-500'
+                  : point.probability > 0.5
+                  ? 'bg-yellow-500'
+                  : 'bg-green-500'
               } animate-ping absolute`}
             ></div>
-            <div 
+            <div
               className={`w-4 h-4 rounded-full ${
-                point.probability > 0.7 ? 'bg-red-500' : 
-                point.probability > 0.5 ? 'bg-yellow-500' : 
-                'bg-green-500'
+                point.probability > 0.7
+                  ? 'bg-red-500'
+                  : point.probability > 0.5
+                  ? 'bg-yellow-500'
+                  : 'bg-green-500'
               }`}
             ></div>
-            
+
             {/* Tooltip */}
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 border border-blue-500/30 rounded-lg px-3 py-2 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
               <div className="text-white font-medium">SFI: {point.sfi.toFixed(2)}</div>
-              <div className="text-gray-400">Probability: {(point.probability * 100).toFixed(0)}%</div>
+              <div className="text-gray-400">
+                Probability: {(point.probability * 100).toFixed(0)}%
+              </div>
               <div className="text-gray-400">Depth: {point.depth}m</div>
             </div>
           </div>
@@ -176,7 +196,7 @@ function ForagingHotspotMap({ region }) {
           <div className="space-y-1">
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <span className="text-xs text-gray-300">High (>70%)</span>
+              <span className="text-xs text-gray-300">High (&gt;70%)</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
@@ -184,7 +204,7 @@ function ForagingHotspotMap({ region }) {
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-xs text-gray-300">Low (<50%)</span>
+              <span className="text-xs text-gray-300">Low (&lt;50%)</span>
             </div>
           </div>
         </div>
@@ -200,15 +220,21 @@ function ForagingHotspotMap({ region }) {
 
       <div className="mt-4 grid grid-cols-3 gap-4 text-center">
         <div>
-          <div className="text-2xl font-bold text-green-400">{hotspotData.filter(p => p.probability > 0.7).length}</div>
+          <div className="text-2xl font-bold text-green-400">
+            {hotspotData.filter((p) => p.probability > 0.7).length}
+          </div>
           <div className="text-xs text-gray-400">High Confidence Zones</div>
         </div>
         <div>
-          <div className="text-2xl font-bold text-blue-400">{(hotspotData.reduce((sum, p) => sum + p.sfi, 0) / hotspotData.length).toFixed(2)}</div>
+          <div className="text-2xl font-bold text-blue-400">
+            {(hotspotData.reduce((sum, p) => sum + p.sfi, 0) / hotspotData.length).toFixed(2)}
+          </div>
           <div className="text-xs text-gray-400">Avg SFI Score</div>
         </div>
         <div>
-          <div className="text-2xl font-bold text-cyan-400">{Math.floor(hotspotData.reduce((sum, p) => sum + p.depth, 0) / hotspotData.length)}m</div>
+          <div className="text-2xl font-bold text-cyan-400">
+            {Math.floor(hotspotData.reduce((sum, p) => sum + p.depth, 0) / hotspotData.length)}m
+          </div>
           <div className="text-xs text-gray-400">Avg Foraging Depth</div>
         </div>
       </div>
@@ -225,7 +251,7 @@ function SatelliteDataOverlay({ dataset }) {
           unit: 'cm',
           description: 'Surface Water and Ocean Topography mission data',
           color: 'from-blue-600 to-cyan-500',
-          range: '±50 cm'
+          range: '±50 cm',
         }
       case 'modis':
         return {
@@ -233,7 +259,7 @@ function SatelliteDataOverlay({ dataset }) {
           unit: 'mg/m³',
           description: 'Ocean color indicating phytoplankton concentration',
           color: 'from-green-600 to-emerald-500',
-          range: '0.01-10 mg/m³'
+          range: '0.01-10 mg/m³',
         }
       case 'pace':
         return {
@@ -241,7 +267,7 @@ function SatelliteDataOverlay({ dataset }) {
           unit: 'communities',
           description: 'Phytoplankton diversity and abundance',
           color: 'from-teal-600 to-cyan-500',
-          range: '5-12 types'
+          range: '5-12 types',
         }
       case 'meteomatics':
         return {
@@ -249,7 +275,7 @@ function SatelliteDataOverlay({ dataset }) {
           unit: '°C',
           description: 'High-resolution temperature data',
           color: 'from-red-600 to-orange-500',
-          range: '10-30°C'
+          range: '10-30°C',
         }
       default:
         return {}
@@ -263,7 +289,7 @@ function SatelliteDataOverlay({ dataset }) {
     return Array.from({ length: 24 }, (_, i) => ({
       hour: i,
       value: 15 + Math.sin(i / 3) * 5 + Math.random() * 3,
-      anomaly: Math.sin(i / 4) * 2 + Math.random() - 0.5
+      anomaly: Math.sin(i / 4) * 2 + Math.random() - 0.5,
     }))
   }, [dataset])
 
@@ -275,10 +301,12 @@ function SatelliteDataOverlay({ dataset }) {
       </div>
 
       {/* Satellite data gradient visualization */}
-      <div className={`relative w-full h-64 bg-gradient-to-br ${info.color} rounded-lg overflow-hidden mb-4`}>
+      <div
+        className={`relative w-full h-64 bg-gradient-to-br ${info.color} rounded-lg overflow-hidden mb-4`}
+      >
         <div className="absolute inset-0 opacity-30">
           {Array.from({ length: 10 }).map((_, i) => (
-            <div 
+            <div
               key={i}
               className="absolute bg-white/20 blur-2xl animate-pulse"
               style={{
@@ -287,7 +315,7 @@ function SatelliteDataOverlay({ dataset }) {
                 width: '150px',
                 height: '150px',
                 animationDelay: `${i * 0.3}s`,
-                animationDuration: '4s'
+                animationDuration: '4s',
               }}
             ></div>
           ))}
@@ -318,9 +346,13 @@ function SatelliteDataOverlay({ dataset }) {
       <ResponsiveContainer width="100%" height={200}>
         <ComposedChart data={satelliteData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-          <XAxis dataKey="hour" stroke="#94a3b8" label={{ value: 'Hour', position: 'insideBottom', offset: -5, fill: '#94a3b8' }} />
+          <XAxis
+            dataKey="hour"
+            stroke="#94a3b8"
+            label={{ value: 'Hour', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
+          />
           <YAxis stroke="#94a3b8" />
-          <Tooltip 
+          <Tooltip
             contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
             labelStyle={{ color: '#e2e8f0' }}
           />
@@ -332,7 +364,9 @@ function SatelliteDataOverlay({ dataset }) {
       <div className="mt-4 flex justify-between text-sm">
         <div>
           <span className="text-gray-400">Last Updated:</span>
-          <span className="text-white ml-2 font-mono">{new Date().toISOString().split('T')[0]}</span>
+          <span className="text-white ml-2 font-mono">
+            {new Date().toISOString().split('T')[0]}
+          </span>
         </div>
         <div>
           <span className="text-gray-400">Coverage:</span>
@@ -347,17 +381,17 @@ function Ocean3DProfile() {
   const depthProfile = useMemo(() => {
     return Array.from({ length: 20 }, (_, i) => ({
       depth: i * 50,
-      temperature: 25 - (i * 50 * 0.03) + Math.random() * 0.5,
+      temperature: 25 - i * 50 * 0.03 + Math.random() * 0.5,
       chlorophyll: Math.exp(-i / 3) * (5 + Math.random() * 2),
       eddyIntensity: Math.exp(-Math.pow((i * 50 - 200) / 100, 2)) * (0.8 + Math.random() * 0.4),
-      sfi: Math.random() * 1.2 + 0.3
+      sfi: Math.random() * 1.2 + 0.3,
     }))
   }, [])
 
   return (
     <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6 mb-8">
       <h2 className="text-2xl font-bold text-white mb-6">3D Ocean Profile Analysis</h2>
-      
+
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Depth profile chart */}
         <div>
@@ -365,10 +399,23 @@ function Ocean3DProfile() {
           <ResponsiveContainer width="100%" height={400}>
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis type="number" dataKey="temperature" name="Temperature" unit="°C" stroke="#94a3b8" />
-              <YAxis type="number" dataKey="depth" name="Depth" unit="m" reversed stroke="#94a3b8" />
+              <XAxis
+                type="number"
+                dataKey="temperature"
+                name="Temperature"
+                unit="°C"
+                stroke="#94a3b8"
+              />
+              <YAxis
+                type="number"
+                dataKey="depth"
+                name="Depth"
+                unit="m"
+                reversed
+                stroke="#94a3b8"
+              />
               <ZAxis type="number" dataKey="sfi" name="SFI" range={[50, 400]} />
-              <Tooltip 
+              <Tooltip
                 cursor={{ strokeDasharray: '3 3' }}
                 contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
                 labelStyle={{ color: '#e2e8f0' }}
@@ -386,15 +433,33 @@ function Ocean3DProfile() {
             <ComposedChart data={depthProfile} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis type="number" stroke="#94a3b8" />
-              <YAxis dataKey="depth" type="number" reversed stroke="#94a3b8" label={{ value: 'Depth (m)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }} />
-              <Tooltip 
+              <YAxis
+                dataKey="depth"
+                type="number"
+                reversed
+                stroke="#94a3b8"
+                label={{ value: 'Depth (m)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+              />
+              <Tooltip
                 contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
                 labelStyle={{ color: '#e2e8f0' }}
               />
               <Legend />
               <Bar dataKey="eddyIntensity" fill="#3b82f6" name="Eddy Intensity" />
-              <Line type="monotone" dataKey="chlorophyll" stroke="#10b981" strokeWidth={2} name="Chlorophyll-a" />
-              <Line type="monotone" dataKey="sfi" stroke="#ef4444" strokeWidth={2} name="SFI Score" />
+              <Line
+                type="monotone"
+                dataKey="chlorophyll"
+                stroke="#10b981"
+                strokeWidth={2}
+                name="Chlorophyll-a"
+              />
+              <Line
+                type="monotone"
+                dataKey="sfi"
+                stroke="#ef4444"
+                strokeWidth={2}
+                name="SFI Score"
+              />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -402,10 +467,30 @@ function Ocean3DProfile() {
 
       {/* Depth zone indicators */}
       <div className="grid grid-cols-4 gap-4 mt-6">
-        <DepthZoneCard zone="Epipelagic" depth="0-200m" color="from-blue-400 to-cyan-400" activity="High" />
-        <DepthZoneCard zone="Mesopelagic" depth="200-1000m" color="from-blue-600 to-blue-800" activity="Medium" />
-        <DepthZoneCard zone="Thermocline" depth="~200m" color="from-orange-500 to-red-500" activity="Peak" />
-        <DepthZoneCard zone="Deep Ocean" depth=">1000m" color="from-slate-700 to-slate-900" activity="Low" />
+        <DepthZoneCard
+          zone="Epipelagic"
+          depth="0-200m"
+          color="from-blue-400 to-cyan-400"
+          activity="High"
+        />
+        <DepthZoneCard
+          zone="Mesopelagic"
+          depth="200-1000m"
+          color="from-blue-600 to-blue-800"
+          activity="Medium"
+        />
+        <DepthZoneCard
+          zone="Thermocline"
+          depth="~200m"
+          color="from-orange-500 to-red-500"
+          activity="Peak"
+        />
+        <DepthZoneCard
+          zone="Deep Ocean"
+          depth=">1000m"
+          color="from-slate-700 to-slate-900"
+          activity="Low"
+        />
       </div>
     </div>
   )
@@ -418,7 +503,7 @@ function TemporalTrends({ timeRange }) {
       time: i,
       sfi: 0.5 + Math.sin(i / 3) * 0.3 + Math.random() * 0.2,
       feedingEvents: Math.floor(Math.random() * 5) + 1,
-      eddyActivity: 0.4 + Math.sin(i / 4) * 0.4 + Math.random() * 0.2
+      eddyActivity: 0.4 + Math.sin(i / 4) * 0.4 + Math.random() * 0.2,
     }))
   }, [timeRange])
 
@@ -430,14 +515,27 @@ function TemporalTrends({ timeRange }) {
           <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
           <XAxis dataKey="time" stroke="#94a3b8" />
           <YAxis stroke="#94a3b8" />
-          <Tooltip 
+          <Tooltip
             contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
             labelStyle={{ color: '#e2e8f0' }}
           />
           <Legend />
-          <Area type="monotone" dataKey="sfi" fill="#3b82f6" stroke="#3b82f6" fillOpacity={0.3} name="SFI Score" />
+          <Area
+            type="monotone"
+            dataKey="sfi"
+            fill="#3b82f6"
+            stroke="#3b82f6"
+            fillOpacity={0.3}
+            name="SFI Score"
+          />
           <Bar dataKey="feedingEvents" fill="#10b981" name="Feeding Events" />
-          <Line type="monotone" dataKey="eddyActivity" stroke="#ef4444" strokeWidth={2} name="Eddy Activity" />
+          <Line
+            type="monotone"
+            dataKey="eddyActivity"
+            stroke="#ef4444"
+            strokeWidth={2}
+            name="Eddy Activity"
+          />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -449,7 +547,7 @@ function SharkActivityCorrelation() {
     return Array.from({ length: 30 }, (_, i) => ({
       sfi: Math.random() * 1.5 + 0.3,
       activity: Math.random() * 8 + 2,
-      temp: 15 + Math.random() * 10
+      temp: 15 + Math.random() * 10,
     }))
   }, [])
 
@@ -462,7 +560,7 @@ function SharkActivityCorrelation() {
           <XAxis type="number" dataKey="sfi" name="SFI Score" stroke="#94a3b8" />
           <YAxis type="number" dataKey="activity" name="Activity Level" stroke="#94a3b8" />
           <ZAxis type="number" dataKey="temp" range={[50, 400]} name="Temperature" />
-          <Tooltip 
+          <Tooltip
             cursor={{ strokeDasharray: '3 3' }}
             contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
           />
@@ -474,7 +572,7 @@ function SharkActivityCorrelation() {
         <span className="text-gray-400">Correlation Coefficient (r): </span>
         <span className="text-green-400 font-bold text-lg">0.87</span>
         <span className="text-gray-400 ml-4">p-value: </span>
-        <span className="text-green-400 font-bold">< 0.001</span>
+        <span className="text-green-400 font-bold">&lt; 0.001</span>
       </div>
     </div>
   )
@@ -484,17 +582,19 @@ function StatisticalHeatmaps({ region }) {
   return (
     <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6 mt-8">
       <h2 className="text-2xl font-bold text-white mb-6">Statistical Correlation Heatmap</h2>
-      
+
       <div className="grid grid-cols-5 gap-2">
         {['SST', 'Chl-a', 'SSH', 'EKE', 'SFI'].map((row, i) => (
           <div key={row} className="contents">
             {['SST', 'Chl-a', 'SSH', 'EKE', 'SFI'].map((col, j) => {
               const value = i === j ? 1.0 : 0.3 + Math.random() * 0.6
-              const color = value > 0.7 ? 'bg-red-500' : value > 0.4 ? 'bg-yellow-500' : 'bg-green-500'
+              const color =
+                value > 0.7 ? 'bg-red-500' : value > 0.4 ? 'bg-yellow-500' : 'bg-green-500'
               return (
                 <div
                   key={`${row}-${col}`}
-                  className={`${color} p-4 rounded text-center text-white font-bold text-sm opacity-${Math.floor(value * 10) * 10}`}
+                  className={`${color} p-4 rounded text-center text-white font-bold text-sm`}
+                  style={{ opacity: value }}
                   title={`${row} vs ${col}: ${value.toFixed(2)}`}
                 >
                   {value.toFixed(2)}
@@ -508,7 +608,7 @@ function StatisticalHeatmaps({ region }) {
       <div className="mt-4 flex justify-center space-x-6 text-sm">
         <div className="flex items-center space-x-2">
           <div className="w-4 h-4 bg-red-500 rounded"></div>
-          <span className="text-gray-400">Strong (>0.7)</span>
+          <span className="text-gray-400">Strong (&gt;0.7)</span>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-4 h-4 bg-yellow-500 rounded"></div>
@@ -516,7 +616,7 @@ function StatisticalHeatmaps({ region }) {
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-4 h-4 bg-green-500 rounded"></div>
-          <span className="text-gray-400">Weak (<0.4)</span>
+          <span className="text-gray-400">Weak (&lt;0.4)</span>
         </div>
       </div>
     </div>
@@ -528,7 +628,7 @@ function RealTimeDataFeed({ dataset }) {
     return Array.from({ length: 5 }, (_, i) => ({
       time: new Date(Date.now() - i * 300000).toISOString(),
       value: (15 + Math.random() * 10).toFixed(2),
-      quality: Math.random() > 0.2 ? 'Good' : 'Fair'
+      quality: Math.random() > 0.2 ? 'Good' : 'Fair',
     }))
   }, [dataset])
 
@@ -551,9 +651,17 @@ function RealTimeDataFeed({ dataset }) {
             transition={{ delay: idx * 0.1 }}
             className="flex justify-between items-center bg-slate-700/50 rounded-lg p-3"
           >
-            <span className="text-gray-400 font-mono text-sm">{new Date(item.time).toLocaleTimeString()}</span>
+            <span className="text-gray-400 font-mono text-sm">
+              {new Date(item.time).toLocaleTimeString()}
+            </span>
             <span className="text-white font-bold">{item.value}</span>
-            <span className={`text-xs px-2 py-1 rounded ${item.quality === 'Good' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+            <span
+              className={`text-xs px-2 py-1 rounded ${
+                item.quality === 'Good'
+                  ? 'bg-green-500/20 text-green-400'
+                  : 'bg-yellow-500/20 text-yellow-400'
+              }`}
+            >
               {item.quality}
             </span>
           </motion.div>
@@ -572,4 +680,3 @@ function DepthZoneCard({ zone, depth, color, activity }) {
     </div>
   )
 }
-
