@@ -579,25 +579,40 @@ function SharkActivityCorrelation() {
 }
 
 function StatisticalHeatmaps({ region }) {
+  // Memoize correlation matrix to prevent regeneration on every render
+  const correlationMatrix = useMemo(() => {
+    const variables = ['SST', 'Chl-a', 'SSH', 'EKE', 'SFI']
+    return variables.map((row, i) =>
+      variables.map((col, j) => ({
+        row,
+        col,
+        value: i === j ? 1.0 : 0.3 + Math.random() * 0.6,
+      }))
+    )
+  }, [region])
+
   return (
     <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6 mt-8">
       <h2 className="text-2xl font-bold text-white mb-6">Statistical Correlation Heatmap</h2>
 
       <div className="grid grid-cols-5 gap-2">
-        {['SST', 'Chl-a', 'SSH', 'EKE', 'SFI'].map((row, i) => (
-          <div key={row} className="contents">
-            {['SST', 'Chl-a', 'SSH', 'EKE', 'SFI'].map((col, j) => {
-              const value = i === j ? 1.0 : 0.3 + Math.random() * 0.6
+        {correlationMatrix.map((rowData, i) => (
+          <div key={rowData[0].row} className="contents">
+            {rowData.map((cell) => {
               const color =
-                value > 0.7 ? 'bg-red-500' : value > 0.4 ? 'bg-yellow-500' : 'bg-green-500'
+                cell.value > 0.7
+                  ? 'bg-red-500'
+                  : cell.value > 0.4
+                  ? 'bg-yellow-500'
+                  : 'bg-green-500'
               return (
                 <div
-                  key={`${row}-${col}`}
+                  key={`${cell.row}-${cell.col}`}
                   className={`${color} p-4 rounded text-center text-white font-bold text-sm`}
-                  style={{ opacity: value }}
-                  title={`${row} vs ${col}: ${value.toFixed(2)}`}
+                  style={{ opacity: cell.value }}
+                  title={`${cell.row} vs ${cell.col}: ${cell.value.toFixed(2)}`}
                 >
-                  {value.toFixed(2)}
+                  {cell.value.toFixed(2)}
                 </div>
               )
             })}
