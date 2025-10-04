@@ -1,8 +1,80 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+import { Lesson1Content, Lesson2Content, Lesson3Content, Lesson4Content } from './LessonContent'
 
 export default function Education() {
   const [activeLesson, setActiveLesson] = useState(null)
+  const [showingContent, setShowingContent] = useState(false)
+
+  const handleStartLesson = (lessonNumber) => {
+    setShowingContent(true)
+    setActiveLesson(lessonNumber)
+  }
+
+  const handleBackToLessons = () => {
+    setShowingContent(false)
+    setActiveLesson(null)
+  }
+
+  // If showing lesson content, render full-screen lesson
+  if (showingContent && activeLesson) {
+    return (
+      <div className="min-h-screen px-4 py-28">
+        <div className="max-w-4xl mx-auto">
+          {/* Back button */}
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={handleBackToLessons}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"
+          >
+            <span>←</span>
+            <span>Back to Lessons</span>
+          </motion.button>
+
+          {/* Lesson header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="inline-block px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full mb-4">
+              <span className="text-purple-400 text-sm font-semibold">Lesson {activeLesson}</span>
+            </div>
+            <h1 className="text-4xl font-extrabold text-white mb-4">
+              {activeLesson === 1 && 'How Satellites Track Ocean Life'}
+              {activeLesson === 2 && 'The Shark Foraging Index'}
+              {activeLesson === 3 && 'Ocean Food Webs'}
+              {activeLesson === 4 && 'Bio-Sensor Technology'}
+            </h1>
+          </motion.div>
+
+          {/* Lesson content */}
+          <AnimatePresence mode="wait">
+            {activeLesson === 1 && <Lesson1Content key="lesson1" />}
+            {activeLesson === 2 && <Lesson2Content key="lesson2" />}
+            {activeLesson === 3 && <Lesson3Content key="lesson3" />}
+            {activeLesson === 4 && <Lesson4Content key="lesson4" />}
+          </AnimatePresence>
+
+          {/* Completion button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="mt-12 text-center"
+          >
+            <button
+              onClick={handleBackToLessons}
+              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all"
+            >
+              ✓ Complete Lesson
+            </button>
+          </motion.div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen px-4 py-28">
@@ -95,7 +167,15 @@ export default function Education() {
               topics={['NASA SWOT Mission', 'Sea Surface Height', 'Ocean Currents', 'Eddies']}
               description="Learn how satellites in space can detect underwater features that sharks use for hunting."
               isActive={activeLesson === 1}
-              onClick={() => setActiveLesson(activeLesson === 1 ? null : 1)}
+              onClick={(num) => {
+                if (activeLesson === 1) {
+                  setActiveLesson(null)
+                } else if (typeof num === 'number') {
+                  handleStartLesson(num)
+                } else {
+                  setActiveLesson(1)
+                }
+              }}
             />
 
             <LessonCard
@@ -106,7 +186,15 @@ export default function Education() {
               topics={['Mathematical Models', 'Data Analysis', 'Predictions', '3D Mapping']}
               description="Discover how we combine satellite data to predict where sharks will hunt next."
               isActive={activeLesson === 2}
-              onClick={() => setActiveLesson(activeLesson === 2 ? null : 2)}
+              onClick={(num) => {
+                if (activeLesson === 2) {
+                  setActiveLesson(null)
+                } else if (typeof num === 'number') {
+                  handleStartLesson(num)
+                } else {
+                  setActiveLesson(2)
+                }
+              }}
             />
 
             <LessonCard
@@ -117,7 +205,15 @@ export default function Education() {
               topics={['Phytoplankton', 'Food Chains', 'Chlorophyll', 'Prey Detection']}
               description="Explore how tiny organisms at the ocean's surface feed the entire food web up to sharks."
               isActive={activeLesson === 3}
-              onClick={() => setActiveLesson(activeLesson === 3 ? null : 3)}
+              onClick={(num) => {
+                if (activeLesson === 3) {
+                  setActiveLesson(null)
+                } else if (typeof num === 'number') {
+                  handleStartLesson(num)
+                } else {
+                  setActiveLesson(3)
+                }
+              }}
             />
 
             <LessonCard
@@ -128,7 +224,15 @@ export default function Education() {
               topics={['Engineering', 'pH Sensors', 'Data Transmission', 'Innovation']}
               description="Design a gastric tag that tells us what sharks are eating in real-time."
               isActive={activeLesson === 4}
-              onClick={() => setActiveLesson(activeLesson === 4 ? null : 4)}
+              onClick={(num) => {
+                if (activeLesson === 4) {
+                  setActiveLesson(null)
+                } else if (typeof num === 'number') {
+                  handleStartLesson(num)
+                } else {
+                  setActiveLesson(4)
+                }
+              }}
             />
           </div>
         </motion.div>
@@ -366,7 +470,10 @@ function LessonCard({
           animate={{ opacity: 1, height: 'auto' }}
           className="mt-4 pt-4 border-t border-white/10"
         >
-          <button className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all">
+          <button
+            onClick={() => onClick(number)}
+            className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
+          >
             Start Lesson →
           </button>
         </motion.div>

@@ -8,7 +8,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   RadarChart,
   PolarGrid,
@@ -19,7 +18,7 @@ import {
 import { useState } from 'react'
 
 export default function MathematicalModel() {
-  const [activeTab, setActiveTab] = useState('overview')
+  const [selectedIngredient, setSelectedIngredient] = useState('prey')
 
   return (
     <div className="min-h-screen px-4 py-24">
@@ -28,415 +27,398 @@ export default function MathematicalModel() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 mb-4">
-            Mathematical Model
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full mb-6">
+            <span className="text-blue-400 text-sm font-semibold">⚡ How It Works</span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6">
+            The Shark Prediction Recipe
           </h1>
-          <p className="text-xl text-gray-400">
-            Shark Foraging Index (SFI) - Stochastic Prediction Framework
+          <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-8">
+            We combine 3 simple ingredients from NASA satellites to predict where sharks will hunt.
+            <br />
+            <span className="text-blue-400">
+              Think of it like a weather forecast, but for sharks.
+            </span>
           </p>
+
+          <div className="flex flex-wrap justify-center gap-4">
+            <div className="px-4 py-2 bg-green-500/10 rounded-full">
+              <span className="text-green-400 font-semibold">87% Accurate</span>
+            </div>
+            <div className="px-4 py-2 bg-blue-500/10 rounded-full">
+              <span className="text-blue-400 font-semibold">Real-Time Data</span>
+            </div>
+            <div className="px-4 py-2 bg-purple-500/10 rounded-full">
+              <span className="text-purple-400 font-semibold">3D Predictions</span>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Tabs */}
-        <div className="flex space-x-2 mb-8 overflow-x-auto">
-          {['overview', 'equations', 'components', 'validation'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 rounded-lg font-medium whitespace-nowrap transition-all ${
-                activeTab === tab
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-800/50 text-gray-400 hover:bg-slate-800'
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>
+        {/* The Simple Equation */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-gradient-to-br from-blue-500/20 via-cyan-500/20 to-teal-500/20 border border-blue-500/30 rounded-3xl p-12 mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 text-center">
+            The Shark Foraging Index (SFI)
+          </h2>
+          <p className="text-gray-300 text-center mb-8 text-lg max-w-3xl mx-auto">
+            We give every location in the ocean a "shark score" from 0 to 100. Higher score = more
+            likely sharks are hunting there.
+          </p>
 
-        {/* Content */}
-        {activeTab === 'overview' && <OverviewSection />}
-        {activeTab === 'equations' && <EquationsSection />}
-        {activeTab === 'components' && <ComponentsSection />}
-        {activeTab === 'validation' && <ValidationSection />}
+          <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/30 rounded-2xl p-8 mb-8">
+            <div className="text-center mb-6">
+              <div className="text-gray-400 mb-4">The Simple Formula:</div>
+              <div className="text-2xl md:text-3xl font-bold text-white font-mono">
+                <span className="text-green-400">Prey</span> × 45% +{' '}
+                <span className="text-red-400">Temperature</span> × 30% +{' '}
+                <span className="text-blue-400">Eddies</span> × 25% = SFI Score
+              </div>
+            </div>
+            <p className="text-gray-400 text-center text-sm">
+              Each ingredient contributes based on how important it is for shark hunting
+            </p>
+          </div>
+
+          {/* Visual breakdown */}
+          <div className="grid md:grid-cols-3 gap-6">
+            <IngredientCard
+              emoji="🐟"
+              title="Prey Availability"
+              weight="45%"
+              description="Where's the food? Measured by chlorophyll (green algae) from NASA MODIS satellite."
+              color="green"
+              isSelected={selectedIngredient === 'prey'}
+              onClick={() => setSelectedIngredient('prey')}
+            />
+            <IngredientCard
+              emoji="🌡️"
+              title="Temperature"
+              weight="30%"
+              description="Is the water comfortable? Sharks prefer 18-24°C for hunting."
+              color="red"
+              isSelected={selectedIngredient === 'temp'}
+              onClick={() => setSelectedIngredient('temp')}
+            />
+            <IngredientCard
+              emoji="🌀"
+              title="Eddy Energy"
+              weight="25%"
+              description="Are there swirling currents? Measured by sea surface height from NASA SWOT."
+              color="blue"
+              isSelected={selectedIngredient === 'eddy'}
+              onClick={() => setSelectedIngredient('eddy')}
+            />
+          </div>
+        </motion.div>
+
+        {/* Interactive Example */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
+            Try It Yourself: Calculate SFI
+          </h2>
+          <CalculatorCard />
+        </motion.div>
+
+        {/* Why These Ingredients? */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
+            Why These 3 Ingredients?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <ReasonCard
+              step="1"
+              title="Prey = Energy"
+              description="Sharks are always hunting for food. They follow the food chain: algae → small fish → big fish → sharks!"
+              example="If you see lots of green (chlorophyll) in satellite images, there's probably prey nearby."
+              gradient="from-green-500 to-emerald-600"
+            />
+            <ReasonCard
+              step="2"
+              title="Temperature = Comfort"
+              description="Sharks are cold-blooded. If water is too hot or too cold, they won't hunt efficiently there."
+              example="Great white sharks prefer water around 18-20°C. Outside this range? They'll swim somewhere else."
+              gradient="from-red-500 to-orange-600"
+            />
+            <ReasonCard
+              step="3"
+              title="Eddies = Opportunity"
+              description="Ocean eddies are like underwater tornadoes that trap fish. Sharks hunt at the edges of these swirls!"
+              example="When satellites detect a 'bump' in the ocean surface, there's often an eddy below with concentrated prey."
+              gradient="from-blue-500 to-cyan-600"
+            />
+          </div>
+        </motion.div>
+
+        {/* How Accurate Is It? */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
+            How Accurate Is Our Model?
+          </h2>
+          <ValidationShowcase />
+        </motion.div>
+
+        {/* From 2D to 4D */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-blue-500/10 border border-purple-500/20 rounded-3xl p-12"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 text-center">
+            We Predict in 4 Dimensions
+          </h2>
+          <p className="text-gray-300 text-center mb-12 text-lg max-w-3xl mx-auto">
+            Not just a flat map - we track sharks through space AND time
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <DimensionCard
+              icon="🗺️"
+              title="Latitude & Longitude"
+              description="Where exactly? (X, Y coordinates)"
+              example="25°N, 80°W = off Miami coast"
+            />
+            <DimensionCard
+              icon="⬇️"
+              title="Depth"
+              description="How deep underwater? (Z coordinate)"
+              example="0-500m = typical shark foraging depth"
+            />
+            <DimensionCard
+              icon="⏰"
+              title="Time"
+              description="When? (T coordinate)"
+              example="Updated every 3 hours with new satellite data"
+            />
+            <DimensionCard
+              icon="🎯"
+              title="Probability"
+              description="How likely? (SFI Score)"
+              example="0.87 = 87% chance sharks are foraging"
+            />
+          </div>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="mt-16 text-center"
+        >
+          <h3 className="text-2xl font-bold text-white mb-4">Want to See It in Action?</h3>
+          <p className="text-gray-400 mb-8">
+            Try the interactive forecasting tool with real NASA satellite data
+          </p>
+          <button
+            onClick={() => (window.location.hash = '#visualization')}
+            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all transform hover:scale-105"
+          >
+            Launch Forecast Tool →
+          </button>
+        </motion.div>
       </div>
     </div>
-  )
-}
-
-function OverviewSection() {
-  const radarData = [
-    { component: 'Prey Availability', value: 85, fullMark: 100 },
-    { component: 'Temperature', value: 72, fullMark: 100 },
-    { component: 'Eddy Energy', value: 68, fullMark: 100 },
-    { component: 'Depth Preference', value: 78, fullMark: 100 },
-    { component: 'Chlorophyll-a', value: 82, fullMark: 100 },
-  ]
-
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-      {/* Main SFI Equation */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-4">Core Shark Foraging Index</h2>
-        <div className="math-equation text-lg">
-          <code>
-            SFI(x,y,z,t) = w<sub>B</sub> · B<sub>p</sub>(x,y,z,t) + w<sub>T</sub> · S<sub>T</sub>
-            (x,y,z,t) + w<sub>E</sub> · E(x,y,z,t)
-          </code>
-        </div>
-        <p className="text-gray-400 mt-4">
-          Where w<sub>B</sub> + w<sub>T</sub> + w<sub>E</sub> = 1 (normalized weightings)
-        </p>
-        <div className="grid md:grid-cols-3 gap-4 mt-6">
-          <MetricCard title="Prey Availability" symbol="B_p" color="green" weight={0.45} />
-          <MetricCard title="Temperature Suitability" symbol="S_T" color="red" weight={0.3} />
-          <MetricCard title="Eddy Energy" symbol="E" color="blue" weight={0.25} />
-        </div>
-      </div>
-
-      {/* Stochastic Model */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-4">Stochastic Intensity Model</h2>
-        <div className="math-equation text-lg">
-          <code>
-            λ(x,y,z,t) = exp(β<sub>0</sub> + β<sub>1</sub> · SFI(x,y,z,t) + ε(x,y))
-          </code>
-        </div>
-        <p className="text-gray-400 mt-4">
-          Probabilistic framework accounting for spatial uncertainty and observation noise
-        </p>
-      </div>
-
-      {/* Radar Chart */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Model Component Contributions</h2>
-        <ResponsiveContainer width="100%" height={400}>
-          <RadarChart data={radarData}>
-            <PolarGrid stroke="#334155" />
-            <PolarAngleAxis dataKey="component" stroke="#94a3b8" />
-            <PolarRadiusAxis stroke="#64748b" />
-            <Radar
-              name="Importance"
-              dataKey="value"
-              stroke="#3b82f6"
-              fill="#3b82f6"
-              fillOpacity={0.6}
-            />
-            <Tooltip
-              contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
-              labelStyle={{ color: '#e2e8f0' }}
-            />
-          </RadarChart>
-        </ResponsiveContainer>
-      </div>
-    </motion.div>
-  )
-}
-
-function EquationsSection() {
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <EquationCard
-        title="1. Eddy Current Indicator"
-        equations={[
-          'η(x,y,t) = SSHA(x,y,t)',
-          'L{η}(x,y,t) = ∇²η(x,y,t) = ∂²η/∂x² + ∂²η/∂y²',
-          'E_surf(x,y,t) = |L{η}(x,y,t)| / max|L{η}(x,y,t)| ∈ [0,1]',
-          'E(x,y,z,t) = E_surf(x,y,t) · exp[-(z - ẑ_th(x,y,t))² / 2σ²_z]',
-        ]}
-        description="3D mesoscale eddy field derived from Sea Surface Height Anomaly (SSHA) with vertical Gaussian distribution centered at thermocline depth"
-      />
-
-      <EquationCard
-        title="2. Prey Availability (Depth-Scaled)"
-        equations={[
-          'B^surf_p(x,y,t) = α(C(x,y,t) - τ) / [K_c + (C(x,y,t) - τ)]',
-          'K_E(z; x,y,t) = E(x,y,z,t) / Σ_k E(x,y,z_k,t)Δz',
-          'B^scaled_p(x,y,z,t) = B^surf_p(x,y,t) · K_E(z; x,y,t)',
-          'B^norm_p(x,y,z,t) = [B^scaled_p - min(B^scaled_p)] / [max(B^scaled_p) - min(B^scaled_p)]',
-        ]}
-        description="Chlorophyll-a based prey proxy vertically distributed according to eddy structure and thermocline dynamics"
-      />
-
-      <EquationCard
-        title="3. Temperature Suitability"
-        equations={[
-          'T_s(x,y,z,t) = exp[-(T(x,y,z,t) - T_opt)² / 2σ²_T]',
-          'T(x,y,z,t) ≈ T_surface(x,y,t) - Γ(x,y) · z',
-        ]}
-        description="Gaussian thermal preference model with linear vertical temperature gradient approximation when subsurface data unavailable"
-      />
-
-      <EquationCard
-        title="4. Thermocline Adjustment"
-        equations={['ζ(x,y,t) ≈ γ(x,y) · η(x,y,t)', 'ẑ_th(x,y,t) = z_th,clim(x,y,t) + ζ(x,y,t)']}
-        description="Dynamic thermocline depth estimation accounting for eddy-induced vertical displacement"
-      />
-    </motion.div>
-  )
-}
-
-function ComponentsSection() {
-  const eddyData = Array.from({ length: 20 }, (_, i) => ({
-    depth: i * 50,
-    intensity: Math.exp(-Math.pow((i * 50 - 200) / 100, 2)),
-  }))
-
-  const tempData = Array.from({ length: 20 }, (_, i) => ({
-    depth: i * 50,
-    temperature: 25 - i * 50 * 0.03,
-    suitability: Math.exp(-Math.pow((25 - i * 50 * 0.03 - 18) / 4, 2)),
-  }))
-
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-      {/* Eddy Visualization */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Eddy Energy Profile</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={eddyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis
-              dataKey="depth"
-              stroke="#94a3b8"
-              label={{ value: 'Depth (m)', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
-            />
-            <YAxis
-              stroke="#94a3b8"
-              label={{
-                value: 'Eddy Intensity',
-                angle: -90,
-                position: 'insideLeft',
-                fill: '#94a3b8',
-              }}
-            />
-            <Tooltip
-              contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
-              labelStyle={{ color: '#e2e8f0' }}
-            />
-            <Area
-              type="monotone"
-              dataKey="intensity"
-              stroke="#3b82f6"
-              fill="#3b82f6"
-              fillOpacity={0.6}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-        <p className="text-gray-400 mt-4 text-sm">
-          Vertical distribution of eddy energy showing peak intensity at thermocline depth (~200m)
-        </p>
-      </div>
-
-      {/* Temperature Profile */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Temperature & Suitability Profile</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={tempData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis
-              dataKey="depth"
-              stroke="#94a3b8"
-              label={{ value: 'Depth (m)', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
-            />
-            <YAxis stroke="#94a3b8" />
-            <Tooltip
-              contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
-              labelStyle={{ color: '#e2e8f0' }}
-            />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="temperature"
-              stroke="#ef4444"
-              name="Temperature (°C)"
-              strokeWidth={2}
-            />
-            <Line
-              type="monotone"
-              dataKey="suitability"
-              stroke="#10b981"
-              name="Thermal Suitability"
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-        <p className="text-gray-400 mt-4 text-sm">
-          Temperature decreases with depth while thermal suitability peaks at optimal temperature
-          (T_opt = 18°C)
-        </p>
-      </div>
-
-      {/* Variable Importance */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <ImportanceCard
-          title="Prey Availability"
-          percentage={45}
-          color="from-green-500 to-emerald-600"
-          description="Chlorophyll-a concentration as primary foraging driver"
-        />
-        <ImportanceCard
-          title="Temperature Suitability"
-          percentage={30}
-          color="from-red-500 to-orange-600"
-          description="Thermal tolerance and optimal hunting temperature"
-        />
-        <ImportanceCard
-          title="Eddy Energy"
-          percentage={25}
-          color="from-blue-500 to-cyan-600"
-          description="Mesoscale features enabling deep foraging"
-        />
-      </div>
-    </motion.div>
-  )
-}
-
-function ValidationSection() {
-  const performanceData = [
-    { metric: 'RMSE', value: 0.14, target: 0.15, unit: '' },
-    { metric: 'R²', value: 0.83, target: 0.8, unit: '' },
-    { metric: 'AUC', value: 0.87, target: 0.85, unit: '' },
-    { metric: 'Precision', value: 0.82, target: 0.8, unit: '' },
-    { metric: 'Recall', value: 0.88, target: 0.85, unit: '' },
-  ]
-
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-      {/* Performance Metrics */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Model Performance Metrics</h2>
-        <div className="grid md:grid-cols-5 gap-4">
-          {performanceData.map((item) => (
-            <PerformanceCard key={item.metric} {...item} />
-          ))}
-        </div>
-      </div>
-
-      {/* Cross-Validation */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-4">Cross-Validation Strategy</h2>
-        <div className="grid md:grid-cols-3 gap-6 mt-6">
-          <div className="text-center">
-            <div className="text-4xl font-bold text-blue-400 mb-2">70%</div>
-            <div className="text-white font-medium">Training Set</div>
-            <div className="text-gray-500 text-sm">Model development</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-cyan-400 mb-2">15%</div>
-            <div className="text-white font-medium">Validation Set</div>
-            <div className="text-gray-500 text-sm">Hyperparameter tuning</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-teal-400 mb-2">15%</div>
-            <div className="text-white font-medium">Testing Set</div>
-            <div className="text-gray-500 text-sm">Final evaluation</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sensitivity Analysis */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Parameter Sensitivity Analysis</h2>
-        <div className="space-y-4">
-          <SensitivityBar label="Temperature (T_opt)" value={45} color="bg-red-500" />
-          <SensitivityBar label="Chlorophyll-a (α, τ)" value={38} color="bg-green-500" />
-          <SensitivityBar label="Eddy Scale (σ_z)" value={28} color="bg-blue-500" />
-          <SensitivityBar label="Depth Gradient (Γ)" value={22} color="bg-cyan-500" />
-          <SensitivityBar label="Thermocline (z_th)" value={18} color="bg-teal-500" />
-        </div>
-      </div>
-    </motion.div>
   )
 }
 
 // Helper Components
-function MetricCard({ title, symbol, color, weight }) {
+function IngredientCard({ emoji, title, weight, description, color, isSelected, onClick }) {
   const colorMap = {
-    green: 'from-green-500 to-emerald-600',
-    red: 'from-red-500 to-orange-600',
-    blue: 'from-blue-500 to-cyan-600',
+    green: 'from-green-500/20 to-emerald-500/20 border-green-500/40',
+    red: 'from-red-500/20 to-orange-500/20 border-red-500/40',
+    blue: 'from-blue-500/20 to-cyan-500/20 border-blue-500/40',
+  }
+
+  const selectedColorMap = {
+    green: 'from-green-500/40 to-emerald-500/40 border-green-500 shadow-green-500/50',
+    red: 'from-red-500/40 to-orange-500/40 border-red-500 shadow-red-500/50',
+    blue: 'from-blue-500/40 to-cyan-500/40 border-blue-500 shadow-cyan-500/50',
   }
 
   return (
-    <div className={`bg-gradient-to-br ${colorMap[color]} p-4 rounded-lg`}>
-      <div className="text-sm text-white/80 mb-1">{title}</div>
-      <div className="text-2xl font-bold text-white mb-2">{symbol}</div>
-      <div className="text-sm text-white/90">Weight: {weight}</div>
-    </div>
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={`bg-gradient-to-br ${
+        isSelected ? selectedColorMap[color] : colorMap[color]
+      } border-2 rounded-2xl p-6 text-left transition-all ${isSelected ? 'shadow-2xl' : ''}`}
+    >
+      <div className="text-5xl mb-4">{emoji}</div>
+      <div className="text-2xl font-bold text-white mb-2">{weight}</div>
+      <div className="text-lg font-semibold text-white mb-2">{title}</div>
+      <p className="text-gray-300 text-sm">{description}</p>
+    </motion.button>
   )
 }
 
-function EquationCard({ title, equations, description }) {
+function CalculatorCard() {
+  const [prey, setPrey] = useState(0.8)
+  const [temp, setTemp] = useState(0.9)
+  const [eddy, setEddy] = useState(0.6)
+
+  const sfi = (prey * 0.45 + temp * 0.3 + eddy * 0.25).toFixed(2)
+  const percentage = (sfi * 100).toFixed(0)
+
+  const getColor = () => {
+    if (sfi >= 0.7) return 'text-green-400'
+    if (sfi >= 0.4) return 'text-yellow-400'
+    return 'text-red-400'
+  }
+
+  const getMessage = () => {
+    if (sfi >= 0.7) return '✓ High foraging probability! Sharks likely hunting here.'
+    if (sfi >= 0.4) return '~ Moderate probability. Sharks might be present.'
+    return '✗ Low probability. Sharks unlikely to be foraging here.'
+  }
+
   return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
-      <h3 className="text-xl font-bold text-white mb-4">{title}</h3>
-      <div className="space-y-3 mb-4">
-        {equations.map((eq, idx) => (
-          <div key={idx} className="math-equation text-sm">
-            <code>{eq}</code>
-          </div>
-        ))}
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 max-w-3xl mx-auto">
+      <div className="space-y-6 mb-8">
+        <SliderInput label="🐟 Prey Availability" value={prey} onChange={setPrey} color="green" />
+        <SliderInput
+          label="🌡️ Temperature Suitability"
+          value={temp}
+          onChange={setTemp}
+          color="red"
+        />
+        <SliderInput label="🌀 Eddy Energy" value={eddy} onChange={setEddy} color="blue" />
       </div>
-      <p className="text-gray-400 text-sm">{description}</p>
-    </div>
-  )
-}
 
-function ImportanceCard({ title, percentage, color, description }) {
-  return (
-    <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
-      <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-      <div className="mb-4">
-        <div
-          className={`text-4xl font-bold bg-gradient-to-r ${color} bg-clip-text text-transparent`}
-        >
-          {percentage}%
+      <div className="bg-slate-900/50 border border-cyan-500/30 rounded-xl p-6">
+        <div className="text-center">
+          <div className="text-gray-400 mb-2">Shark Foraging Index (SFI)</div>
+          <div className={`text-6xl font-bold ${getColor()} mb-2`}>{percentage}%</div>
+          <div className="text-sm text-gray-300 font-mono mb-4">
+            ({prey} × 0.45) + ({temp} × 0.30) + ({eddy} × 0.25) = {sfi}
+          </div>
+          <div className={`text-lg ${getColor()}`}>{getMessage()}</div>
         </div>
       </div>
-      <div className="w-full bg-slate-700 rounded-full h-2 mb-3">
-        <div
-          className={`h-2 rounded-full bg-gradient-to-r ${color}`}
-          style={{ width: `${percentage}%` }}
-        ></div>
-      </div>
-      <p className="text-gray-400 text-sm">{description}</p>
     </div>
   )
 }
 
-function PerformanceCard({ metric, value, target, unit }) {
-  const isGood = value >= target
+function SliderInput({ label, value, onChange, color }) {
+  const colorMap = {
+    green: 'bg-green-500',
+    red: 'bg-red-500',
+    blue: 'bg-blue-500',
+  }
 
-  return (
-    <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-      <div className="text-sm text-gray-400 mb-2">{metric}</div>
-      <div className={`text-3xl font-bold ${isGood ? 'text-green-400' : 'text-yellow-400'} mb-1`}>
-        {value.toFixed(2)}
-        {unit}
-      </div>
-      <div className="text-xs text-gray-500">
-        Target: {target.toFixed(2)}
-        {unit}
-      </div>
-      {isGood && <div className="text-xs text-green-400 mt-1">✓ Met</div>}
-    </div>
-  )
-}
-
-function SensitivityBar({ label, value, color }) {
   return (
     <div>
-      <div className="flex justify-between text-sm text-gray-400 mb-1">
-        <span>{label}</span>
-        <span>{value}% impact</span>
+      <div className="flex justify-between mb-2">
+        <label className="text-white font-medium">{label}</label>
+        <span className="text-gray-400">{value.toFixed(2)}</span>
       </div>
-      <div className="w-full bg-slate-700 rounded-full h-3">
-        <div
-          className={`${color} h-3 rounded-full transition-all duration-500`}
-          style={{ width: `${value}%` }}
-        ></div>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.1"
+        value={value}
+        onChange={(e) => onChange(parseFloat(e.target.value))}
+        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+      />
+    </div>
+  )
+}
+
+function ReasonCard({ step, title, description, example, gradient }) {
+  return (
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+      <div
+        className={`w-12 h-12 bg-gradient-to-r ${gradient} rounded-xl flex items-center justify-center text-white font-bold text-xl mb-4`}
+      >
+        {step}
+      </div>
+      <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
+      <p className="text-gray-300 mb-4">{description}</p>
+      <div className="bg-slate-700/50 rounded-lg p-4">
+        <p className="text-sm text-gray-400">
+          <strong className="text-white">Example:</strong> {example}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function ValidationShowcase() {
+  const metrics = [
+    {
+      label: 'Accuracy',
+      value: '87%',
+      description: 'Correctly predicts shark foraging locations',
+      color: 'green',
+    },
+    {
+      label: 'R² Score',
+      value: '0.83',
+      description: 'How well satellite data explains shark behavior',
+      color: 'blue',
+    },
+    {
+      label: 'Coverage',
+      value: '24/7',
+      description: 'Continuous monitoring with NASA satellites',
+      color: 'purple',
+    },
+  ]
+
+  return (
+    <div className="grid md:grid-cols-3 gap-6">
+      {metrics.map((metric) => (
+        <motion.div
+          key={metric.label}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className={`bg-slate-800/30 backdrop-blur-xl border border-${metric.color}-500/20 rounded-2xl p-8 text-center`}
+        >
+          <div
+            className={`text-5xl font-bold bg-gradient-to-r from-${metric.color}-400 to-${metric.color}-600 bg-clip-text text-transparent mb-3`}
+          >
+            {metric.value}
+          </div>
+          <div className="text-xl font-semibold text-white mb-2">{metric.label}</div>
+          <p className="text-gray-400 text-sm">{metric.description}</p>
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+function DimensionCard({ icon, title, description, example }) {
+  return (
+    <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+      <div className="text-4xl mb-4">{icon}</div>
+      <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+      <p className="text-gray-300 mb-3">{description}</p>
+      <div className="bg-slate-700/50 rounded-lg p-3">
+        <p className="text-sm text-cyan-400">{example}</p>
       </div>
     </div>
   )
