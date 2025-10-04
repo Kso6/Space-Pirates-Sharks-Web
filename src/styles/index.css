@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f172a 100%);
+  color: #e5e7eb;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1f3a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+
+/* Smooth animations */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400;
+  }
+  
+  .card-glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  
+  .ocean-gradient {
+    background: linear-gradient(180deg, #0a4d7d 0%, #003a5d 50%, #001f3f 100%);
+  }
+}
+
+/* Loading animation */
+.loading-spinner {
+  border: 3px solid rgba(59, 130, 246, 0.3);
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Map container styles */
+.mapboxgl-canvas,
+.leaflet-container {
+  border-radius: 12px;
+}
+
+/* Chart tooltips */
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+/* Math equation rendering */
+.math-equation {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+  overflow-x: auto;
+}
+
