@@ -5,6 +5,7 @@ Quick visual reference for each slide in the intro journey.
 ---
 
 ## 🎬 Slide 1: Welcome
+
 ```
 ┌─────────────────────────────────────────────────┐
 │                                    [Skip intro →]│
@@ -30,6 +31,7 @@ Quick visual reference for each slide in the intro journey.
 ```
 
 **Key Elements:**
+
 - Pulsing gradient shark icon box
 - Team branding centered
 - Clean, minimal layout
@@ -39,6 +41,7 @@ Quick visual reference for each slide in the intro journey.
 ---
 
 ## 🛰️ Slide 2: Connecting
+
 ```
 ┌─────────────────────────────────────────────────┐
 │                                    [Skip intro →]│
@@ -63,6 +66,7 @@ Quick visual reference for each slide in the intro journey.
 ```
 
 **Key Elements:**
+
 - Animated satellite orbit (20s)
 - Pulsing signal waves from Earth
 - 3 loading progress bars
@@ -72,6 +76,7 @@ Quick visual reference for each slide in the intro journey.
 ---
 
 ## ❓ Slide 3: The Challenge
+
 ```
 ┌─────────────────────────────────────────────────┐
 │                                    [Skip intro →]│
@@ -103,6 +108,7 @@ Quick visual reference for each slide in the intro journey.
 ```
 
 **Key Elements:**
+
 - 3 problem cards with gradient stats
 - Color-coded (red/orange/purple)
 - Clear statistics
@@ -112,6 +118,7 @@ Quick visual reference for each slide in the intro journey.
 ---
 
 ## 💡 Slide 4: Our Solution
+
 ```
 ┌─────────────────────────────────────────────────┐
 │                                    [Skip intro →]│
@@ -142,6 +149,7 @@ Quick visual reference for each slide in the intro journey.
 ```
 
 **Key Elements:**
+
 - 3 numbered solution cards
 - Gradient hover effects
 - Numbered badges (1,2,3)
@@ -151,6 +159,7 @@ Quick visual reference for each slide in the intro journey.
 ---
 
 ## 🎯 Slide 5: Mission
+
 ```
 ┌─────────────────────────────────────────────────┐
 │                                    [Skip intro →]│
@@ -183,6 +192,7 @@ Quick visual reference for each slide in the intro journey.
 ```
 
 **Key Elements:**
+
 - Mission motto prominent
 - 3 pillars explained
 - Call-out box with gradient
@@ -194,6 +204,7 @@ Quick visual reference for each slide in the intro journey.
 ## 🎨 Visual Design System
 
 ### Colors Used:
+
 ```
 Background:   #020617 (slate-950)
 Text Primary: #FFFFFF (white)
@@ -205,6 +216,7 @@ Border:       rgba(255,255,255,0.1) (white/10)
 ```
 
 ### Typography Scale:
+
 ```
 Hero Title:   text-7xl (72px)  font-extrabold
 Section:      text-5xl (48px)  font-extrabold
@@ -214,6 +226,7 @@ Small Text:   text-sm  (14px)  font-medium
 ```
 
 ### Spacing:
+
 ```
 Container:    max-w-4xl or max-w-5xl
 Padding:      p-6 (cards), p-8 (sections)
@@ -222,6 +235,7 @@ Margin:       mb-12 (sections), mb-6 (elements)
 ```
 
 ### Animations:
+
 ```
 Entrance:     0.4-0.6s fade + slide
 Transitions:  0.3s smooth
@@ -235,6 +249,7 @@ Pulse:        2s loop (signals)
 ## 📐 Layout Patterns
 
 ### Centered Hero:
+
 ```css
 max-w-4xl mx-auto
 text-center
@@ -242,6 +257,7 @@ flex flex-col items-center justify-center
 ```
 
 ### Grid Cards:
+
 ```css
 grid md:grid-cols-3 gap-6
 bg-slate-800/50
@@ -250,6 +266,7 @@ rounded-2xl p-6
 ```
 
 ### Badge Pills:
+
 ```css
 flex items-center gap-2
 px-4 py-2
@@ -259,6 +276,7 @@ rounded-full
 ```
 
 ### Call-out Box:
+
 ```css
 bg-gradient-to-r from-blue-500/20 to-purple-500/20
 border border-white/10
@@ -270,6 +288,7 @@ rounded-2xl p-8
 ## 🎭 Animation Sequences
 
 ### Slide Entrance:
+
 ```
 1. Slide out previous (0.5s, opacity 0, y: -20)
 2. Brief pause (isTransitioning flag)
@@ -277,12 +296,14 @@ rounded-2xl p-8
 ```
 
 ### Card Stagger:
+
 ```javascript
 delay: 0.2 * cardIndex
 // Card 1: 0.2s, Card 2: 0.4s, Card 3: 0.6s
 ```
 
 ### Loading Bars:
+
 ```javascript
 width: ['0%', '100%']
 duration: 2s
@@ -290,6 +311,7 @@ delay: 0.5 + (index * 0.2)
 ```
 
 ### Satellite Orbit:
+
 ```javascript
 rotate: 360deg
 duration: 20s
@@ -316,6 +338,7 @@ ease: 'linear'
 ```
 
 **User can:**
+
 - ✅ Go forward (Continue button)
 - ✅ Go backward (Back button)
 - ✅ Skip entire intro (Skip link)
@@ -349,18 +372,23 @@ localStorage.removeItem('hasSeenIntro')
 ## 🎯 Key Messages Per Slide
 
 ### Slide 1:
+
 > "We're professional, NASA-backed, and focused on students"
 
 ### Slide 2:
+
 > "We use real, live satellite data - not fake demos"
 
 ### Slide 3:
+
 > "The problem is urgent and multifaceted"
 
 ### Slide 4:
+
 > "Our solution is comprehensive, free, and education-first"
 
 ### Slide 5:
+
 > "Join our mission to Learn, Predict, and Protect"
 
 ---
@@ -368,12 +396,14 @@ localStorage.removeItem('hasSeenIntro')
 ## 📱 Responsive Breakpoints
 
 ### Desktop (>768px):
+
 - Full 3-column grids
 - Large satellite animation
 - Side-by-side layouts
 - Full-size typography
 
 ### Mobile (<768px):
+
 - Single column stacked
 - Smaller animations
 - Compressed spacing
@@ -384,17 +414,20 @@ localStorage.removeItem('hasSeenIntro')
 ## ✨ Polish Details
 
 ### Micro-interactions:
+
 - ✅ Button hover scales to 1.05
 - ✅ Card hover brightens border
 - ✅ Badge hover lifts slightly
 - ✅ Progress dot active is wider
 
 ### Loading States:
+
 - ✅ Suspense spinner while lazy loading
 - ✅ Transition flag prevents double-renders
 - ✅ Smooth fade between slides
 
 ### Accessibility:
+
 - ✅ Skip option always visible
 - ✅ Keyboard navigation works
 - ✅ Focus states on buttons
@@ -405,6 +438,7 @@ localStorage.removeItem('hasSeenIntro')
 ## 🎬 Demo Day Presentation Flow
 
 ### Option 1: Full Intro
+
 ```
 1. Clear localStorage
 2. Load site fresh
@@ -414,6 +448,7 @@ localStorage.removeItem('hasSeenIntro')
 ```
 
 ### Option 2: Quick Version
+
 ```
 1. Show slides 1, 3, 5 only
 2. Skip slides 2 & 4
@@ -422,6 +457,7 @@ localStorage.removeItem('hasSeenIntro')
 ```
 
 ### Option 3: Screenshots
+
 ```
 1. Show slide screenshots in deck
 2. Jump straight to platform
@@ -436,16 +472,19 @@ localStorage.removeItem('hasSeenIntro')
 ## 🏆 Why This Wins
 
 ### Compared to Other Hackathon Projects:
+
 - ❌ Most: No intro, jump to features
 - ✅ Yours: Story first, features second
 - **Result:** More memorable!
 
 ### Compared to QuakeHeroes:
+
 - ❌ Theirs: Playful, colorful
 - ✅ Yours: Professional, YC-style
 - **Result:** More credible!
 
 ### Compared to 2024 Winners:
+
 - ✓ Like Team Aliens: Education first
 - ✓ Like Team Blue Skies: Visual storytelling
 - ✓ Plus: Modern UI + Smooth UX
@@ -458,4 +497,3 @@ localStorage.removeItem('hasSeenIntro')
 Your intro journey is **polished, professional, and purposeful**. It tells your story before you say a word. That's the power of good UX! 🎯
 
 **Key takeaway:** The intro isn't just decoration - it's your elevator pitch in interactive form. Make sure judges see it! 🦈🛰️🎓
-

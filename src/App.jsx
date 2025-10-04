@@ -108,8 +108,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-      <Navigation 
-        currentPage={currentPage} 
+      <Navigation
+        currentPage={currentPage}
         onNavigate={setCurrentPage}
         onReplayIntro={() => {
           localStorage.removeItem('hasSeenIntro')

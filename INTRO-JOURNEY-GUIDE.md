@@ -16,9 +16,11 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ## 🎬 The 5-Slide Journey
 
 ### Slide 1: Welcome
+
 **Visual:** Large animated shark icon in a glowing gradient box
 
 **Content:**
+
 - Team branding: "Global Sharks" + "Team Space Pirates"
 - NASA Space Apps Challenge 2025
 - Tagline: "Join us on a journey to predict shark behavior"
@@ -29,9 +31,11 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ---
 
 ### Slide 2: Connecting to Satellites
+
 **Visual:** Animated Earth with orbiting satellite, signal waves
 
 **Content:**
+
 - "Connecting to NASA Satellites..." with blinking animation
 - Loading bars for SWOT, MODIS, and PACE data streams
 - Creates anticipation and shows real technology
@@ -43,9 +47,11 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ---
 
 ### Slide 3: The Challenge
+
 **Visual:** Three problem cards with statistics
 
 **Content:**
+
 - **Sharks declining:** 100M killed annually vs 5 human deaths
 - **Conflicts increasing:** Lack of predictive tools
 - **Education gap:** Students lack access to ocean data
@@ -57,9 +63,11 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ---
 
 ### Slide 4: Our Solution
+
 **Visual:** Three numbered solution cards with icons
 
 **Content:**
+
 - **#1 Interactive Lessons:** 4 NGSS-aligned lessons with NASA data
 - **#2 AI Forecasting:** 87% accurate shark predictions
 - **#3 Bio-Sensor Design:** Student engineering challenges
@@ -73,9 +81,11 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ---
 
 ### Slide 5: Mission
+
 **Visual:** Target emoji, "Learn • Predict • Protect" motto
 
 **Content:**
+
 - Three pillars explained with icons and descriptions
 - Final CTA: "Ready to dive in? Explore interactive forecasting tools..."
 - Ends with inspiring message about protecting oceans
@@ -89,12 +99,14 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ## 🎨 Design Features (YC-Startup Style)
 
 ### Color Palette
+
 - **Background:** Slate-950 (`#020617`) - deep, modern
 - **Gradients:** Blue → Cyan, Purple → Pink
 - **Borders:** White/10 for subtle elegance
 - **Text:** White for headers, Gray-400 for body
 
 ### Animations
+
 - **Slide transitions:** Fade + slide (400ms)
 - **Loading state:** Spinning border gradient
 - **Hover effects:** Scale, opacity, border color changes
@@ -102,12 +114,14 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 - **Signal waves:** Pulsing outward from Earth (2s loop)
 
 ### Typography
+
 - **Headings:** Extrabold (font-weight: 900), 5xl-7xl
 - **Body:** Regular/Medium, Gray-400
 - **Stats:** Extra large, gradient text
 - **Buttons:** Bold, rounded-xl
 
 ### Layout
+
 - **Centered content:** Max-width containers
 - **Grid systems:** 2-3 columns on desktop, stacked on mobile
 - **Breathing room:** Generous padding and margins
@@ -118,6 +132,7 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ## 🎯 User Experience Flow
 
 ### First-Time User:
+
 1. **Lands on site** → Sees intro journey automatically
 2. **Slide 1:** "Oh, this looks professional!"
 3. **Slide 2:** "Cool animation! They're using real NASA data!"
@@ -128,10 +143,12 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 8. **localStorage saves** → Won't see intro again
 
 ### Returning User:
+
 - **No intro** - goes straight to main platform
 - **Can replay** anytime via hidden ↻ button in nav
 
 ### Navigation Controls:
+
 - **Progress dots** at top (5 dots, current = white, past = blue)
 - **Back button** (disabled on first slide)
 - **Forward/Continue button** (becomes "Let's Go →" on last slide)
@@ -145,6 +162,7 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ### Key Components
 
 **`IntroJourney.jsx`**
+
 - Main container component
 - 5 slide components: `WelcomeSlide`, `ConnectingSlide`, `ProblemSlide`, `SolutionSlide`, `MissionSlide`
 - Navigation state management
@@ -152,6 +170,7 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 - Progress tracking
 
 **Helper Components:**
+
 - `ProblemCard` - Statistics display with gradient numbers
 - `SolutionCard` - Numbered feature boxes with hover effects
 - `Badge` - Pill-shaped badges for features
@@ -159,6 +178,7 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 ### App Integration
 
 **`App.jsx` changes:**
+
 ```javascript
 const [showIntro, setShowIntro] = useState(true)
 
@@ -173,6 +193,7 @@ if (showIntro) {
 ```
 
 **localStorage:**
+
 - Key: `hasSeenIntro`
 - Value: `'true'` after completion
 - Cleared when user clicks replay button
@@ -180,11 +201,13 @@ if (showIntro) {
 ### Performance Optimizations
 
 **Lazy Loading:**
+
 - Main pages lazy loaded (Education, Viz, Model, Tag, About)
 - Intro loads immediately (not lazy) for instant experience
 - Suspense wrapper with loading spinner
 
 **Error Boundary:**
+
 - Catches React errors gracefully
 - Shows friendly error message with reload option
 - Prevents app crashes
@@ -193,46 +216,51 @@ if (showIntro) {
 
 ## 📊 QuakeHeroes vs Global Sharks Comparison
 
-| Feature | QuakeHeroes | Global Sharks |
-|---------|-------------|---------------|
-| **Story approach** | ✓ | ✓ |
-| **Loading animation** | ✓ (Receiving code) | ✓ (Connecting satellites) |
-| **Character** | Lunar lander | Shark + Earth |
-| **Navigation** | Back/Team/Forward | Back/Counter/Forward + Skip |
-| **Progress indicator** | ❌ | ✓ (5 dots) |
-| **Design style** | Playful, colorful | Clean, professional |
-| **Problem statement** | Earthquakes rare | Sharks declining |
-| **Educational focus** | Seismic data | Ocean science |
-| **localStorage memory** | ❌ | ✓ (remembers seen) |
-| **Replay option** | ❌ | ✓ (↻ button) |
+| Feature                 | QuakeHeroes        | Global Sharks               |
+| ----------------------- | ------------------ | --------------------------- |
+| **Story approach**      | ✓                  | ✓                           |
+| **Loading animation**   | ✓ (Receiving code) | ✓ (Connecting satellites)   |
+| **Character**           | Lunar lander       | Shark + Earth               |
+| **Navigation**          | Back/Team/Forward  | Back/Counter/Forward + Skip |
+| **Progress indicator**  | ❌                 | ✓ (5 dots)                  |
+| **Design style**        | Playful, colorful  | Clean, professional         |
+| **Problem statement**   | Earthquakes rare   | Sharks declining            |
+| **Educational focus**   | Seismic data       | Ocean science               |
+| **localStorage memory** | ❌                 | ✓ (remembers seen)          |
+| **Replay option**       | ❌                 | ✓ (↻ button)                |
 
 ---
 
 ## 🎯 Why This Works for Judges
 
 ### 1. **Immediate Engagement**
+
 - Users understand the mission before seeing code
 - Story creates emotional connection
 - Professional first impression
 
 ### 2. **Educational Mission Clear**
+
 - Problem → Solution structure
 - "For students" emphasized early
 - NGSS alignment badge prominent
 
 ### 3. **YC-Startup Polish**
+
 - Clean, modern design
 - Smooth animations
 - Professional typography
 - Attention to detail
 
 ### 4. **Accessibility**
+
 - Skip option for power users
 - Progress indicators for orientation
 - Keyboard navigation supported
 - Mobile responsive
 
 ### 5. **Memorable Branding**
+
 - "Learn • Predict • Protect" motto
 - Consistent color scheme
 - Strong visual identity
@@ -243,6 +271,7 @@ if (showIntro) {
 ## 🚀 Demo Day Strategy
 
 ### Opening (With Intro):
+
 1. **Open browser** (clear localStorage first to show intro)
 2. **Slide 1:** "This is our team, Global Sharks, Team Space Pirates"
 3. **Slide 2:** "We connect to real NASA satellites - SWOT, MODIS, PACE"
@@ -252,6 +281,7 @@ if (showIntro) {
 7. **Click "Let's Go"** → Smoothly transitions to main platform
 
 ### Why Start with Intro:
+
 - ✅ Sets context immediately
 - ✅ Shows storytelling ability
 - ✅ Professional first impression
@@ -259,6 +289,7 @@ if (showIntro) {
 - ✅ Smooth transition to platform
 
 ### Alternative (If Pressed for Time):
+
 - Skip to main platform
 - Reference intro slides in presentation
 - Show screenshots in deck
@@ -268,17 +299,20 @@ if (showIntro) {
 ## 📱 Responsive Design
 
 ### Desktop (>768px)
+
 - Full-size cards and animations
 - Side-by-side layouts
 - Satellite animation large
 - 3-column grids
 
 ### Tablet (768px)
+
 - 2-column grids
 - Slightly smaller text
 - Compressed spacing
 
 ### Mobile (<768px)
+
 - Single column stacked
 - Larger touch targets
 - Simplified animations
@@ -289,22 +323,26 @@ if (showIntro) {
 ## 🎨 Animation Details
 
 ### Entrance Animations
+
 - Slide content: Fade in + Y translate (0.4s)
 - Cards: Staggered entrance (0.2s delay each)
 - Scale animations: Start 0.9, grow to 1.0
 
 ### Looping Animations
+
 - **Satellite orbit:** 20s continuous rotation
 - **Signal waves:** 2s pulse cycle
 - **"Connecting" text:** Opacity pulse (1.5s)
 - **Progress bars:** 2s fill animation
 
 ### Hover Effects
+
 - **Cards:** Border brighten + gradient overlay (0.3s)
 - **Buttons:** Scale 1.05 + shadow increase
 - **Badges:** Subtle lift effect
 
 ### Transitions
+
 - **Between slides:** Fade out (0.5s) → Fade in (0.4s)
 - **Total transition:** ~500ms smooth
 
@@ -313,12 +351,14 @@ if (showIntro) {
 ## 🔄 Replay Functionality
 
 ### How to Replay:
+
 1. **Hidden button** in navigation (↻ symbol)
 2. Clears localStorage
 3. Resets intro state
 4. User sees full journey again
 
 ### Use Cases:
+
 - Showing friends/colleagues
 - Presentation rehearsal
 - Testing changes
@@ -331,15 +371,19 @@ if (showIntro) {
 ### Key Messages in Intro:
 
 **Slide 1:**
+
 > "Join us on a journey to predict shark behavior using NASA satellite data and AI to protect apex predators and communities worldwide"
 
 **Slide 3 Problem:**
+
 > "We lack the tools to predict shark behavior and the educational resources to teach ocean conservation to the next generation"
 
 **Slide 4 Solution:**
+
 > "A free, open-source platform combining education with AI forecasting"
 
 **Slide 5 Mission:**
+
 > "Ready to dive in? Explore interactive forecasting tools, learn ocean science, and join a global community protecting our oceans using NASA's eyes in space"
 
 ---
@@ -347,30 +391,35 @@ if (showIntro) {
 ## ✨ What Makes It YC-Startup Style
 
 ### Clean Minimalism
+
 - ❌ No clutter or excessive decoration
 - ✓ Intentional whitespace
 - ✓ Clear hierarchy
 - ✓ Focused content
 
 ### Professional Typography
+
 - ❌ No comic sans or playful fonts
 - ✓ Inter font family (YC favorite)
 - ✓ Consistent sizing scale
 - ✓ Proper weight variations
 
 ### Subtle Animations
+
 - ❌ No bouncing or silly effects
 - ✓ Smooth, purposeful transitions
 - ✓ Professional loading states
 - ✓ Elegant hover effects
 
 ### Modern Color Palette
+
 - ❌ No rainbow gradients
 - ✓ Dark background (#020617)
 - ✓ Blue/cyan accent colors
 - ✓ White text with gray descriptions
 
 ### Data-Driven Stats
+
 - ✓ "100M sharks killed"
 - ✓ "87% accuracy"
 - ✓ "10,000 students"
@@ -381,10 +430,12 @@ if (showIntro) {
 ## 🎯 Impact on Judging
 
 ### First Impressions:
+
 - **Before intro:** "Another hackathon project"
 - **After intro:** "Wow, this team is professional!"
 
 ### Key Takeaways:
+
 1. **Education first** - Message clear from slide 3-4
 2. **Open source commitment** - Badges show this
 3. **Real NASA data** - Emphasized in slide 2
@@ -392,6 +443,7 @@ if (showIntro) {
 5. **Professional execution** - Smooth, polished UX
 
 ### Competitive Advantage:
+
 - Most teams: Jump straight to features
 - **Our team:** Tell a story first
 - Result: **Memorable and engaging!**
@@ -401,16 +453,19 @@ if (showIntro) {
 ## 🏆 Alignment with 2024 Winners
 
 ### Team Aliens (1st Place):
+
 - ✓ Clear educational mission (Slide 4)
 - ✓ Accessibility focus (badges)
 - ✓ Open source emphasized
 
 ### Team Blue Skies (4th Place):
+
 - ✓ Engaging visual storytelling
 - ✓ Problem clearly stated (Slide 3)
 - ✓ Real-time data highlighted (Slide 2)
 
 ### Our Unique Value:
+
 **Interactive journey + YC polish + Education first = Winner formula**
 
 ---
@@ -418,6 +473,7 @@ if (showIntro) {
 ## 🚀 Quick Start Commands
 
 ### See intro journey:
+
 ```bash
 # Clear localStorage in browser console:
 localStorage.removeItem('hasSeenIntro')
@@ -425,6 +481,7 @@ localStorage.removeItem('hasSeenIntro')
 ```
 
 ### Skip to main app:
+
 ```bash
 # Set in browser console:
 localStorage.setItem('hasSeenIntro', 'true')
@@ -432,6 +489,7 @@ localStorage.setItem('hasSeenIntro', 'true')
 ```
 
 ### Development:
+
 ```bash
 npm run dev
 # Navigate to http://localhost:5173
@@ -442,14 +500,17 @@ npm run dev
 ## 📦 Files Changed/Added
 
 ### New Files:
+
 - ✅ `src/pages/IntroJourney.jsx` (520 lines)
 
 ### Modified Files:
+
 - ✅ `src/App.jsx` - Added intro state management
 - ✅ `src/components/Navigation.jsx` - Added replay button
 - ✅ `src/pages/Education.jsx` - Formatting cleanup
 
 ### Build Output:
+
 - Bundle size increased by ~1.8KB (intro journey)
 - Lazy loading keeps initial load fast
 - Total build: 10.03s ✓
@@ -459,6 +520,7 @@ npm run dev
 ## 🎉 Result
 
 You now have an **engaging, story-driven intro** that:
+
 - ✅ Matches QuakeHeroes' storytelling approach
 - ✅ Uses clean YC-startup design aesthetic
 - ✅ Emphasizes education mission immediately
@@ -480,4 +542,3 @@ You now have an **engaging, story-driven intro** that:
 5. **End strong** - "Learn • Predict • Protect" is your motto
 
 The intro journey tells your story **before** you say a word. That's powerful! 🚀
-
