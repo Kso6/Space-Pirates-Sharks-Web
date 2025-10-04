@@ -1,211 +1,217 @@
 # 🚀 Quick Start Guide
 
-Get **Sharks from Space** running locally in under 5 minutes!
+Get your Global Sharks website running in 5 minutes!
 
-## Prerequisites
+---
 
-- **Node.js 18+** ([Download here](https://nodejs.org/))
-- **npm** (comes with Node.js)
-- **Git** ([Download here](https://git-scm.com/))
-
-## Installation (30 seconds)
+## ⚡ Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/sharks-from-space.git
-cd sharks-from-space
-
 # Install dependencies
 npm install
 ```
 
-## Run Development Server (10 seconds)
+---
+
+## 🏃 Run Development Server
 
 ```bash
+# Start the dev server
 npm run dev
 ```
 
-🌐 Open your browser to: **http://localhost:3000**
+Open browser to: **http://localhost:3000**
 
-## Explore the App
+---
 
-### 🏠 Home Page
-- Overview of all three pipelines
-- Quick navigation cards
-- Project statistics
-
-### 📐 Mathematical Model
-- Shark Foraging Index (SFI) equations
-- 3D ocean modeling visualization
-- Component contributions
-- Model validation metrics
-
-### 🗺️ Data Visualization
-- Real-time NASA satellite data
-- Interactive foraging hotspot maps
-- 3D ocean depth profiles
-- Temporal trends analysis
-
-### 🔬 Tag Sensor
-- Gastric capsule architecture
-- pH & NH₄⁺ sensing principles
-- Feeding event simulations
-- Power budget analysis
-
-### ℹ️ About
-- Complete project overview
-- NASA data sources
-- Technology stack
-- Future development plans
-
-## Build for Production
+## 🏗️ Build for Production
 
 ```bash
-# Create optimized production build
+# Create production build
 npm run build
 
-# Preview production build
+# Preview production build locally
 npm run preview
 ```
 
-## Deploy to Production
+---
 
-### Option 1: Quick Deploy Script (Easiest)
+## 🌐 Deploy to globalsharks.wiki
 
-```bash
-chmod +x deploy.sh
-./deploy.sh
-```
+### Option 1: Netlify (Easiest)
 
-Choose your deployment platform:
-1. GitHub Pages (Free)
-2. Netlify (Free)
-3. Vercel (Free)
-4. Manual build only
+1. Push code to GitHub (already done ✅)
+2. Go to [netlify.com](https://netlify.com)
+3. Click "Add new site" → "Import from Git"
+4. Select your repository
+5. Build settings:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+6. Click "Deploy"
+7. Add custom domain: `globalsharks.wiki`
+8. Update DNS at Porkbun with Netlify's records
 
-### Option 2: GitHub Pages (Automated)
-
-1. Push your code to GitHub
-2. GitHub Actions automatically deploys
-3. Configure DNS in Porkbun dashboard
-
-See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for detailed instructions.
-
-### Option 3: Netlify (One-Click)
+### Option 2: One-Command Deploy
 
 ```bash
-npm run deploy:netlify
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Login
+netlify login
+
+# Deploy
+netlify deploy --prod
 ```
 
-### Option 4: Vercel
+---
 
-```bash
-npm run deploy:vercel
-```
-
-## Project Structure Overview
+## 📁 Project Structure
 
 ```
 src/
-├── components/           # Reusable components
-│   ├── Hero.jsx         # Landing page hero
-│   └── Navigation.jsx   # Top navigation bar
-├── pages/               # Main pages
-│   ├── MathematicalModel.jsx
-│   ├── DataVisualization.jsx
-│   ├── TagSensor.jsx
-│   └── About.jsx
-├── App.jsx              # Main app component
-└── main.jsx             # Entry point
+├── components/
+│   ├── Navigation.jsx      # Top navigation bar
+│   └── Hero.jsx            # Landing page
+├── pages/
+│   ├── MathematicalModel.jsx   # SFI equations & validation
+│   ├── DataVisualization.jsx   # Interactive maps & charts
+│   ├── TagSensor.jsx           # Tag architecture & specs
+│   └── About.jsx               # Project information
+├── styles/
+│   └── index.css           # Global styles
+├── App.jsx                 # Main app component
+└── main.jsx               # Entry point
 ```
 
-## Common Tasks
+---
 
-### Update Content
-- Edit components in `src/components/`
-- Edit pages in `src/pages/`
-- Add images to `public/`
+## 🎨 Customization
 
-### Change Styling
-- Modify `src/styles/index.css`
-- Update Tailwind config in `tailwind.config.js`
+### Update Colors
 
-### Add New Page
-1. Create new file in `src/pages/YourPage.jsx`
-2. Add route in `src/App.jsx`
-3. Add navigation item in `src/components/Navigation.jsx`
+Edit `tailwind.config.js`:
+```javascript
+colors: {
+  ocean: { /* your ocean colors */ },
+  shark: { /* your shark colors */ }
+}
+```
 
-## Troubleshooting
+### Add New Pages
 
-### Port Already in Use
+1. Create file in `src/pages/YourPage.jsx`
+2. Import in `App.jsx`
+3. Add route in `renderPage()` function
+4. Add navigation item in `Navigation.jsx`
+
+### Modify Mathematical Model
+
+Edit `src/pages/MathematicalModel.jsx` to update:
+- Equations
+- Charts
+- Performance metrics
+- Validation data
+
+---
+
+## 🐛 Troubleshooting
+
+### Port 3000 already in use
 ```bash
 # Kill process on port 3000
 npx kill-port 3000
 
-# Or change port in vite.config.js
+# Or use different port
+npm run dev -- --port 3001
 ```
 
-### Dependencies Not Installing
+### Dependencies not installing
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-### Build Errors
+### Build errors
 ```bash
-# Clear build cache
-rm -rf dist
-npm run build
+# Check Node version (need 18+)
+node --version
+
+# Update if needed
+nvm install 18
+nvm use 18
 ```
-
-### Slow Development Server
-```bash
-# Restart with clean cache
-npm run dev -- --force
-```
-
-## Development Tips
-
-### Hot Module Replacement (HMR)
-- Changes automatically reload in browser
-- No need to refresh manually
-
-### React DevTools
-- Install React DevTools browser extension
-- Inspect component hierarchy
-
-### Tailwind CSS IntelliSense
-- Install Tailwind CSS IntelliSense VSCode extension
-- Get autocompletion for Tailwind classes
-
-## Next Steps
-
-1. ✅ **Customize Content** - Update text, images, and data
-2. ✅ **Add Features** - Implement new visualizations or pages
-3. ✅ **Deploy** - Share your project with the world
-4. ✅ **Configure DNS** - Point globalsharks.wiki to your deployment
-
-## Need Help?
-
-- 📖 **Full Documentation:** [DEPLOYMENT.md](./DEPLOYMENT.md)
-- 🐛 **Issues:** Open an issue on GitHub
-- 💬 **Questions:** Check project README
-
-## Key Commands Reference
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `./deploy.sh` | Interactive deployment |
-| `npm run deploy:netlify` | Deploy to Netlify |
-| `npm run deploy:vercel` | Deploy to Vercel |
 
 ---
 
-**Happy Coding! 🦈🛰️**
+## 📊 Features Overview
 
-Team Space Pirates | NASA Space Apps Challenge 2025
+### Page 1: Home
+- Hero section with project overview
+- Feature cards (clickable)
+- Project statistics
+- Call-to-action button
 
+### Page 2: Mathematical Model
+- SFI equation display
+- Stochastic model explanation
+- Interactive charts (Eddy profiles, Temperature)
+- Performance metrics
+- Cross-validation results
+
+### Page 3: Data Visualization
+- Real-time foraging hotspot map
+- Satellite data overlays (SWOT, MODIS, PACE)
+- 3D ocean profile analysis
+- Temporal trends
+- Correlation analysis
+- Statistical heatmaps
+
+### Page 4: Tag Sensor
+- 3D capsule architecture diagram
+- Sensing principle explanation
+- Real-time feeding event simulation
+- Power budget analysis
+- Deployment protocol
+- Species applications
+
+### Page 5: About
+- Project mission statement
+- Challenge description
+- Three-pipeline architecture
+- NASA data sources
+- Conservation impact
+- Team information
+
+---
+
+## 🎯 Next Steps
+
+1. **Customize Content**: Update team info in `About.jsx`
+2. **Add Real Data**: Replace synthetic data with actual NASA datasets
+3. **Deploy**: Push to production using Netlify/Vercel
+4. **Test**: Verify all pages load correctly
+5. **Share**: Submit to NASA Space Apps Challenge
+
+---
+
+## 📚 Resources
+
+- [React Documentation](https://react.dev)
+- [Vite Documentation](https://vitejs.dev)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Recharts](https://recharts.org)
+- [Framer Motion](https://www.framer.com/motion)
+
+---
+
+## 🎉 You're Ready!
+
+Your professional data visualization website is ready to showcase your NASA Space Apps project!
+
+**Live URL**: https://globalsharks.wiki
+
+---
+
+**Need help?** Check `DEPLOYMENT.md` for detailed deployment instructions.
