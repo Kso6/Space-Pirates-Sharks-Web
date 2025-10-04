@@ -404,7 +404,7 @@ function DataSection() {
             <div className="text-sm text-gray-400">Typical Events</div>
           </div>
           <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-cyan-400">< 1 hour</div>
+            <div className="text-2xl font-bold text-cyan-400">&lt; 1 hour</div>
             <div className="text-sm text-gray-400">Latency</div>
           </div>
         </div>
