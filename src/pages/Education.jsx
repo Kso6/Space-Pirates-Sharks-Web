@@ -276,7 +276,7 @@ export default function Education() {
 
           <div className="mt-12">
             <a
-              href="https://github.com"
+              href="https://github.com/global-sharks/shark-forecast"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all"
@@ -298,7 +298,9 @@ function ImpactCard({ icon, title, description, stat, statLabel }) {
       <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
       <p className="text-gray-300 mb-6">{description}</p>
       <div className="border-t border-white/10 pt-4">
-        <div className="text-3xl font-bold text-gradient mb-1">{stat}</div>
+        <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 mb-1">
+          {stat}
+        </div>
         <div className="text-sm text-gray-400">{statLabel}</div>
       </div>
     </div>
@@ -452,4 +454,3 @@ function StatBox({ number, label }) {
     </div>
   )
 }
-

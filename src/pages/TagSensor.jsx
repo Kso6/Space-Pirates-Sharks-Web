@@ -47,7 +47,9 @@ export default function TagSensor() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl font-bold text-gradient mb-4">Gastric Capsule Tag</h1>
+          <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 mb-4">
+            Gastric Capsule Tag
+          </h1>
           <p className="text-xl text-gray-400">
             Revolutionary Bio-Sensor for Real-Time Feeding Detection
           </p>

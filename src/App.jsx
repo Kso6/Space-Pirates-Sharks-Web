@@ -1,7 +1,8 @@
-import { useState, lazy, Suspense, Component } from 'react'
+import { useState, lazy, Suspense, Component, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navigation from './components/Navigation'
 import Hero from './components/Hero'
+import IntroJourney from './pages/IntroJourney'
 
 // Error Boundary Component
 class ErrorBoundary extends Component {
@@ -50,6 +51,25 @@ const Education = lazy(() => import('./pages/Education'))
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
+  const [showIntro, setShowIntro] = useState(true)
+
+  // Check if user has seen intro before
+  useEffect(() => {
+    const hasSeenIntro = localStorage.getItem('hasSeenIntro')
+    if (hasSeenIntro === 'true') {
+      setShowIntro(false)
+    }
+  }, [])
+
+  const handleIntroComplete = () => {
+    localStorage.setItem('hasSeenIntro', 'true')
+    setShowIntro(false)
+  }
+
+  // Show intro journey first
+  if (showIntro) {
+    return <IntroJourney onComplete={handleIntroComplete} />
+  }
 
   const renderPage = () => {
     // Home page is not lazy loaded for faster initial load
@@ -88,7 +108,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-      <Navigation currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Navigation 
+        currentPage={currentPage} 
+        onNavigate={setCurrentPage}
+        onReplayIntro={() => {
+          localStorage.removeItem('hasSeenIntro')
+          setShowIntro(true)
+        }}
+      />
 
       <AnimatePresence mode="wait">
         <motion.div

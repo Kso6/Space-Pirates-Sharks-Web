@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
-export default function Navigation({ currentPage, onNavigate }) {
+export default function Navigation({ currentPage, onNavigate, onReplayIntro }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const navItems = [
@@ -34,6 +34,17 @@ export default function Navigation({ currentPage, onNavigate }) {
             </div>
           </motion.div>
 
+          {/* Hidden Intro Replay Button (desktop) */}
+          {onReplayIntro && (
+            <button
+              onClick={onReplayIntro}
+              className="hidden md:block text-gray-500 hover:text-gray-300 transition-colors text-xs"
+              title="Replay intro journey"
+            >
+              ↻
+            </button>
+          )}
+
           {/* Navigation Items - Desktop */}
           <div className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => (
@@ -54,12 +65,12 @@ export default function Navigation({ currentPage, onNavigate }) {
 
             {/* CTA Button */}
             <motion.button
-              onClick={() => handleNavigate('education')}
+              onClick={() => handleNavigate('about')}
               className="ml-4 px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg shadow-purple-500/30"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Start Learning
+              About Us
             </motion.button>
           </div>
 
@@ -114,10 +125,10 @@ export default function Navigation({ currentPage, onNavigate }) {
                   </button>
                 ))}
                 <button
-                  onClick={() => handleNavigate('education')}
+                  onClick={() => handleNavigate('about')}
                   className="w-full px-5 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold rounded-xl mt-2"
                 >
-                  Start Learning →
+                  About Us →
                 </button>
               </div>
             </motion.div>
