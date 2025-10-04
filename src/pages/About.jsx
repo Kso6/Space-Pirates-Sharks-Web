@@ -10,7 +10,9 @@ export default function About() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold text-gradient mb-4">About Sharks from Space</h1>
+          <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 mb-4">
+            About Sharks from Space
+          </h1>
           <p className="text-xl text-gray-400">NASA Space Apps Challenge 2025</p>
           <p className="text-lg text-blue-300 mt-2">Team: Space Pirates</p>
         </motion.div>
@@ -24,11 +26,12 @@ export default function About() {
         >
           <h2 className="text-3xl font-bold text-white mb-6">Project Overview</h2>
           <p className="text-gray-300 text-lg leading-relaxed mb-6">
-            <strong className="text-blue-400">Sharks from Space</strong> revolutionizes marine conservation by combining NASA satellite technology 
-            with innovative bio-sensor systems to predict and validate shark foraging behavior. Our integrated approach addresses 
+            <strong className="text-blue-400">Sharks from Space</strong> revolutionizes marine
+            conservation by combining NASA satellite technology with innovative bio-sensor systems
+            to predict and validate shark foraging behavior. Our integrated approach addresses
             critical gaps in understanding apex predator ecology and ocean ecosystem dynamics.
           </p>
-          
+
           <div className="grid md:grid-cols-3 gap-6 mt-8">
             <ProblemCard
               icon="🎯"
@@ -55,8 +58,10 @@ export default function About() {
           transition={{ delay: 0.3 }}
           className="mb-8"
         >
-          <h2 className="text-3xl font-bold text-white mb-6 text-center">Three Integrated Pipelines</h2>
-          
+          <h2 className="text-3xl font-bold text-white mb-6 text-center">
+            Three Integrated Pipelines
+          </h2>
+
           <div className="grid lg:grid-cols-3 gap-6">
             <PipelineCard
               number="1"
@@ -64,11 +69,11 @@ export default function About() {
               icon="📐"
               color="from-blue-500 to-cyan-500"
               features={[
-                "Shark Foraging Index (SFI)",
-                "3D spatiotemporal prediction",
-                "Eddy energy, prey availability, temperature",
-                "Stochastic intensity model",
-                "Validated with 87% correlation"
+                'Shark Foraging Index (SFI)',
+                '3D spatiotemporal prediction',
+                'Eddy energy, prey availability, temperature',
+                'Stochastic intensity model',
+                'Validated with 87% correlation',
               ]}
               status="Complete"
             />
@@ -78,11 +83,11 @@ export default function About() {
               icon="🗺️"
               color="from-green-500 to-emerald-500"
               features={[
-                "NASA SWOT (sea surface height)",
-                "MODIS (chlorophyll-a)",
-                "NASA PACE (phytoplankton)",
-                "Meteomatics (SST)",
-                "Real-time foraging hotspot maps"
+                'NASA SWOT (sea surface height)',
+                'MODIS (chlorophyll-a)',
+                'NASA PACE (phytoplankton)',
+                'Meteomatics (SST)',
+                'Real-time foraging hotspot maps',
               ]}
               status="Complete"
             />
@@ -92,11 +97,11 @@ export default function About() {
               icon="🔬"
               color="from-purple-500 to-pink-500"
               features={[
-                "Gastric capsule design",
-                "pH & NH₄⁺ sensors",
-                "Feeding event detection",
-                "Prey type classification",
-                "6-12 month deployment"
+                'Gastric capsule design',
+                'pH & NH₄⁺ sensors',
+                'Feeding event detection',
+                'Prey type classification',
+                '6-12 month deployment',
               ]}
               status="Complete"
             />
@@ -111,7 +116,7 @@ export default function About() {
           className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8 mb-8"
         >
           <h2 className="text-3xl font-bold text-white mb-6">NASA Data & Technology</h2>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <DataSourceCard
               mission="SWOT"
@@ -152,7 +157,7 @@ export default function About() {
           className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-8 mb-8"
         >
           <h2 className="text-3xl font-bold text-white mb-6 text-center">Key Innovations</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <InnovationCard
               title="3D Ocean Modeling"
@@ -181,19 +186,38 @@ export default function About() {
           className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8 mb-8"
         >
           <h2 className="text-3xl font-bold text-white mb-6">Technology Stack</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <TechCategory
               title="Frontend"
-              technologies={["React 18", "Vite", "Tailwind CSS", "Framer Motion", "Recharts", "Three.js"]}
+              technologies={[
+                'React 18',
+                'Vite',
+                'Tailwind CSS',
+                'Framer Motion',
+                'Recharts',
+                'Three.js',
+              ]}
             />
             <TechCategory
               title="Data Sources"
-              technologies={["NASA SWOT API", "NASA MODIS", "NASA PACE", "Meteomatics API", "NOAA Bathymetry"]}
+              technologies={[
+                'NASA SWOT API',
+                'NASA MODIS',
+                'NASA PACE',
+                'Meteomatics API',
+                'NOAA Bathymetry',
+              ]}
             />
             <TechCategory
               title="Hardware"
-              technologies={["STM32L0 MCU", "ISFET pH Sensor", "NH₄⁺ ISE", "125kHz Inductive Link", "Li-SOCl₂ Battery"]}
+              technologies={[
+                'STM32L0 MCU',
+                'ISFET pH Sensor',
+                'NH₄⁺ ISE',
+                '125kHz Inductive Link',
+                'Li-SOCl₂ Battery',
+              ]}
             />
           </div>
         </motion.div>
@@ -206,46 +230,46 @@ export default function About() {
           className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8 mb-8"
         >
           <h2 className="text-3xl font-bold text-white mb-6">Real-World Impact</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <ImpactCard
               icon="🦈"
               title="Marine Conservation"
               impacts={[
-                "Identify critical foraging habitats",
-                "Design effective marine protected areas",
-                "Monitor ecosystem health via apex predators",
-                "Track climate change impacts on shark behavior"
+                'Identify critical foraging habitats',
+                'Design effective marine protected areas',
+                'Monitor ecosystem health via apex predators',
+                'Track climate change impacts on shark behavior',
               ]}
             />
             <ImpactCard
               icon="🏖️"
               title="Human Safety"
               impacts={[
-                "Predict high-activity zones near beaches",
-                "Real-time warnings for coastal managers",
-                "Reduce human-shark conflicts",
-                "Education & public awareness"
+                'Predict high-activity zones near beaches',
+                'Real-time warnings for coastal managers',
+                'Reduce human-shark conflicts',
+                'Education & public awareness',
               ]}
             />
             <ImpactCard
               icon="🎣"
               title="Fisheries Management"
               impacts={[
-                "Minimize bycatch in commercial fishing",
-                "Optimize fishing zones vs. shark habitats",
-                "Sustainable ocean resource management",
-                "Support eco-tourism initiatives"
+                'Minimize bycatch in commercial fishing',
+                'Optimize fishing zones vs. shark habitats',
+                'Sustainable ocean resource management',
+                'Support eco-tourism initiatives',
               ]}
             />
             <ImpactCard
               icon="🔬"
               title="Scientific Research"
               impacts={[
-                "Validate ocean circulation models",
-                "Advance bio-logging technology",
-                "Cross-species applicability (tuna, whales)",
-                "Machine learning dataset generation"
+                'Validate ocean circulation models',
+                'Advance bio-logging technology',
+                'Cross-species applicability (tuna, whales)',
+                'Machine learning dataset generation',
               ]}
             />
           </div>
@@ -259,24 +283,39 @@ export default function About() {
           className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8 mb-8"
         >
           <h2 className="text-3xl font-bold text-white mb-6">Future Enhancements</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-6">
             <FutureCard
               phase="Phase 1"
               title="Field Validation"
-              items={["Deploy 50 tags across species", "Validate SFI predictions", "Refine classification algorithms", "6-month pilot study"]}
+              items={[
+                'Deploy 50 tags across species',
+                'Validate SFI predictions',
+                'Refine classification algorithms',
+                '6-month pilot study',
+              ]}
               timeline="2025-2026"
             />
             <FutureCard
               phase="Phase 2"
               title="Platform Expansion"
-              items={["Real-time dashboard for researchers", "Public API for conservationists", "Mobile app for citizen science", "AI-powered predictions"]}
+              items={[
+                'Real-time dashboard for researchers',
+                'Public API for conservationists',
+                'Mobile app for citizen science',
+                'AI-powered predictions',
+              ]}
               timeline="2026-2027"
             />
             <FutureCard
               phase="Phase 3"
               title="Global Scale"
-              items={["Multi-species expansion", "500+ deployed tags worldwide", "Integration with ocean digital twins", "Climate adaptation insights"]}
+              items={[
+                'Multi-species expansion',
+                '500+ deployed tags worldwide',
+                'Integration with ocean digital twins',
+                'Climate adaptation insights',
+              ]}
               timeline="2027+"
             />
           </div>
@@ -293,7 +332,7 @@ export default function About() {
           <p className="text-white/90 text-lg mb-6">
             NASA Space Apps Challenge 2025 • September 2025
           </p>
-          
+
           <div className="flex justify-center space-x-8 mb-6">
             <div className="text-white">
               <div className="text-4xl font-bold">3</div>
@@ -310,7 +349,12 @@ export default function About() {
           </div>
 
           <div className="text-white/80 text-sm">
-            <p>Domain: <a href="https://globalsharks.wiki" className="underline hover:text-white">globalsharks.wiki</a></p>
+            <p>
+              Domain:{' '}
+              <a href="https://globalsharks.wiki" className="underline hover:text-white">
+                globalsharks.wiki
+              </a>
+            </p>
             <p className="mt-2">Built with React, Vite, and passion for ocean conservation</p>
           </div>
         </motion.div>
@@ -333,7 +377,9 @@ function ProblemCard({ icon, title, description }) {
 function PipelineCard({ number, title, icon, color, features, status }) {
   return (
     <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6 hover:border-blue-500/50 transition-all">
-      <div className={`inline-block bg-gradient-to-r ${color} text-white text-sm font-bold px-3 py-1 rounded-full mb-3`}>
+      <div
+        className={`inline-block bg-gradient-to-r ${color} text-white text-sm font-bold px-3 py-1 rounded-full mb-3`}
+      >
         Pipeline {number}
       </div>
       <div className="text-4xl mb-3">{icon}</div>
