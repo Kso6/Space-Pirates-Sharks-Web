@@ -839,7 +839,7 @@ function PowerSection() {
                   <div className="text-center space-y-4 w-full">
                     <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
                       <img
-                        src="/Internal Gastric Tag.png"
+                        src="/internal-gastric-tag.png"
                         alt="Internal Gastric Capsule"
                         className="w-full h-auto object-cover"
                         style={{
