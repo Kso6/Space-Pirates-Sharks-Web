@@ -838,13 +838,13 @@ function PowerSection() {
                 <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-6 h-full flex items-center justify-center border-4 border-cyan-500/30">
                   <div className="text-center space-y-4 w-full">
                     <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
-                      <img 
-                        src="/Internal Gastric Tag.png" 
-                        alt="Internal Gastric Capsule" 
+                      <img
+                        src="/Internal Gastric Tag.png"
+                        alt="Internal Gastric Capsule"
                         className="w-full h-auto object-cover"
                         style={{
                           filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
-                          borderRadius: '16px'
+                          borderRadius: '16px',
                         }}
                       />
                       <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded">
