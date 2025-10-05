@@ -55,6 +55,7 @@ export default function SFIDashboard() {
     if (!modisData.depths[depthKey]) return null
 
     const depthData = modisData.depths[depthKey].data
+    if (!depthData || !Array.isArray(depthData)) return null
 
     // Filter valid data and calculate SFI
     const validData = depthData
