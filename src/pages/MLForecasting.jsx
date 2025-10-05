@@ -36,9 +36,12 @@ export default function MLForecasting() {
         const parsed = parseSSHAData(text)
         setSSHAData(parsed)
       } catch (err) {
-        // Silent error handling for production - could implement proper error logging service
-        console.error('Error loading data:', err)
-        // App will continue to work without data
+        // Centralized error handling with optional logging
+        if (import.meta.env.DEV) {
+          console.error('Error loading ML forecast data:', err)
+        }
+        // Optionally send to error tracking service in production
+        // errorTrackingService.capture(err)
       } finally {
         setLoading(false)
       }
@@ -50,58 +53,79 @@ export default function MLForecasting() {
   const forecastData = useMemo(() => {
     if (!sshaData || sshaData.length === 0) return null
 
-    // Sample data for performance using efficient method
-    const sampleSize = Math.min(500, sshaData.length)
-    const step = Math.floor(sshaData.length / sampleSize)
-    const sampled = new Array(sampleSize)
-    let sampledIndex = 0
-
-    for (let i = 0; i < sshaData.length && sampledIndex < sampleSize; i += step) {
-      sampled[sampledIndex++] = sshaData[i]
-    }
-    sampled.length = sampledIndex
-
-    // Normalize SSHA
-    const sshaValues = sampled.map((d) => d.value)
-    const { normalized } = normalizeSSHA(sshaValues)
-
-    // Pre-allocate result array
-    const processed = new Array(sampled.length)
-
-    // Generate synthetic SST and Chlorophyll for demonstration
-    // In production, these would come from real data files
-    for (let i = 0; i < sampled.length; i++) {
-      const point = sampled[i]
-
-      // Synthetic SST (18-30°C based on latitude)
-      const sst = 26 - Math.abs(point.lat) * 0.15 + (Math.random() - 0.5) * 2
-
-      // Synthetic Chlorophyll (0.01-5 mg/m³, higher near coasts)
-      const chlorophyll = 0.1 + Math.random() * 2
-
-      const probability = sharkGaussianModel({
-        sst,
-        ssha: normalized[i],
-        chlorophyll,
-        lat: point.lat,
-        depth,
-      })
-
-      const intensity = Math.exp(2.0 * probability + (Math.random() - 0.5) * 0.1)
-
-      processed[i] = {
-        lat: point.lat,
-        lon: point.lon,
-        sst,
-        chlorophyll,
-        ssha: normalized[i],
-        probability,
-        intensity,
-        depth,
+    try {
+      // Stratified sampling to ensure representative data
+      const sampleSize = Math.min(500, sshaData.length)
+      const sampled = []
+      
+      // Sort data by latitude to enable stratified sampling
+      const sortedData = [...sshaData].sort((a, b) => a.lat - b.lat)
+      
+      // Divide into latitude bands
+      const bands = 5
+      const bandSize = Math.floor(sortedData.length / bands)
+      
+      for (let band = 0; band < bands; band++) {
+        const start = band * bandSize
+        const end = (band + 1) * bandSize
+        const bandData = sortedData.slice(start, end)
+        
+        // Sample proportionally from each band
+        const bandSampleSize = Math.floor(sampleSize / bands)
+        const step = Math.max(1, Math.floor(bandData.length / bandSampleSize))
+        
+        for (let i = 0; i < bandData.length; i += step) {
+          sampled.push(bandData[i])
+          if (sampled.length >= sampleSize) break
+        }
       }
-    }
 
-    return processed
+      // Normalize SSHA
+      const sshaValues = sampled.map((d) => d.value)
+      const { normalized } = normalizeSSHA(sshaValues)
+
+      // Pre-allocate result array
+      const processed = new Array(sampled.length)
+
+      // Generate synthetic SST and Chlorophyll for demonstration
+      for (let i = 0; i < sampled.length; i++) {
+        const point = sampled[i]
+        
+        // Synthetic SST (18-30°C based on latitude)
+        const sst = 26 - Math.abs(point.lat) * 0.15 + (Math.random() - 0.5) * 2
+
+        // Synthetic Chlorophyll (0.01-5 mg/m³, higher near coasts)
+        const chlorophyll = 0.1 + Math.random() * 2
+
+        const probability = sharkGaussianModel({
+          sst,
+          ssha: normalized[i],
+          chlorophyll,
+          lat: point.lat,
+          depth,
+        })
+
+        const intensity = Math.exp(2.0 * probability + (Math.random() - 0.5) * 0.1)
+
+        processed[i] = {
+          lat: point.lat,
+          lon: point.lon,
+          sst,
+          chlorophyll,
+          ssha: normalized[i],
+          probability,
+          intensity,
+          depth,
+        }
+      }
+
+      return processed
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error processing forecast data:', error)
+      }
+      return null
+    }
   }, [sshaData, depth])
 
   const stats = useMemo(() => {
