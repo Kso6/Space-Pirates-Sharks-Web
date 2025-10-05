@@ -326,7 +326,7 @@ export default function Education() {
 
           <div className="mt-12">
             <a
-              href="https://github.com/global-sharks/shark-forecast"
+              href="https://github.com/Kso6/Space-Pirates-Sharks-Web"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all"
