@@ -39,7 +39,10 @@ export default function SFIDashboard() {
         const data = await response.json()
         setModisData(data)
       } catch (err) {
-        console.error('Error loading MODIS data:', err)
+        // Silent error handling for production
+        if (import.meta.env.DEV) {
+          console.error('Error loading MODIS data:', err)
+        }
       } finally {
         setLoading(false)
       }

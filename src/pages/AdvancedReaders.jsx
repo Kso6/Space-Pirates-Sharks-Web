@@ -14,12 +14,12 @@ export default function AdvancedReaders() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full mb-6">
-            <span className="text-red-400 text-sm font-semibold">⚠️ Advanced Technical Content</span>
+            <span className="text-red-400 text-sm font-semibold">
+              ⚠️ Advanced Technical Content
+            </span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
-            Advanced Readers
-          </h1>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">Advanced Readers</h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Deep dive into the mathematical foundations, model development, and technical
             implementation of the SHARK framework
@@ -62,9 +62,7 @@ export default function AdvancedReaders() {
         {/* Mathematical Model */}
         <Section title="Mathematical Model Development" delay={0.2}>
           <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
-            <h3 className="text-xl font-bold text-cyan-400 mb-4">
-              Shark Foraging Index (SFI)
-            </h3>
+            <h3 className="text-xl font-bold text-cyan-400 mb-4">Shark Foraging Index (SFI)</h3>
             <div className="bg-slate-950 rounded-lg p-4 font-mono text-sm text-green-400 mb-4 overflow-x-auto">
               SFI(x,y,z,t) = w_B · B_p(x,y,z,t) + w_T · S_T(x,y,z,t) + w_E · E(x,y,z,t)
             </div>
@@ -77,9 +75,7 @@ export default function AdvancedReaders() {
           </div>
 
           <div className="bg-slate-900/50 rounded-xl p-6">
-            <h3 className="text-xl font-bold text-purple-400 mb-4">
-              Stochastic Intensity Model
-            </h3>
+            <h3 className="text-xl font-bold text-purple-400 mb-4">Stochastic Intensity Model</h3>
             <div className="bg-slate-950 rounded-lg p-4 font-mono text-sm text-green-400 overflow-x-auto">
               λ(x,y,z,t) = exp(β₀ + β₁ · SFI(x,y,z,t) + ε(x,y))
             </div>
@@ -101,8 +97,12 @@ export default function AdvancedReaders() {
             <div className="bg-slate-900/50 rounded-xl p-6">
               <div className="bg-slate-950 rounded-lg p-4 font-mono text-sm text-green-400 space-y-2 overflow-x-auto">
                 <div>η(x,y,t) = SSHA(x,y,t)</div>
-                <div>𝓛{'{'}η{'}'}(x,y,t) = ∇²η = ∂²η/∂x² + ∂²η/∂y²</div>
-                <div>E_surf(x,y,t) = |𝓛{'{'}η{'}'}| / max|𝓛{'{'}η{'}'}| ∈ [0,1]</div>
+                <div>
+                  𝓛{'{'}η{'}'}(x,y,t) = ∇²η = ∂²η/∂x² + ∂²η/∂y²
+                </div>
+                <div>
+                  E_surf(x,y,t) = |𝓛{'{'}η{'}'}| / max|𝓛{'{'}η{'}'}| ∈ [0,1]
+                </div>
               </div>
             </div>
 
@@ -124,16 +124,14 @@ export default function AdvancedReaders() {
             <h4 className="text-sm font-bold text-blue-400 mb-2">Key Variables:</h4>
             <ul className="text-sm text-gray-300 space-y-1">
               <li>
-                <code className="text-cyan-400">η(x,y,t)</code> — Sea surface height anomaly
-                (SSHA)
+                <code className="text-cyan-400">η(x,y,t)</code> — Sea surface height anomaly (SSHA)
               </li>
               <li>
                 <code className="text-cyan-400">γ(x,y)</code> — Local scaling coefficient for
                 subsurface displacement
               </li>
               <li>
-                <code className="text-cyan-400">σ_z</code> — Vertical spread controlling depth
-                decay
+                <code className="text-cyan-400">σ_z</code> — Vertical spread controlling depth decay
               </li>
               <li>
                 <code className="text-cyan-400">z_th,clim</code> — Climatological mean thermocline
@@ -233,7 +231,11 @@ export default function AdvancedReaders() {
         {/* Model Implementation */}
         <Section title="SHARK Model Implementation" delay={0.6}>
           <p className="text-gray-300 leading-relaxed mb-6">
-            The <strong className="text-cyan-400">Stochastic and Heuristic Anomaly Regression Kernel (SHARK)</strong> is the world's first deterministic foraging mapping algorithm.
+            The{' '}
+            <strong className="text-cyan-400">
+              Stochastic and Heuristic Anomaly Regression Kernel (SHARK)
+            </strong>{' '}
+            is the world's first deterministic foraging mapping algorithm.
           </p>
 
           <div className="space-y-4">
@@ -370,7 +372,9 @@ export default function AdvancedReaders() {
           <h2 className="text-2xl font-bold text-white mb-4">References & Data Sources</h2>
           <ul className="space-y-2 text-sm text-gray-400">
             <li>• Argo float climatologies (EN4 dataset)</li>
-            <li>• Emery and Thomson, Data Analysis Methods in Physical Oceanography, 2nd Edition</li>
+            <li>
+              • Emery and Thomson, Data Analysis Methods in Physical Oceanography, 2nd Edition
+            </li>
             <li>• Talley et al, Descriptive Physical Oceanography</li>
             <li>• NASA MODIS Ocean Color Data</li>
             <li>• NOAA Sea Surface Height Anomaly (SWOT Mission)</li>

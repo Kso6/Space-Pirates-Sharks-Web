@@ -115,9 +115,8 @@ export function sharkGaussianModel({
  */
 export function logLinearTransform(probability, beta0 = 0.0, beta1 = 2.0) {
   if (probability === null || isNaN(probability) || probability <= 0) return 0
-  // Add small random noise for realism
-  const epsilon = (Math.random() - 0.5) * 0.1
-  return Math.exp(beta0 + beta1 * probability + epsilon)
+  // Deterministic transformation for consistent predictions
+  return Math.exp(beta0 + beta1 * probability)
 }
 
 /**
