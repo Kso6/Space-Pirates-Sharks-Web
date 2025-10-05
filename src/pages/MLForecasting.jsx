@@ -30,21 +30,46 @@ export default function MLForecasting() {
     const loadData = async () => {
       try {
         setLoading(true)
-        console.log('Attempting to load MODIS data from /processed-data/modis-shark-model.json')
-        const response = await fetch('/processed-data/modis-shark-model.json')
-        console.log('Response status:', response.status, response.statusText)
-        if (!response.ok) throw new Error(`Failed to load MODIS data: ${response.status}`)
-        const data = await response.json()
-        console.log('Data loaded successfully:', {
-          hasMetadata: !!data.metadata,
-          hasDepths: !!data.depths,
-          depthKeys: data.depths ? Object.keys(data.depths) : []
-        })
-        setModisData(data)
+        
+        // Try multiple paths in case of deployment issues
+        const paths = [
+          '/processed-data/modis-shark-model.json',
+          './processed-data/modis-shark-model.json',
+          'processed-data/modis-shark-model.json',
+        ]
+        
+        let data = null
+        let lastError = null
+        
+        for (const path of paths) {
+          try {
+            console.log(`Attempting to load MODIS data from ${path}`)
+            const response = await fetch(path)
+            console.log(`Response status for ${path}:`, response.status, response.statusText)
+            
+            if (response.ok) {
+              data = await response.json()
+              console.log('Data loaded successfully from:', path, {
+                hasMetadata: !!data.metadata,
+                hasDepths: !!data.depths,
+                depthKeys: data.depths ? Object.keys(data.depths) : []
+              })
+              break
+            }
+          } catch (err) {
+            console.warn(`Failed to load from ${path}:`, err.message)
+            lastError = err
+          }
+        }
+        
+        if (data) {
+          setModisData(data)
+        } else {
+          throw lastError || new Error('Failed to load MODIS data from any path')
+        }
       } catch (err) {
         console.error('Error loading MODIS data:', err)
-        // Optionally send to error tracking service in production
-        // errorTrackingService.capture(err)
+        console.error('Please wait for GitHub Pages deployment to complete (2-3 minutes)')
       } finally {
         setLoading(false)
       }

@@ -9,11 +9,13 @@ A stunning **Y Combinator-style founders section** has been added to the About p
 ## 📸 Team Photo Integration
 
 ### File Added
+
 - **Source**: `Founders Picture /Group Pic.png`
 - **Destination**: `public/team-photo.png` (2.9MB)
 - **Alt Text**: "Team Space Pirates - Kayra, Cornelius, Lachlan, Ishan, and Ansh"
 
 ### Photo Styling
+
 - **Border**: 4px orange gradient border with glow effect
 - **Overlay Badge**: Floating badge at bottom center
   - Team name: "Team Space Pirates"
@@ -27,15 +29,16 @@ A stunning **Y Combinator-style founders section** has been added to the About p
 
 ### Individual Founder Cards
 
-| Name       | Role                    | Icon |
-|------------|-------------------------|------|
-| **Kayra**      | ML & Data Science       | 🤖   |
-| **Cornelius**  | Full-Stack Dev          | 💻   |
-| **Lachlan**    | Hardware & Sensors      | 🔬   |
-| **Ishan**      | Mathematical Modeling   | 📐   |
-| **Ansh**       | Data Visualization      | 📊   |
+| Name          | Role                  | Icon |
+| ------------- | --------------------- | ---- |
+| **Kayra**     | ML & Data Science     | 🤖   |
+| **Cornelius** | Full-Stack Dev        | 💻   |
+| **Lachlan**   | Hardware & Sensors    | 🔬   |
+| **Ishan**     | Mathematical Modeling | 📐   |
+| **Ansh**      | Data Visualization    | 📊   |
 
 ### Card Features
+
 - **Hover Animation**: Scale 1.05 + lift 5px on hover
 - **Border**: Orange gradient that intensifies on hover
 - **Layout**: 5-column grid on desktop, stacks on mobile
@@ -53,6 +56,7 @@ Four key metrics displayed in a 2x2 grid (4 columns on desktop):
 4. **∞** - Potential Impact (Purple)
 
 Each stat card has:
+
 - Large bold number (text-4xl)
 - Descriptive label
 - Color-coded border matching the metric
@@ -62,18 +66,21 @@ Each stat card has:
 ## 🎨 Design System
 
 ### Color Palette (YC-Inspired)
+
 - **Primary**: Orange (#fb923c) → Red (#ef4444) → Pink (#ec4899)
 - **Accents**: Purple (#a855f7) for special elements
 - **Background**: Slate-900 with transparency
 - **Borders**: Colored borders with 20-50% opacity
 
 ### Typography
+
 - **Header**: 4xl-5xl, gradient text (orange → red → pink)
 - **Subheader**: xl, gray-300
 - **Body**: lg, white/90
 - **Labels**: sm, gray-400
 
 ### Spacing
+
 - **Section Padding**: 8-12 (responsive)
 - **Card Gap**: 6 (1.5rem)
 - **Margin Bottom**: 12 (3rem)
@@ -83,6 +90,7 @@ Each stat card has:
 ## 🚀 Mission Statement
 
 Centered call-to-action box with:
+
 - **Gradient Background**: Orange-600 → Red-600
 - **Rounded Corners**: 2xl (1rem)
 - **Content**:
@@ -96,45 +104,47 @@ Centered call-to-action box with:
 ## 💻 Technical Implementation
 
 ### Component Structure
+
 ```jsx
-<motion.div> {/* Outer container with animation */}
-  <div className="bg-gradient-to-br from-orange-500/10..."> {/* YC-style card */}
+<motion.div>
+  {' '}
+  {/* Outer container with animation */}
+  <div className="bg-gradient-to-br from-orange-500/10...">
+    {' '}
+    {/* YC-style card */}
     {/* Header with badge + title */}
     <div className="text-center mb-12">
-      <div className="inline-flex..."> {/* Animated badge */}
+      <div className="inline-flex...">
+        {' '}
+        {/* Animated badge */}
         MEET THE TEAM • SPACE PIRATES
       </div>
       <h2>Five Students. One Mission.</h2>
     </div>
-
     {/* Team Photo */}
-    <motion.div> {/* Photo with animation */}
+    <motion.div>
+      {' '}
+      {/* Photo with animation */}
       <img src="/team-photo.png" alt="..." />
       {/* Overlay badge */}
     </motion.div>
-
     {/* Founders Grid */}
     <div className="grid md:grid-cols-5 gap-6">
       <FounderCard name="Kayra" role="ML & Data Science" icon="🤖" />
       {/* ... 4 more founders */}
     </div>
-
     {/* Stats Grid */}
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {/* 4 stat cards */}
-    </div>
-
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">{/* 4 stat cards */}</div>
     {/* Mission Statement */}
     <div className="text-center">
-      <div className="inline-block bg-gradient-to-r...">
-        {/* Mission content */}
-      </div>
+      <div className="inline-block bg-gradient-to-r...">{/* Mission content */}</div>
     </div>
   </div>
 </motion.div>
 ```
 
 ### New Component: `FounderCard`
+
 ```jsx
 function FounderCard({ name, role, icon }) {
   return (
@@ -155,12 +165,14 @@ function FounderCard({ name, role, icon }) {
 ## 📱 Responsive Design
 
 ### Desktop (md+)
+
 - 5-column founder grid
 - 4-column stats grid
 - Full-width photo with contained max-width
 - Horizontal layout for all elements
 
 ### Mobile (< md)
+
 - Single column founder cards (stacked)
 - 2-column stats grid
 - Full-width photo
@@ -171,15 +183,18 @@ function FounderCard({ name, role, icon }) {
 ## ✨ Animations
 
 ### Page Load
+
 - **Delay**: 0.9s (loads after other sections)
 - **Effect**: Fade in + slide up (opacity 0→1, y 20→0)
 
 ### Team Photo
+
 - **Delay**: 0.3s after section loads
 - **Effect**: Fade in + scale (opacity 0→1, scale 0.95→1.0)
 - **Duration**: 0.5s
 
 ### Founder Cards
+
 - **Hover**: Scale 1.05 + lift 5px
 - **Border**: Opacity 20% → 50%
 - **Transition**: Smooth (all properties)
@@ -202,6 +217,7 @@ function FounderCard({ name, role, icon }) {
 ## 📦 Files Modified
 
 1. **`src/pages/About.jsx`**
+
    - Added team photo section
    - Added founders grid
    - Added stats grid
@@ -209,6 +225,7 @@ function FounderCard({ name, role, icon }) {
    - Created `FounderCard` component
 
 2. **`public/team-photo.png`**
+
    - Copied from `Founders Picture /Group Pic.png`
    - 2.9MB file size
    - Optimized for web display

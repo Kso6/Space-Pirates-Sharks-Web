@@ -431,7 +431,11 @@ export default function About() {
             {/* Founders Grid */}
             <div className="grid md:grid-cols-5 gap-6 mb-12">
               <FounderCard name="Kayra" role="Full-Stack Web Dev & Co-Product Designer" icon="💻" />
-              <FounderCard name="Cornelius" role="Lead Pipeline Coordinator & Researcher" icon="🔬" />
+              <FounderCard
+                name="Cornelius"
+                role="Lead Pipeline Coordinator & Researcher"
+                icon="🔬"
+              />
               <FounderCard name="Lachlan" role="Lead Hardware Product Designer" icon="📐" />
               <FounderCard name="Ishan" role="Lead Data Analyst & Algorithmic Tuner" icon="📊" />
               <FounderCard name="Ansh" role="Lead Model Coordinator & Project Manager" icon="🚀" />
