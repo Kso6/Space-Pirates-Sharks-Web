@@ -12,21 +12,21 @@
  */
 export function calculateTemperatureAtDepth(surfaceTemp, depth, lat) {
   if (depth === 0) return surfaceTemp
-  
+
   // Latitude-dependent lapse rate (0.02-0.03 °C/m)
   const lapseRate = 0.02 + 0.01 * Math.pow(Math.sin((lat * Math.PI) / 180), 2)
-  
+
   // Thermocline depth (typically 100-200m, varies with latitude)
   const thermoclineDepth = 150 - Math.abs(lat) * 0.5
-  
+
   if (depth <= thermoclineDepth) {
     // Linear decrease in thermocline
-    return surfaceTemp - (lapseRate * depth)
+    return surfaceTemp - lapseRate * depth
   } else {
     // Slower decrease below thermocline
-    const thermoclineTemp = surfaceTemp - (lapseRate * thermoclineDepth)
+    const thermoclineTemp = surfaceTemp - lapseRate * thermoclineDepth
     const deepLapseRate = 0.005 // Much slower below thermocline
-    return thermoclineTemp - (deepLapseRate * (depth - thermoclineDepth))
+    return thermoclineTemp - deepLapseRate * (depth - thermoclineDepth)
   }
 }
 
@@ -39,12 +39,12 @@ export function calculateTemperatureAtDepth(surfaceTemp, depth, lat) {
  */
 export function calculateChlorophyllAtDepth(surfaceChl, depth) {
   if (depth === 0) return surfaceChl
-  
+
   // Chlorophyll typically peaks at 20-50m (subsurface chlorophyll maximum)
   // Then decays exponentially
   const depthOfMaximum = 30
   const decayRate = 0.015 // per meter
-  
+
   if (depth <= depthOfMaximum) {
     // Slight increase to maximum
     const increase = 1 + (depth / depthOfMaximum) * 0.3
@@ -66,22 +66,22 @@ export function calculateChlorophyllAtDepth(surfaceChl, depth) {
  */
 export function calculateEddyIntensity(sshaData, lat, lon, radius = 1.0) {
   if (!sshaData || sshaData.length === 0) return 0
-  
+
   // Find nearby points
-  const nearbyPoints = sshaData.filter(point => {
+  const nearbyPoints = sshaData.filter((point) => {
     const latDiff = Math.abs(point.lat - lat)
     const lonDiff = Math.abs(point.lon - lon)
     return latDiff <= radius && lonDiff <= radius
   })
-  
+
   if (nearbyPoints.length < 4) return 0
-  
+
   // Calculate spatial gradients
-  const values = nearbyPoints.map(p => p.value)
+  const values = nearbyPoints.map((p) => p.value)
   const mean = values.reduce((sum, v) => sum + v, 0) / values.length
   const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length
   const std = Math.sqrt(variance)
-  
+
   // High variance = strong eddy activity
   // Normalize to 0-1 scale (std of 20cm is strong eddy)
   return Math.min(std / 20, 1.0)
@@ -94,31 +94,38 @@ export function calculateEddyIntensity(sshaData, lat, lon, radius = 1.0) {
  */
 export function isValidModisPoint(point) {
   if (!point) return false
-  
+
   // Check chlorophyll
-  if (point.chlorophyll === -32767 || // NoData flag
-      point.chlorophyll < 0 || 
-      point.chlorophyll > 100 || // Unrealistic
-      isNaN(point.chlorophyll)) {
+  if (
+    point.chlorophyll === -32767 || // NoData flag
+    point.chlorophyll < 0 ||
+    point.chlorophyll > 100 || // Unrealistic
+    isNaN(point.chlorophyll)
+  ) {
     return false
   }
-  
+
   // Check SST
-  if (point.sst < -2 || // Below freezing point of seawater
-      point.sst > 35 || // Unrealistic high
-      isNaN(point.sst)) {
+  if (
+    point.sst < -2 || // Below freezing point of seawater
+    point.sst > 35 || // Unrealistic high
+    isNaN(point.sst)
+  ) {
     return false
   }
-  
+
   // Check intensity and probability if present
   if (point.intensity !== undefined && (isNaN(point.intensity) || point.intensity < 0)) {
     return false
   }
-  
-  if (point.probability !== undefined && (isNaN(point.probability) || point.probability < 0 || point.probability > 1)) {
+
+  if (
+    point.probability !== undefined &&
+    (isNaN(point.probability) || point.probability < 0 || point.probability > 1)
+  ) {
     return false
   }
-  
+
   return true
 }
 
@@ -129,19 +136,19 @@ export function isValidModisPoint(point) {
  */
 export function isValidSSHAPoint(point) {
   if (!point || !point.value) return false
-  
+
   const value = point.value
-  
+
   // Check for NoData flags
   if (value === -999 || value === null || isNaN(value)) {
     return false
   }
-  
+
   // Check for unrealistic values (>2 meters anomaly)
   if (Math.abs(value) > 200) {
     return false
   }
-  
+
   return true
 }
 
@@ -155,12 +162,12 @@ export function isValidSSHAPoint(point) {
 export function estimateThermoclineDepth(ssha, lat) {
   // Base thermocline depth varies with latitude
   const baseDepth = 150 - Math.abs(lat) * 0.5
-  
+
   // SSHA affects thermocline depth
   // Positive anomaly = deeper thermocline (warm eddy)
   // Negative anomaly = shallower thermocline (cold eddy)
   const depthAdjustment = ssha * 0.5 // ~0.5m per cm of SSHA
-  
+
   return Math.max(50, Math.min(300, baseDepth + depthAdjustment))
 }
 
@@ -172,8 +179,8 @@ export function estimateThermoclineDepth(ssha, lat) {
  */
 export function createDepthProfile(surfaceData, depths = [0, 50, 100, 150, 200, 250, 300]) {
   const { sst, chlorophyll, lat, lon, ssha } = surfaceData
-  
-  return depths.map(depth => ({
+
+  return depths.map((depth) => ({
     depth,
     temperature: calculateTemperatureAtDepth(sst, depth, lat),
     chlorophyll: calculateChlorophyllAtDepth(chlorophyll, depth),

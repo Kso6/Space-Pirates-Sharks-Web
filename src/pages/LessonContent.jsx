@@ -1,687 +1,755 @@
-// Lesson content components that can be imported
+// Enhanced interactive lesson content components
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts'
 
-// Lesson 1: How Satellites Track Ocean Life
+// ============================================================================
+// LESSON 1: How Satellites Track Ocean Life
+// ============================================================================
 export function Lesson1Content() {
-  const [selectedRegion, setSelectedRegion] = useState(null)
+  const [selectedTerm, setSelectedTerm] = useState(null)
   const [quizAnswers, setQuizAnswers] = useState({})
-  const [showQuizResults, setShowQuizResults] = useState(false)
-  const [definitionVisible, setDefinitionVisible] = useState('')
+  const [showResults, setShowResults] = useState(false)
+  const [guessedZones, setGuessedZones] = useState([])
 
-  const oceanRegions = [
-    { id: 'atlantic', name: 'North Atlantic', temp: '22°C', chlorophyll: 'High', eddies: 'Strong' },
-    { id: 'pacific', name: 'Pacific Gyre', temp: '25°C', chlorophyll: 'Low', eddies: 'Weak' },
-    {
-      id: 'southern',
-      name: 'Southern Ocean',
-      temp: '8°C',
-      chlorophyll: 'Medium',
-      eddies: 'Very Strong',
+  // Interactive definitions
+  const terms = {
+    chlorophyll: {
+      word: 'chlorophyll',
+      definition:
+        'A green pigment found in plants and algae that captures sunlight for photosynthesis. Satellites detect it to measure ocean productivity.',
+      color: 'green',
     },
-    {
-      id: 'coastal',
-      name: 'California Coast',
-      temp: '16°C',
-      chlorophyll: 'Very High',
-      eddies: 'Moderate',
+    eddies: {
+      word: 'eddies',
+      definition:
+        'Swirling ocean currents that can be hundreds of kilometers wide. They trap nutrients and prey, creating hunting hotspots for sharks.',
+      color: 'blue',
     },
-  ]
-
-  const quizQuestions = [
-    {
-      question: 'What does chlorophyll concentration (detected from space) tell scientists?',
-      options: [
-        'A. The number of sharks in an area',
-        'B. The productivity of the water (how much plankton is present)',
-        'C. The salinity of the ocean',
-        'D. The temperature below 1000 m',
-      ],
-      correct: 'B',
+    upwelling: {
+      word: 'upwelling',
+      definition:
+        'When deep, cold, nutrient-rich water rises to the surface. This creates highly productive zones where marine life thrives.',
+      color: 'cyan',
     },
-    {
-      question:
-        'You see a satellite map showing a patch of warm water with high chlorophyll concentration. Where is a shark most likely to be foraging?',
-      options: [
-        'a) In the patch, but generally there is a time delay',
-        'b) Far from the patch',
-        'c) At the ocean floor',
-      ],
-      correct: 'a',
+    'thermal fronts': {
+      word: 'thermal fronts',
+      definition:
+        'Boundaries between warm and cold water masses. Prey often concentrates along these fronts, attracting predators like sharks.',
+      color: 'red',
     },
-  ]
-
-  const definitions = {
-    chlorophyll: 'A green pigment in plants and algae that absorbs sunlight for photosynthesis',
-    phytoplankton: 'Microscopic marine algae that form the base of the ocean food web',
-    eddies: 'Circular currents in the ocean that trap nutrients and concentrate prey',
-    'sea surface height': 'The elevation of the ocean surface relative to a reference level',
-    'NASA SWOT':
-      'Surface Water and Ocean Topography mission - a satellite that measures ocean height with unprecedented accuracy',
   }
 
-  const handleQuizSubmit = () => {
-    setShowQuizResults(true)
+  const handleQuizAnswer = (questionId, answer) => {
+    setQuizAnswers({ ...quizAnswers, [questionId]: answer })
   }
+
+  const checkQuiz = () => {
+    setShowResults(true)
+  }
+
+  const correctAnswers = {
+    q1: 'B',
+    q2: 'a',
+  }
+
+  const allAnswered = Object.keys(correctAnswers).every((q) => quizAnswers[q])
 
   return (
-    <div className="space-y-6">
-      {/* Step 1 */}
+    <div className="space-y-8">
+      {/* Introduction */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        className="bg-gradient-to-br from-blue-500/20 via-cyan-500/20 to-purple-500/20 border border-blue-500/30 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-            1
-          </div>
-          <h3 className="text-xl font-bold text-white">Satellites See the Invisible</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          NASA satellites orbit 500km above Earth, but they can detect tiny changes in the ocean
-          surface that reveal what's happening underwater!
+        <h2 className="text-3xl font-bold text-white mb-4">
+          🛰️ How Satellites Predict Shark Movement
+        </h2>
+        <p className="text-gray-300 text-lg leading-relaxed">
+          Satellites help predict shark movement by monitoring the ocean conditions that influence
+          where sharks hunt and travel. By measuring factors such as sea surface temperature,{' '}
+          <ClickableWord
+            term="chlorophyll"
+            onClick={() => setSelectedTerm('chlorophyll')}
+            color="green"
+          />{' '}
+          concentration (which indicates plankton and therefore prey abundance, since fish prey on
+          plankton), and sea surface height anomalies (which reveal ocean currents and{' '}
+          <ClickableWord term="eddies" onClick={() => setSelectedTerm('eddies')} color="blue" />
+          ), scientists can identify regions where food is likely to be concentrated.
         </p>
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-          <p className="text-blue-300 text-sm">
-            <strong>Key Concept:</strong> Satellites use radar to measure{' '}
-            <span
-              className="text-cyan-400 cursor-pointer hover:underline"
-              onClick={() => setDefinitionVisible('sea surface height')}
-            >
-              sea surface height
-            </span>{' '}
-            down to the centimeter. Underwater{' '}
-            <span
-              className="text-cyan-400 cursor-pointer hover:underline"
-              onClick={() => setDefinitionVisible('eddies')}
-            >
-              eddies
-            </span>{' '}
-            create "bumps" and "dips" in the ocean surface.
-          </p>
-        </div>
+        <p className="text-gray-300 text-lg leading-relaxed mt-4">
+          Sharks often follow these productive areas, especially along{' '}
+          <ClickableWord
+            term="thermal fronts"
+            onClick={() => setSelectedTerm('thermal fronts')}
+            color="red"
+          />{' '}
+          or{' '}
+          <ClickableWord
+            term="upwelling"
+            onClick={() => setSelectedTerm('upwelling')}
+            color="cyan"
+          />{' '}
+          zones, where prey gather. Combining satellite data with GPS-tagged shark tracking allows
+          researchers to find patterns between environmental changes and shark movements, helping
+          predict when and where sharks are likely to forage or migrate next.
+        </p>
       </motion.div>
 
-      {/* Step 2 */}
+      {/* Definition popup */}
+      <AnimatePresence>
+        {selectedTerm && terms[selectedTerm] && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-slate-800/95 backdrop-blur-xl border border-cyan-500/50 rounded-2xl p-6 shadow-2xl"
+          >
+            <div className="flex items-start justify-between mb-3">
+              <h3 className={`text-2xl font-bold text-${terms[selectedTerm].color}-400 capitalize`}>
+                {terms[selectedTerm].word}
+              </h3>
+              <button
+                onClick={() => setSelectedTerm(null)}
+                className="text-gray-400 hover:text-white text-2xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+            <p className="text-gray-300 text-lg">{terms[selectedTerm].definition}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* NASA SWOT Mission */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-            2
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            1
           </div>
-          <h3 className="text-xl font-bold text-white">Meet NASA SWOT</h3>
+          <h3 className="text-2xl font-bold text-white">Meet NASA SWOT Mission</h3>
         </div>
-        <p className="text-gray-300 mb-4">
-          The{' '}
-          <span
-            className="text-cyan-400 cursor-pointer hover:underline"
-            onClick={() => setDefinitionVisible('NASA SWOT')}
-          >
-            NASA SWOT mission
-          </span>{' '}
-          launched in 2022. It can map ocean height with incredible detail - 10x better than
-          previous satellites!
+        <p className="text-gray-300 text-lg mb-6">
+          The Surface Water and Ocean Topography (SWOT) mission launched in December 2022. It
+          measures sea surface height with unprecedented accuracy, detecting underwater features
+          that sharks use for hunting.
         </p>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <div className="text-2xl font-bold text-blue-400 mb-1">±2cm</div>
-            <div className="text-sm text-gray-400">Measurement accuracy</div>
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 text-center">
+            <div className="text-4xl font-bold text-blue-400 mb-2">±2cm</div>
+            <div className="text-sm text-gray-400">Height measurement accuracy</div>
           </div>
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <div className="text-2xl font-bold text-cyan-400 mb-1">120km</div>
-            <div className="text-sm text-gray-400">Swath width</div>
+          <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-xl p-6 text-center">
+            <div className="text-4xl font-bold text-cyan-400 mb-2">120km</div>
+            <div className="text-sm text-gray-400">Swath width coverage</div>
+          </div>
+          <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-6 text-center">
+            <div className="text-4xl font-bold text-purple-400 mb-2">21 days</div>
+            <div className="text-sm text-gray-400">Complete Earth coverage</div>
           </div>
         </div>
+      </motion.div>
+
+      {/* Quiz Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-6">📝 Test Your Knowledge</h3>
+
+        {/* Question 1 */}
+        <div className="bg-slate-800/50 rounded-xl p-6 mb-6">
+          <p className="text-white text-lg font-semibold mb-4">
+            1. What does chlorophyll concentration (detected from space) tell scientists?
+          </p>
+          <div className="space-y-3">
+            {['A', 'B', 'C', 'D'].map((option) => {
+              const labels = {
+                A: 'The number of sharks in an area',
+                B: 'The productivity of the water (how much plankton is present)',
+                C: 'The salinity of the ocean',
+                D: 'The temperature below 1000 m',
+              }
+              const isSelected = quizAnswers.q1 === option
+              const isCorrect = option === correctAnswers.q1
+              const showFeedback = showResults && isSelected
+
+              return (
+                <button
+                  key={option}
+                  onClick={() => handleQuizAnswer('q1', option)}
+                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                    isSelected
+                      ? showFeedback
+                        ? isCorrect
+                          ? 'border-green-500 bg-green-500/20'
+                          : 'border-red-500 bg-red-500/20'
+                        : 'border-blue-500 bg-blue-500/10'
+                      : 'border-white/10 bg-slate-700/30 hover:border-white/30'
+                  }`}
+                >
+                  <span className="text-white font-semibold">{option}.</span>{' '}
+                  <span className="text-gray-300">{labels[option]}</span>
+                  {showFeedback && isCorrect && (
+                    <span className="ml-2 text-green-400">✓ Correct!</span>
+                  )}
+                  {showFeedback && !isCorrect && (
+                    <span className="ml-2 text-red-400">✗ Incorrect</span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Question 2 */}
+        <div className="bg-slate-800/50 rounded-xl p-6 mb-6">
+          <p className="text-white text-lg font-semibold mb-4">
+            2. You see a satellite map showing a patch of warm water with high chlorophyll
+            concentration. Where is a shark most likely to be foraging?
+          </p>
+          <div className="space-y-3">
+            {['a', 'b', 'c'].map((option) => {
+              const labels = {
+                a: 'In the patch, but generally there is a time delay',
+                b: 'Far from the patch',
+                c: 'At the ocean floor',
+              }
+              const isSelected = quizAnswers.q2 === option
+              const isCorrect = option === correctAnswers.q2
+              const showFeedback = showResults && isSelected
+
+              return (
+                <button
+                  key={option}
+                  onClick={() => handleQuizAnswer('q2', option)}
+                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                    isSelected
+                      ? showFeedback
+                        ? isCorrect
+                          ? 'border-green-500 bg-green-500/20'
+                          : 'border-red-500 bg-red-500/20'
+                        : 'border-blue-500 bg-blue-500/10'
+                      : 'border-white/10 bg-slate-700/30 hover:border-white/30'
+                  }`}
+                >
+                  <span className="text-white font-semibold">{option})</span>{' '}
+                  <span className="text-gray-300">{labels[option]}</span>
+                  {showFeedback && isCorrect && (
+                    <span className="ml-2 text-green-400">✓ Correct!</span>
+                  )}
+                  {showFeedback && !isCorrect && (
+                    <span className="ml-2 text-red-400">✗ Incorrect</span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+          {showResults && quizAnswers.q2 === 'a' && (
+            <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <p className="text-blue-300 text-sm">
+                <strong>Explanation:</strong> There's typically a time delay between when
+                phytoplankton blooms appear and when sharks arrive. First, the plankton attracts
+                small fish, then those fish attract larger fish, and finally sharks come to hunt the
+                larger fish. This cascade can take days to weeks!
+              </p>
+            </div>
+          )}
+        </div>
+
+        {!showResults && (
+          <button
+            onClick={checkQuiz}
+            disabled={!allAnswered}
+            className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
+              allAnswered
+                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
+                : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            {allAnswered ? 'Check Answers' : 'Answer all questions to continue'}
+          </button>
+        )}
+
+        {showResults && (
+          <div className="text-center">
+            <div className="text-2xl font-bold text-white mb-2">
+              Score:{' '}
+              {
+                Object.keys(correctAnswers).filter((q) => quizAnswers[q] === correctAnswers[q])
+                  .length
+              }
+              /{Object.keys(correctAnswers).length}
+            </div>
+            <button
+              onClick={() => {
+                setQuizAnswers({})
+                setShowResults(false)
+              }}
+              className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
+            >
+              Retry Quiz
+            </button>
+          </div>
+        )}
       </motion.div>
 
       {/* Interactive Map Activity */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        transition={{ delay: 0.6 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
-            3
-          </div>
-          <h3 className="text-xl font-bold text-white">Interactive Ocean Explorer</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          Click on different ocean regions to see environmental data, then predict where sharks
-          might hunt.
+        <h3 className="text-2xl font-bold text-white mb-4">🗺️ Interactive Map Activity</h3>
+        <p className="text-gray-300 mb-6">
+          Explore simulated satellite maps showing sea surface temperature, chlorophyll, and
+          currents. Click on different ocean regions to predict where sharks might hunt!
         </p>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-3">
-            <h4 className="text-white font-semibold mb-3">Ocean Regions</h4>
-            {oceanRegions.map((region) => (
-              <motion.button
-                key={region.id}
-                onClick={() => setSelectedRegion(region)}
-                className={`w-full p-3 rounded-lg border transition-all ${
-                  selectedRegion?.id === region.id
-                    ? 'bg-blue-500/20 border-blue-500 text-white'
-                    : 'bg-slate-800/50 border-white/10 text-gray-300 hover:bg-slate-800/70'
-                }`}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="text-left">
-                  <div className="font-semibold">{region.name}</div>
-                  <div className="text-xs text-gray-400 mt-1">
-                    🌡️ {region.temp} • 🌿 {region.chlorophyll} • 🌀 {region.eddies}
-                  </div>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">Environmental Data</h4>
-            {selectedRegion ? (
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Temperature:</span>
-                  <span
-                    className={`font-semibold ${
-                      parseFloat(selectedRegion.temp) > 20 ? 'text-yellow-400' : 'text-blue-400'
-                    }`}
-                  >
-                    {selectedRegion.temp}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Chlorophyll:</span>
-                  <span
-                    className={`font-semibold ${
-                      selectedRegion.chlorophyll === 'Very High'
-                        ? 'text-green-400'
-                        : selectedRegion.chlorophyll === 'High'
-                        ? 'text-green-300'
-                        : 'text-gray-400'
-                    }`}
-                  >
-                    {selectedRegion.chlorophyll}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Eddy Activity:</span>
-                  <span
-                    className={`font-semibold ${
-                      selectedRegion.eddies === 'Very Strong' || selectedRegion.eddies === 'Strong'
-                        ? 'text-purple-400'
-                        : 'text-gray-400'
-                    }`}
-                  >
-                    {selectedRegion.eddies}
-                  </span>
-                </div>
-                <div className="border-t border-white/10 pt-3 mt-3">
-                  <div className="text-sm text-gray-400 mb-2">Shark Foraging Probability:</div>
-                  <div className="w-full bg-slate-700 rounded-full h-3">
-                    <div
-                      className={`h-3 rounded-full ${
-                        selectedRegion.chlorophyll === 'Very High' &&
-                        (selectedRegion.eddies === 'Strong' ||
-                          selectedRegion.eddies === 'Very Strong')
-                          ? 'bg-green-400 w-4/5'
-                          : selectedRegion.chlorophyll === 'High'
-                          ? 'bg-yellow-400 w-3/5'
-                          : 'bg-red-400 w-1/5'
-                      }`}
-                    ></div>
-                  </div>
-                  <div className="text-xs text-gray-400 mt-1">
-                    {selectedRegion.chlorophyll === 'Very High' &&
-                    (selectedRegion.eddies === 'Strong' || selectedRegion.eddies === 'Very Strong')
-                      ? 'High - Perfect hunting conditions!'
-                      : selectedRegion.chlorophyll === 'High'
-                      ? 'Medium - Good potential'
-                      : 'Low - Poor conditions'}
-                  </div>
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {/* Eddy Map */}
+          <div className="bg-slate-900/50 rounded-xl p-4">
+            <h4 className="text-white font-semibold mb-3">Ocean Eddies (Sea Surface Height)</h4>
+            <div className="aspect-square bg-gradient-to-br from-blue-900 via-cyan-800 to-blue-900 rounded-lg relative overflow-hidden">
+              {/* Simulated eddy visualization */}
+              <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-red-500/30 rounded-full blur-2xl"></div>
+              <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-blue-500/40 rounded-full blur-2xl"></div>
+              <div className="absolute bottom-1/4 left-1/2 w-36 h-36 bg-cyan-500/30 rounded-full blur-2xl"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-white/50 text-sm text-center">
+                  Warm eddies (red) and cold eddies (blue)
+                  <br />
+                  create swirling currents
                 </div>
               </div>
-            ) : (
-              <div className="text-gray-400 text-sm text-center py-8">
-                Select a region to view data
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-6 p-4 bg-slate-800/30 rounded-lg">
-          <h4 className="text-white font-semibold mb-2">🦈 Guess Zone</h4>
-          <p className="text-gray-300 text-sm mb-3">
-            Based on the environmental data, where would you expect sharks to hunt?
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {oceanRegions.map((region) => (
-              <button
-                key={region.id}
-                className={`px-3 py-1 rounded-full text-sm transition-all ${
-                  selectedRegion?.id === region.id
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
-                }`}
-              >
-                {region.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Ocean Eddies Explanation */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-            4
-          </div>
-          <h3 className="text-xl font-bold text-white">Ocean Eddies = Shark Restaurants</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          <span
-            className="text-cyan-400 cursor-pointer hover:underline"
-            onClick={() => setDefinitionVisible('eddies')}
-          >
-            Eddies
-          </span>{' '}
-          are swirling currents that trap nutrients and small fish. Sharks hunt at the edges of
-          these eddies where prey concentrates!
-        </p>
-        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-          <p className="text-green-300 text-sm">
-            <strong>Try This:</strong> Think of an eddy like a whirlpool in a bathtub - it pulls
-            things to its center and creates a spiral of water that sharks can detect and use for
-            hunting.
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Interactive Quiz */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-6"
-      >
-        <h3 className="text-xl font-bold text-white mb-4">🧠 Knowledge Check</h3>
-        <div className="space-y-6">
-          {quizQuestions.map((q, index) => (
-            <div key={index} className="bg-slate-800/30 rounded-lg p-4">
-              <p className="text-white font-semibold mb-3">{q.question}</p>
-              <div className="space-y-2">
-                {q.options.map((option, optIndex) => (
-                  <label key={optIndex} className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      name={`question-${index}`}
-                      value={option[0]}
-                      checked={quizAnswers[`question-${index}`] === option[0]}
-                      onChange={(e) =>
-                        setQuizAnswers({ ...quizAnswers, [`question-${index}`]: e.target.value })
-                      }
-                      className="w-4 h-4 text-blue-500"
-                    />
-                    <span className="text-gray-300">{option}</span>
-                  </label>
-                ))}
-              </div>
-              {showQuizResults && (
-                <div
-                  className={`mt-3 p-2 rounded ${
-                    quizAnswers[`question-${index}`] === q.correct
-                      ? 'bg-green-500/20 text-green-300'
-                      : 'bg-red-500/20 text-red-300'
-                  }`}
-                >
-                  {quizAnswers[`question-${index}`] === q.correct
-                    ? '✅ Correct!'
-                    : `❌ Incorrect. The answer is ${q.correct}`}
-                </div>
-              )}
             </div>
-          ))}
+          </div>
+
+          {/* Shark Probability Map */}
+          <div className="bg-slate-900/50 rounded-xl p-4">
+            <h4 className="text-white font-semibold mb-3">Shark Foraging Probability</h4>
+            <div className="aspect-square bg-gradient-to-br from-slate-900 via-green-900 to-slate-900 rounded-lg relative overflow-hidden">
+              {/* Simulated shark probability */}
+              <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-yellow-500/40 rounded-full blur-2xl"></div>
+              <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-green-500/50 rounded-full blur-2xl"></div>
+              <div className="absolute bottom-1/4 left-1/2 w-36 h-36 bg-yellow-500/30 rounded-full blur-2xl"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-white/50 text-sm text-center">
+                  High probability zones (green/yellow)
+                  <br />
+                  align with eddy edges
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="mt-6 text-center">
-          <button
-            onClick={handleQuizSubmit}
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all"
-          >
-            Check Answers
-          </button>
+
+        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+          <p className="text-blue-300 mb-4">
+            <strong>Pattern Recognition:</strong> Notice how the high shark probability zones
+            (green/yellow on the right) tend to appear near the edges of ocean eddies (swirls on the
+            left)? This is because eddies concentrate prey at their boundaries, creating ideal
+            hunting grounds for sharks!
+          </p>
+          <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+              <span className="text-gray-300">Warm Eddy</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+              <span className="text-gray-300">Cold Eddy</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+              <span className="text-gray-300">High Shark Probability</span>
+            </div>
+          </div>
         </div>
       </motion.div>
 
-      {/* Definition Popups */}
-      <AnimatePresence>
-        {definitionVisible && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-            onClick={() => setDefinitionVisible('')}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-slate-800 rounded-xl p-6 max-w-md w-full border border-white/10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="text-xl font-bold text-white mb-2 capitalize">
-                {definitionVisible.replace(/([A-Z])/g, ' $1').trim()}
-              </h3>
-              <p className="text-gray-300">{definitions[definitionVisible]}</p>
-              <button
-                onClick={() => setDefinitionVisible('')}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
-              >
-                Got it!
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Temperature and Sharks */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-4">🌡️ Temperature Preferences</h3>
+        <p className="text-gray-300 mb-6">
+          Different shark species prefer different water temperatures. Great white sharks, for
+          example, typically hunt in waters between 12-24°C, with optimal foraging around 18-20°C.
+        </p>
+        <TemperatureChart />
+      </motion.div>
     </div>
   )
 }
 
-// Lesson 2: The Shark Foraging Index
+// ============================================================================
+// LESSON 2: The Shark Foraging Index
+// ============================================================================
 export function Lesson2Content() {
-  const [tempSlider, setTempSlider] = useState(20)
-  const [eddySlider, setEddySlider] = useState(0.5)
-  const [chlorophyllSlider, setChlorophyllSlider] = useState(0.7)
-  const [depthSlider, setDepthSlider] = useState(50)
-  const [lapseRateSlider, setLapseRateSlider] = useState(0.1)
-  const [showPipeline, setShowPipeline] = useState(false)
-
-  // Calculate indicators based on sliders
-  const temperatureSuitability = Math.exp(-Math.pow((tempSlider - 22) / 5, 2))
-  const eddyIndicator = eddySlider
-  const preyAvailability = Math.min(chlorophyllSlider * 1.5, 1)
-  const sfi = preyAvailability * 0.45 + temperatureSuitability * 0.3 + eddyIndicator * 0.25
-
-  // Depth scaling calculations
-  const surfaceTemp = tempSlider
-  const depthTemp = surfaceTemp - lapseRateSlider * depthSlider
-  const depthScaling = Math.exp(-Math.pow(depthSlider / 100, 2))
-  const scaledPrey = preyAvailability * depthScaling
-  const scaledEddy = eddyIndicator * depthScaling
+  const [tempOptimal, setTempOptimal] = useState(20)
+  const [tempSensitivity, setTempSensitivity] = useState(5)
+  const [sshaValue, setSshaValue] = useState(0.15)
+  const [chlorophyllValue, setChlorophyllValue] = useState(2)
+  const [timeDelay, setTimeDelay] = useState(7)
+  const [lapseRate, setLapseRate] = useState(0.02)
+  const [thermoclineDepth, setThermoclineDepth] = useState(100)
+  const [depthVariability, setDepthVariability] = useState(50)
 
   return (
-    <div className="space-y-6">
-      {/* Environmental Indicators Introduction */}
+    <div className="space-y-8">
+      {/* Introduction */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        className="bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 border border-blue-500/30 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-            1
-          </div>
-          <h3 className="text-xl font-bold text-white">Environmental Indicators</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          To predict where sharks might be foraging, scientists look at environmental indicators —
-          measurable properties of the ocean that affect where prey lives and how sharks move.
+        <h2 className="text-3xl font-bold text-white mb-4">
+          🧮 Understanding the Shark Foraging Index
+        </h2>
+        <p className="text-gray-300 text-lg leading-relaxed">
+          The ocean is a complex, living system — and sharks depend on it to find food. To predict
+          where sharks might be foraging, scientists look at environmental indicators — measurable
+          properties of the ocean that affect where prey lives and how sharks move.
         </p>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-center">
-            <div className="text-3xl mb-2">🌡️</div>
-            <h4 className="text-white font-semibold mb-1">Temperature</h4>
-            <p className="text-blue-300 text-sm">Sharks prefer specific temperature ranges</p>
-          </div>
-          <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 text-center">
-            <div className="text-3xl mb-2">🌀</div>
-            <h4 className="text-white font-semibold mb-1">Eddy Energy</h4>
-            <p className="text-purple-300 text-sm">Swirling currents concentrate prey</p>
-          </div>
-          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
-            <div className="text-3xl mb-2">🌿</div>
-            <h4 className="text-white font-semibold mb-1">Prey Availability</h4>
-            <p className="text-green-300 text-sm">Areas rich in phytoplankton</p>
-          </div>
-        </div>
       </motion.div>
 
-      {/* Data Pipeline Animation */}
+      {/* Environmental Layers */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
-            2
+        <h3 className="text-2xl font-bold text-white mb-6">
+          🌊 Three Main Environmental Indicators
+        </h3>
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 rounded-xl p-6">
+            <div className="text-4xl mb-3">🌡️</div>
+            <h4 className="text-xl font-bold text-white mb-2">Temperature (T)</h4>
+            <p className="text-gray-300 text-sm">
+              Sharks prefer certain water temperatures depending on their species. Temperature
+              suitability affects their hunting efficiency and metabolic rate.
+            </p>
           </div>
-          <h3 className="text-xl font-bold text-white">From Data to Indicators</h3>
+          <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-xl p-6">
+            <div className="text-4xl mb-3">🌀</div>
+            <h4 className="text-xl font-bold text-white mb-2">Eddy Energy (E)</h4>
+            <p className="text-gray-300 text-sm">
+              Swirling ocean currents (eddies) bring nutrients upward, concentrating prey. Measured
+              by sea surface height anomalies.
+            </p>
+          </div>
+          <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-6">
+            <div className="text-4xl mb-3">🌿</div>
+            <h4 className="text-xl font-bold text-white mb-2">Prey Availability (Bp)</h4>
+            <p className="text-gray-300 text-sm">
+              Areas rich in microscopic plants (phytoplankton) usually support more fish and thus
+              attract sharks. Measured by chlorophyll concentration.
+            </p>
+          </div>
         </div>
-        <p className="text-gray-300 mb-4">
-          Scientists don't dive in every day — they use satellites and ocean reanalysis models to
-          study the ocean.
-        </p>
-
-        <button
-          onClick={() => setShowPipeline(!showPipeline)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all mb-4"
-        >
-          {showPipeline ? 'Hide' : 'Show'} Data Pipeline
-        </button>
-
-        {showPipeline && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="bg-slate-800/50 rounded-lg p-6"
-          >
-            <div className="grid md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl">🛰️</span>
-                </div>
-                <h4 className="text-white font-semibold text-sm">Satellites</h4>
-                <p className="text-gray-400 text-xs">Collect raw data</p>
-              </div>
-              <div className="flex items-center justify-center">
-                <span className="text-2xl">→</span>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl">📊</span>
-                </div>
-                <h4 className="text-white font-semibold text-sm">Processing</h4>
-                <p className="text-gray-400 text-xs">Turn into maps</p>
-              </div>
-              <div className="flex items-center justify-center">
-                <span className="text-2xl">→</span>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl">🧮</span>
-                </div>
-                <h4 className="text-white font-semibold text-sm">Indicators</h4>
-                <p className="text-gray-400 text-xs">Compute suitability</p>
-              </div>
-              <div className="flex items-center justify-center">
-                <span className="text-2xl">→</span>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl">🦈</span>
-                </div>
-                <h4 className="text-white font-semibold text-sm">SFI</h4>
-                <p className="text-gray-400 text-xs">Shark predictions</p>
-              </div>
-            </div>
-          </motion.div>
-        )}
       </motion.div>
 
-      {/* Interactive Sliders for Computing Indicators */}
+      {/* Data Pipeline */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        transition={{ delay: 0.4 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-            3
+        <h3 className="text-2xl font-bold text-white mb-6">📡 From Satellites to Predictions</h3>
+        <p className="text-gray-300 mb-6">
+          To study the ocean, scientists don't dive in every day — they use satellites and ocean
+          reanalysis models. Here's the data pipeline:
+        </p>
+
+        <div className="space-y-4">
+          <DataPipelineStep
+            number="1"
+            title="Collect Raw Data"
+            items={[
+              'Sea Surface Temperature (SST) → from infrared satellite sensors',
+              'Sea Surface Height Anomaly (SSHA) → from radar altimeters',
+              'Chlorophyll concentration → from ocean color satellites (MODIS, PACE)',
+            ]}
+          />
+          <DataPipelineStep
+            number="2"
+            title="Process into Maps"
+            items={[
+              'Each dataset is turned into a map of the ocean grid',
+              'Latitude, longitude, and time dimensions',
+              'Quality control and gap filling',
+            ]}
+          />
+          <DataPipelineStep
+            number="3"
+            title="Compute Indicators"
+            items={[
+              'Transform raw data into habitat suitability metrics',
+              'Apply physical and biological models',
+              'Generate 3D predictions with depth scaling',
+            ]}
+          />
+        </div>
+      </motion.div>
+
+      {/* Temperature Suitability */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-4">
+          (a) Temperature Suitability — Tₛ(x,y,t)
+        </h3>
+        <p className="text-gray-300 mb-6">
+          Sharks tend to forage where temperatures are close to their preferred range. We use a
+          Gaussian function that rewards "comfortable" temperatures and penalizes extremes.
+        </p>
+
+        <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
+          <div className="text-center mb-4">
+            <div className="text-lg text-gray-400 mb-2">Formula:</div>
+            <div className="text-xl font-mono text-cyan-400">Tₛ = exp(-(T - T_opt)² / (2σ²))</div>
           </div>
-          <h3 className="text-xl font-bold text-white">Computing Each Indicator</h3>
+          <p className="text-gray-400 text-sm text-center">
+            Where T_opt is the optimal temperature and σ controls sensitivity to temperature changes
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Temperature Suitability */}
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">🌡️ Temperature Suitability</h4>
-            <p className="text-gray-300 text-sm mb-3">
-              Sharks tend to forage where temperatures are close to their preferred range (18-24°C).
-            </p>
-            <div className="mb-4">
-              <label className="block text-sm text-gray-400 mb-2">
-                Temperature: {tempSlider}°C
-              </label>
-              <input
-                type="range"
-                min="5"
-                max="35"
-                value={tempSlider}
-                onChange={(e) => setTempSlider(Number(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-              />
-            </div>
-            <div className="bg-blue-500/10 rounded p-3">
-              <div className="text-sm text-blue-300 mb-1">Formula:</div>
-              <div className="font-mono text-xs text-blue-200">Tₛ = exp(-(T-Tₒₚₜ)²/(2σ²))</div>
-              <div className="text-sm text-gray-400 mt-2">
-                Suitability:{' '}
-                <span className="text-cyan-400 font-semibold">
-                  {temperatureSuitability.toFixed(3)}
-                </span>
-              </div>
-            </div>
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label className="text-white font-semibold mb-2 block">
+              Optimal Temperature (T_opt): {tempOptimal}°C
+            </label>
+            <input
+              type="range"
+              min="10"
+              max="30"
+              value={tempOptimal}
+              onChange={(e) => setTempOptimal(Number(e.target.value))}
+              className="w-full"
+            />
           </div>
+          <div>
+            <label className="text-white font-semibold mb-2 block">
+              Temperature Sensitivity (σ): {tempSensitivity}°C
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={tempSensitivity}
+              onChange={(e) => setTempSensitivity(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+        </div>
 
-          {/* Eddy Current Indicator */}
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">🌀 Eddy Current Indicator</h4>
-            <p className="text-gray-300 text-sm mb-3">
-              Eddies (swirling ocean features) trap nutrients and prey. We detect them from Sea
-              Surface Height Anomalies (SSHA).
-            </p>
-            <div className="mb-4">
-              <label className="block text-sm text-gray-400 mb-2">
-                Eddy Strength: {eddySlider.toFixed(2)}
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={eddySlider}
-                onChange={(e) => setEddySlider(Number(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-              />
-            </div>
-            <div className="bg-purple-500/10 rounded p-3">
-              <div className="text-sm text-purple-300 mb-1">Formula:</div>
-              <div className="font-mono text-xs text-purple-200">E = f(SSHA curvature)</div>
-              <div className="text-sm text-gray-400 mt-2">
-                Eddy Score:{' '}
-                <span className="text-purple-400 font-semibold">{eddyIndicator.toFixed(3)}</span>
-              </div>
-            </div>
-          </div>
+        <TemperatureSuitabilityChart tempOptimal={tempOptimal} tempSensitivity={tempSensitivity} />
+      </motion.div>
 
-          {/* Prey Availability */}
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">🌿 Prey Availability</h4>
-            <p className="text-gray-300 text-sm mb-3">
-              Phytoplankton (measured via chlorophyll concentration) supports the marine food web.
-            </p>
-            <div className="mb-4">
-              <label className="block text-sm text-gray-400 mb-2">
-                Chlorophyll: {chlorophyllSlider.toFixed(2)}
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={chlorophyllSlider}
-                onChange={(e) => setChlorophyllSlider(Number(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-              />
-            </div>
-            <div className="bg-green-500/10 rounded p-3">
-              <div className="text-sm text-green-300 mb-1">Formula:</div>
-              <div className="font-mono text-xs text-green-200">Bₚ = min(C × 1.5, 1.0)</div>
-              <div className="text-sm text-gray-400 mt-2">
-                Prey Score:{' '}
-                <span className="text-green-400 font-semibold">{preyAvailability.toFixed(3)}</span>
-              </div>
-            </div>
-          </div>
+      {/* Eddy Current Indicator */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-4">
+          (b) Eddy Current Indicator — E(x,y,t)
+        </h3>
+        <p className="text-gray-300 mb-6">
+          Eddies (swirling ocean features) can trap nutrients and prey. We detect them from Sea
+          Surface Height Anomalies (SSHA) — when the sea surface bulges or dips, it signals rotating
+          currents.
+        </p>
 
-          {/* SFI Calculation */}
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">🦈 Shark Foraging Index (SFI)</h4>
-            <div className="bg-slate-900/50 rounded p-3 font-mono text-sm">
-              <div className="text-green-300">
-                Prey (45%): {preyAvailability.toFixed(3)} × 0.45 ={' '}
-                {(preyAvailability * 0.45).toFixed(3)}
-              </div>
-              <div className="text-blue-300">
-                Temp (30%): {temperatureSuitability.toFixed(3)} × 0.30 ={' '}
-                {(temperatureSuitability * 0.3).toFixed(3)}
-              </div>
-              <div className="text-purple-300">
-                Eddy (25%): {eddyIndicator.toFixed(3)} × 0.25 = {(eddyIndicator * 0.25).toFixed(3)}
-              </div>
-              <div className="border-t border-white/10 pt-2 mt-2">
-                <div className="text-cyan-300 font-bold">
-                  SFI ={' '}
-                  {(
-                    preyAvailability * 0.45 +
-                    temperatureSuitability * 0.3 +
-                    eddyIndicator * 0.25
-                  ).toFixed(3)}
-                </div>
-              </div>
+        <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
+          <div className="text-center mb-4">
+            <div className="text-lg text-gray-400 mb-2">Simplified Formula:</div>
+            <div className="text-xl font-mono text-cyan-400">E ∝ |∇²SSHA|</div>
+          </div>
+          <p className="text-gray-400 text-sm text-center">
+            Proportional to the curvature (Laplacian) of sea surface height — high curvature means
+            strong circular motion → more mixing → more prey
+          </p>
+        </div>
+
+        <div className="mb-6">
+          <label className="text-white font-semibold mb-2 block">
+            Sea Surface Height Anomaly: {sshaValue.toFixed(2)} m
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="0.5"
+            step="0.01"
+            value={sshaValue}
+            onChange={(e) => setSshaValue(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+          <div className="text-center">
+            <div className="text-sm text-gray-400 mb-2">Eddy Energy Indicator</div>
+            <div className="text-4xl font-bold text-blue-400 mb-2">
+              {(sshaValue * 10).toFixed(2)}
             </div>
-            <div className="mt-3">
-              <div className="w-full bg-slate-700 rounded-full h-3">
-                <div
-                  className={`h-3 rounded-full transition-all ${
-                    sfi > 0.7 ? 'bg-green-400' : sfi > 0.5 ? 'bg-yellow-400' : 'bg-red-400'
-                  }`}
-                  style={{ width: `${Math.min(sfi * 100, 100)}%` }}
-                ></div>
-              </div>
-              <div className="text-xs text-gray-400 mt-1">
-                {sfi > 0.7
-                  ? 'High foraging probability!'
-                  : sfi > 0.5
-                  ? 'Medium potential'
-                  : 'Low probability'}
-              </div>
+            <p className="text-gray-300 text-sm">
+              {sshaValue > 0.3
+                ? 'Strong eddy activity - high prey concentration expected'
+                : sshaValue > 0.15
+                ? 'Moderate eddy activity'
+                : 'Weak eddy activity'}
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Prey Availability */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.0 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-4">(c) Prey Availability — Bₚ(x,y,t)</h3>
+        <p className="text-gray-300 mb-6">
+          Phytoplankton (measured via chlorophyll concentration) supports the whole marine food web.
+          Higher chlorophyll = more plankton = more small fish = more prey for sharks.
+        </p>
+
+        <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
+          <div className="text-center mb-4">
+            <div className="text-lg text-gray-400 mb-2">Formula with time delay:</div>
+            <div className="text-xl font-mono text-cyan-400">
+              Bₚ(t) = C(t - Δt) × scaling_factor
             </div>
           </div>
+          <p className="text-gray-400 text-sm text-center">
+            Where C is chlorophyll concentration and Δt accounts for the time it takes for the food
+            chain to propagate from plankton to shark prey
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label className="text-white font-semibold mb-2 block">
+              Chlorophyll Concentration: {chlorophyllValue.toFixed(1)} mg/m³
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              step="0.1"
+              value={chlorophyllValue}
+              onChange={(e) => setChlorophyllValue(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+          <div>
+            <label className="text-white font-semibold mb-2 block">
+              Time Delay: {timeDelay} days
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="30"
+              value={timeDelay}
+              onChange={(e) => setTimeDelay(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+        </div>
+
+        <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6">
+          <div className="text-center">
+            <div className="text-sm text-gray-400 mb-2">Prey Availability Score</div>
+            <div className="text-4xl font-bold text-green-400 mb-2">
+              {Math.min(chlorophyllValue / 10, 1).toFixed(2)}
+            </div>
+            <p className="text-gray-300 text-sm">
+              {chlorophyllValue > 5
+                ? 'High productivity - abundant prey expected in ' + timeDelay + ' days'
+                : chlorophyllValue > 2
+                ? 'Moderate productivity'
+                : 'Low productivity'}
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Combining Indicators */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2 }}
+        className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-4">🎯 Combining the Indicators</h3>
+        <p className="text-gray-300 mb-6">
+          We combine these three indicators using weighted coefficients to compute the Shark
+          Foraging Index (SFI):
+        </p>
+
+        <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
+          <div className="text-center mb-4">
+            <div className="text-2xl font-mono text-white">
+              SFI(x,y,t) = w_T × Tₛ + w_E × E + w_B × Bₚ
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4 mt-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-red-400">30%</div>
+              <div className="text-sm text-gray-400">Temperature weight (w_T)</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-blue-400">25%</div>
+              <div className="text-sm text-gray-400">Eddy weight (w_E)</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-green-400">45%</div>
+              <div className="text-sm text-gray-400">Prey weight (w_B)</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+          <p className="text-blue-300 text-sm">
+            <strong>Why these weights?</strong> Prey availability gets the highest weight (45%)
+            because sharks ultimately follow food. Temperature (30%) is crucial for metabolic
+            efficiency. Eddies (25%) create opportunities but aren't always necessary for foraging.
+            These weights can be tuned based on species and region!
+          </p>
         </div>
       </motion.div>
 
@@ -689,615 +757,772 @@ export function Lesson2Content() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        transition={{ delay: 1.4 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold">
-            4
-          </div>
-          <h3 className="text-xl font-bold text-white">Depth Scaling</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          Our maps are 2D, but sharks hunt in 3D! We estimate how conditions change with depth.
+        <h3 className="text-2xl font-bold text-white mb-4">📏 Scaling to 3D: Adding Depth</h3>
+        <p className="text-gray-300 mb-6">
+          So far, our maps are only 2D — the ocean surface. But sharks hunt in 3D, diving to
+          different depths. We estimate how conditions change with depth using physical assumptions.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">Temperature vs Depth</h4>
-            <div className="mb-4">
-              <label className="block text-sm text-gray-400 mb-2">Depth: {depthSlider}m</label>
-              <input
-                type="range"
-                min="0"
-                max="200"
-                value={depthSlider}
-                onChange={(e) => setDepthSlider(Number(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm text-gray-400 mb-2">
-                Lapse Rate: {lapseRateSlider}°C/m
+        <div className="mb-8">
+          <h4 className="text-xl font-bold text-white mb-4">Temperature decreases with depth</h4>
+          <p className="text-gray-300 mb-4">T(z) ≈ T_surface - Γ × z</p>
+          <p className="text-gray-400 text-sm mb-4">
+            Where Γ is the vertical temperature gradient (lapse rate)
+          </p>
+
+          <div className="mb-6">
+            <label className="text-white font-semibold mb-2 block">
+              Temperature Lapse Rate (Γ): {lapseRate.toFixed(3)} °C/m
+            </label>
+            <input
+              type="range"
+              min="0.005"
+              max="0.05"
+              step="0.001"
+              value={lapseRate}
+              onChange={(e) => setLapseRate(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+
+          <DepthTemperatureChart lapseRate={lapseRate} />
+        </div>
+
+        <div>
+          <h4 className="text-xl font-bold text-white mb-4">
+            Prey and eddy effects fade with depth
+          </h4>
+          <p className="text-gray-300 mb-4">K_E(z) = exp(-(z - z_thermocline)² / (2σ_z²))</p>
+          <p className="text-gray-400 text-sm mb-4">
+            Centered around thermocline depth where nutrients and prey concentrate
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="text-white font-semibold mb-2 block">
+                Thermocline Depth: {thermoclineDepth} m
               </label>
               <input
                 type="range"
-                min="0.01"
-                max="0.2"
-                step="0.01"
-                value={lapseRateSlider}
-                onChange={(e) => setLapseRateSlider(Number(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                min="50"
+                max="300"
+                value={thermoclineDepth}
+                onChange={(e) => setThermoclineDepth(Number(e.target.value))}
+                className="w-full"
               />
             </div>
-            <div className="bg-blue-500/10 rounded p-3">
-              <div className="text-sm text-blue-300 mb-1">Temperature Profile:</div>
-              <div className="text-sm text-gray-400">
-                Surface: <span className="text-cyan-400">{surfaceTemp.toFixed(1)}°C</span>
-              </div>
-              <div className="text-sm text-gray-400">
-                At {depthSlider}m: <span className="text-cyan-400">{depthTemp.toFixed(1)}°C</span>
-              </div>
+            <div>
+              <label className="text-white font-semibold mb-2 block">
+                Depth Variability (σ_z): {depthVariability} m
+              </label>
+              <input
+                type="range"
+                min="20"
+                max="100"
+                value={depthVariability}
+                onChange={(e) => setDepthVariability(Number(e.target.value))}
+                className="w-full"
+              />
             </div>
           </div>
 
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">Depth Effects on Indicators</h4>
-            <div className="space-y-3">
-              <div>
-                <div className="text-sm text-gray-400 mb-1">Prey Availability:</div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-slate-700 rounded-full h-2">
-                    <div
-                      className="h-2 bg-green-400 rounded-full"
-                      style={{ width: `${preyAvailability * 100}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-xs text-green-400">{scaledPrey.toFixed(3)}</span>
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-400 mb-1">Eddy Effects:</div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-slate-700 rounded-full h-2">
-                    <div
-                      className="h-2 bg-purple-400 rounded-full"
-                      style={{ width: `${scaledEddy * 100}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-xs text-purple-400">{scaledEddy.toFixed(3)}</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-slate-900/50 rounded p-3 mt-4">
-              <div className="text-sm text-gray-300 mb-1">3D SFI at {depthSlider}m:</div>
-              <div className="font-mono text-sm text-cyan-300">
-                SFI₃D ={' '}
-                {(scaledPrey * 0.45 + temperatureSuitability * 0.3 + scaledEddy * 0.25).toFixed(3)}
-              </div>
-            </div>
-          </div>
+          <DepthScalingChart
+            thermoclineDepth={thermoclineDepth}
+            depthVariability={depthVariability}
+          />
         </div>
-      </motion.div>
 
-      {/* Weightings Explanation */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">
-            5
-          </div>
-          <h3 className="text-xl font-bold text-white">Combining the Indicators</h3>
+        <div className="mt-6 bg-cyan-500/10 border border-cyan-500/30 rounded-xl p-6">
+          <p className="text-cyan-300 text-sm">
+            <strong>Key Insight:</strong> These assumptions allow us to predict the foraging depth —
+            the most likely vertical layer where sharks will feed — even without full 3D ocean data.
+            The thermocline (where temperature changes rapidly) is often where prey concentrates!
+          </p>
         </div>
-        <p className="text-gray-300 mb-4">
-          Each indicator gets a different weight based on how important it is for shark foraging
-          behavior.
-        </p>
-
-        <div className="bg-slate-800/50 rounded-lg p-6">
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-400 mb-2">45%</div>
-              <h4 className="text-white font-semibold mb-2">Prey Availability</h4>
-              <p className="text-gray-400 text-sm">Most important - sharks go where food is</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-2">30%</div>
-              <h4 className="text-white font-semibold mb-2">Temperature</h4>
-              <p className="text-gray-400 text-sm">Very important - affects shark metabolism</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-purple-400 mb-2">25%</div>
-              <h4 className="text-white font-semibold mb-2">Eddy Energy</h4>
-              <p className="text-gray-400 text-sm">
-                Important - concentrates prey in huntable areas
-              </p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Link to Main Tool */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-xl p-6"
-      >
-        <h3 className="text-xl font-bold text-white mb-4">🚀 Try It Yourself!</h3>
-        <p className="text-gray-300 mb-4">
-          Want to see how your own parameters would look on a real map? Check out our main shark
-          forecasting tool!
-        </p>
-        <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all">
-          Explore Main Tool →
-        </button>
       </motion.div>
     </div>
   )
 }
 
-// Lesson 3: Ocean Food Webs
+// ============================================================================
+// LESSON 3: Ocean Food Webs
+// ============================================================================
 export function Lesson3Content() {
-  const [draggedItem, setDraggedItem] = useState(null)
-  const [foodWebOrder, setFoodWebOrder] = useState([])
-  const [showConnections, setShowConnections] = useState(false)
+  const [foodChain, setFoodChain] = useState([])
+  const [availableOrganisms, setAvailableOrganisms] = useState([
+    { id: 'phytoplankton', name: 'Phytoplankton', emoji: '🦠', level: 1 },
+    { id: 'zooplankton', name: 'Zooplankton', emoji: '🦐', level: 2 },
+    { id: 'small-fish', name: 'Small Fish', emoji: '🐟', level: 3 },
+    { id: 'large-fish', name: 'Large Fish', emoji: '🐠', level: 4 },
+    { id: 'shark', name: 'Shark', emoji: '🦈', level: 5 },
+  ])
+  const [isCorrect, setIsCorrect] = useState(null)
 
-  const foodWebItems = [
-    {
-      id: 'phytoplankton',
-      name: 'Phytoplankton',
-      level: 1,
-      icon: '🦠',
-      description: 'Microscopic algae that convert sunlight into energy',
-    },
-    {
-      id: 'zooplankton',
-      name: 'Zooplankton',
-      level: 2,
-      icon: '🦐',
-      description: 'Tiny animals that feed on phytoplankton',
-    },
-    {
-      id: 'small_fish',
-      name: 'Small Fish',
-      level: 3,
-      icon: '🐟',
-      description: 'Small fish that eat zooplankton',
-    },
-    {
-      id: 'large_fish',
-      name: 'Large Fish',
-      level: 4,
-      icon: '🐠',
-      description: 'Predatory fish that hunt smaller fish',
-    },
-    {
-      id: 'shark',
-      name: 'Shark',
-      level: 5,
-      icon: '🦈',
-      description: 'Apex predator that hunts large fish',
-    },
-  ]
+  const handleDragStart = (e, organism) => {
+    e.dataTransfer.setData('organism', JSON.stringify(organism))
+  }
 
-  const correctOrder = ['phytoplankton', 'zooplankton', 'small_fish', 'large_fish', 'shark']
-
-  const handleDragStart = (e, item) => {
-    setDraggedItem(item)
+  const handleDrop = (e) => {
+    e.preventDefault()
+    const organism = JSON.parse(e.dataTransfer.getData('organism'))
+    if (!foodChain.find((o) => o.id === organism.id)) {
+      setFoodChain([...foodChain, organism])
+      setAvailableOrganisms(availableOrganisms.filter((o) => o.id !== organism.id))
+    }
+    setIsCorrect(null)
   }
 
   const handleDragOver = (e) => {
     e.preventDefault()
   }
 
-  const handleDrop = (e, targetIndex) => {
-    e.preventDefault()
-    if (draggedItem) {
-      const newOrder = [...foodWebOrder]
-      const draggedIndex = newOrder.indexOf(draggedItem.id)
-
-      if (draggedIndex !== -1) {
-        newOrder.splice(draggedIndex, 1)
-      }
-
-      newOrder.splice(targetIndex, 0, draggedItem.id)
-      setFoodWebOrder(newOrder)
-      setDraggedItem(null)
-    }
+  const removeFromChain = (organism) => {
+    setFoodChain(foodChain.filter((o) => o.id !== organism.id))
+    setAvailableOrganisms([...availableOrganisms, organism].sort((a, b) => a.level - b.level))
+    setIsCorrect(null)
   }
 
-  const resetFoodWeb = () => {
-    setFoodWebOrder([])
+  const checkAnswer = () => {
+    const correctOrder = ['phytoplankton', 'zooplankton', 'small-fish', 'large-fish', 'shark']
+    const userOrder = foodChain.map((o) => o.id)
+    setIsCorrect(JSON.stringify(correctOrder) === JSON.stringify(userOrder))
   }
 
-  const isCorrectOrder = JSON.stringify(foodWebOrder) === JSON.stringify(correctOrder)
+  const resetActivity = () => {
+    setFoodChain([])
+    setAvailableOrganisms([
+      { id: 'phytoplankton', name: 'Phytoplankton', emoji: '🦠', level: 1 },
+      { id: 'zooplankton', name: 'Zooplankton', emoji: '🦐', level: 2 },
+      { id: 'small-fish', name: 'Small Fish', emoji: '🐟', level: 3 },
+      { id: 'large-fish', name: 'Large Fish', emoji: '🐠', level: 4 },
+      { id: 'shark', name: 'Shark', emoji: '🦈', level: 5 },
+    ])
+    setIsCorrect(null)
+  }
 
   return (
-    <div className="space-y-6">
-      {/* Phytoplankton Introduction */}
+    <div className="space-y-8">
+      {/* Introduction */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        className="bg-gradient-to-br from-green-500/20 via-blue-500/20 to-purple-500/20 border border-green-500/30 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
-            1
-          </div>
-          <h3 className="text-xl font-bold text-white">It All Starts with Sunlight</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
+        <h2 className="text-3xl font-bold text-white mb-4">🌊 Ocean Food Webs</h2>
+        <p className="text-gray-300 text-lg leading-relaxed">
           The ocean food web begins with tiny organisms called phytoplankton - microscopic plants
-          that use sunlight to make energy (photosynthesis), just like trees!
+          that use sunlight to make energy through photosynthesis. Energy flows up the food chain
+          from these primary producers all the way to apex predators like sharks!
         </p>
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-          <p className="text-yellow-300 text-sm">
-            <strong>Fun Fact:</strong> Phytoplankton produce 50% of Earth's oxygen - more than all
-            forests combined!
-          </p>
-        </div>
-
-        <div className="mt-6 grid md:grid-cols-2 gap-6">
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">🌞 What They Need</h4>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
-                  <span className="text-sm">☀️</span>
-                </div>
-                <div>
-                  <div className="text-white text-sm font-semibold">Sunlight</div>
-                  <div className="text-gray-400 text-xs">For photosynthesis</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
-                  <span className="text-sm">💧</span>
-                </div>
-                <div>
-                  <div className="text-white text-sm font-semibold">Nutrients</div>
-                  <div className="text-gray-400 text-xs">Nitrogen, phosphorus</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
-                  <span className="text-sm">🌊</span>
-                </div>
-                <div>
-                  <div className="text-white text-sm font-semibold">Water</div>
-                  <div className="text-gray-400 text-xs">Ocean environment</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">🔬 How We Detect Them</h4>
-            <p className="text-gray-300 text-sm mb-3">
-              Satellites detect phytoplankton by measuring chlorophyll concentration in the water.
-            </p>
-            <div className="bg-blue-500/10 rounded p-3">
-              <div className="text-sm text-blue-300 mb-1">Chlorophyll makes water look green!</div>
-              <div className="text-xs text-gray-400">
-                More chlorophyll = More phytoplankton = More food for the food web
-              </div>
-            </div>
-          </div>
-        </div>
       </motion.div>
 
-      {/* Interactive Food Web Builder */}
+      {/* Sunlight and Phytoplankton */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-            2
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            ☀️
           </div>
-          <h3 className="text-xl font-bold text-white">Build the Food Web</h3>
+          <h3 className="text-2xl font-bold text-white">It All Starts with Sunlight</h3>
         </div>
-        <p className="text-gray-300 mb-4">
-          Drag and drop the organisms to arrange them in the correct order of the ocean food chain.
+        <p className="text-gray-300 text-lg mb-6">
+          Phytoplankton are microscopic algae that float near the ocean surface. They use sunlight,
+          carbon dioxide, and nutrients to create energy through photosynthesis - just like plants
+          on land!
         </p>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Available Items */}
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">Available Organisms</h4>
-            <div className="space-y-2">
-              {foodWebItems.map((item) => (
-                <motion.div
-                  key={item.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, item)}
-                  className={`p-3 rounded-lg border cursor-move transition-all ${
-                    foodWebOrder.includes(item.id)
-                      ? 'bg-slate-600/50 border-slate-600 opacity-50'
-                      : 'bg-slate-700 border-white/10 hover:bg-slate-600 hover:border-white/20'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{item.icon}</span>
-                    <div>
-                      <div className="text-white font-semibold text-sm">{item.name}</div>
-                      <div className="text-gray-400 text-xs">{item.description}</div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Food Web Chain */}
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">Food Chain (Bottom to Top)</h4>
-            <div className="space-y-2 min-h-[200px]">
-              {foodWebOrder.length === 0 ? (
-                <div className="text-gray-400 text-sm text-center py-8 border-2 border-dashed border-gray-600 rounded-lg">
-                  Drop organisms here to build the food chain
-                </div>
-              ) : (
-                foodWebOrder.map((itemId, index) => {
-                  const item = foodWebItems.find((f) => f.id === itemId)
-                  return (
-                    <div key={`${itemId}-${index}`} className="relative">
-                      <motion.div
-                        className={`p-3 rounded-lg border ${
-                          isCorrectOrder && foodWebOrder[index] === correctOrder[index]
-                            ? 'bg-green-500/20 border-green-500'
-                            : 'bg-slate-700 border-white/10'
-                        }`}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{item.icon}</span>
-                          <div>
-                            <div className="text-white font-semibold text-sm">{item.name}</div>
-                            <div className="text-gray-400 text-xs">Level {item.level}</div>
-                          </div>
-                        </div>
-                      </motion.div>
-
-                      {/* Connection Arrow */}
-                      {index < foodWebOrder.length - 1 && (
-                        <div className="flex justify-center my-2">
-                          <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[12px] border-l-transparent border-r-transparent border-b-gray-500"></div>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })
-              )}
-            </div>
-
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={resetFoodWeb}
-                className="px-3 py-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-all text-sm"
-              >
-                Reset
-              </button>
-              {foodWebOrder.length === 5 && (
-                <div
-                  className={`px-3 py-2 rounded-lg text-sm ${
-                    isCorrectOrder
-                      ? 'bg-green-500/20 text-green-300'
-                      : 'bg-yellow-500/20 text-yellow-300'
-                  }`}
-                >
-                  {isCorrectOrder ? '✅ Perfect!' : '❌ Try again'}
-                </div>
-              )}
-            </div>
-          </div>
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
+          <p className="text-yellow-300">
+            <strong>🌟 Amazing Fact:</strong> Phytoplankton produce more than 50% of Earth's oxygen
+            - more than all forests combined! Every other breath you take comes from these tiny
+            ocean organisms.
+          </p>
         </div>
       </motion.div>
 
-      {/* Food Web Levels Explained */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
-            3
-          </div>
-          <h3 className="text-xl font-bold text-white">Energy Transfer</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          Energy flows from one level to the next, but only about 10% is transferred each time.
-        </p>
-
-        <div className="grid md:grid-cols-5 gap-4">
-          {foodWebItems.map((item, index) => (
-            <div key={item.id} className="text-center">
-              <div
-                className={`w-16 h-16 mx-auto mb-2 rounded-full flex items-center justify-center ${
-                  index === 0
-                    ? 'bg-green-500/20'
-                    : index === 1
-                    ? 'bg-blue-500/20'
-                    : index === 2
-                    ? 'bg-purple-500/20'
-                    : index === 3
-                    ? 'bg-red-500/20'
-                    : 'bg-gray-500/20'
-                }`}
-              >
-                <span className="text-2xl">{item.icon}</span>
-              </div>
-              <div className="text-white font-semibold text-sm mb-1">{item.name}</div>
-              <div className="text-gray-400 text-xs mb-2">Level {item.level}</div>
-              <div
-                className={`text-xs p-2 rounded ${
-                  index === 0
-                    ? 'bg-green-500/20 text-green-300'
-                    : index === 1
-                    ? 'bg-blue-500/20 text-blue-300'
-                    : index === 2
-                    ? 'bg-purple-500/20 text-purple-300'
-                    : index === 3
-                    ? 'bg-red-500/20 text-red-300'
-                    : 'bg-gray-500/20 text-gray-300'
-                }`}
-              >
-                {index === 0
-                  ? '100% Energy'
-                  : index === 1
-                  ? '~10% Energy'
-                  : index === 2
-                  ? '~1% Energy'
-                  : index === 3
-                  ? '~0.1% Energy'
-                  : '~0.01% Energy'}
-              </div>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Satellite Connection */}
+      {/* Drag and Drop Activity */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold">
-            4
-          </div>
-          <h3 className="text-xl font-bold text-white">Satellite → Sharks</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          By tracking phytoplankton (Level 1) with satellites, we can predict where Level 5 sharks
-          will be!
+        <h3 className="text-2xl font-bold text-white mb-4">🎮 Build the Food Chain</h3>
+        <p className="text-gray-300 mb-6">
+          Drag and drop the organisms in the correct order, from the bottom of the food chain to the
+          top!
         </p>
 
-        <div className="bg-slate-800/50 rounded-lg p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                <span className="text-xl">🛰️</span>
+        {/* Available organisms */}
+        <div className="mb-6">
+          <h4 className="text-white font-semibold mb-3">Available Organisms:</h4>
+          <div className="flex flex-wrap gap-3">
+            {availableOrganisms.map((organism) => (
+              <div
+                key={organism.id}
+                draggable
+                onDragStart={(e) => handleDragStart(e, organism)}
+                className="bg-slate-700/50 border border-white/20 rounded-xl p-4 cursor-move hover:bg-slate-700 transition-all"
+              >
+                <div className="text-4xl mb-2 text-center">{organism.emoji}</div>
+                <div className="text-white text-sm text-center">{organism.name}</div>
               </div>
-              <div className="text-white text-sm font-semibold">Satellite</div>
-            </div>
-            <div className="flex-1 flex items-center justify-center px-4">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">→</span>
-                <span className="text-cyan-400 text-sm font-semibold">Chlorophyll Data</span>
-                <span className="text-2xl">→</span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                <span className="text-xl">🦠</span>
-              </div>
-              <div className="text-white text-sm font-semibold">Phytoplankton</div>
-            </div>
-            <div className="flex-1 flex items-center justify-center px-4">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">→</span>
-                <span className="text-green-400 text-sm font-semibold">Food Web</span>
-                <span className="text-2xl">→</span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                <span className="text-xl">🦈</span>
-              </div>
-              <div className="text-white text-sm font-semibold">Sharks</div>
-            </div>
-          </div>
-
-          <div className="bg-slate-900/50 rounded p-3">
-            <p className="text-cyan-300 text-sm mb-2">
-              <strong>NASA's MODIS satellite measures chlorophyll concentration</strong>
-            </p>
-            <p className="text-gray-400 text-sm">
-              Where there's lots of green color in the satellite data, there will eventually be
-              sharks! This creates a time delay between when phytoplankton bloom and when sharks
-              arrive to hunt.
-            </p>
+            ))}
           </div>
         </div>
-      </motion.div>
 
-      {/* Interactive Diagram Toggle */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-            5
-          </div>
-          <h3 className="text-xl font-bold text-white">Interactive Food Web</h3>
-        </div>
-
-        <button
-          onClick={() => setShowConnections(!showConnections)}
-          className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-all mb-4"
+        {/* Drop zone */}
+        <div
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          className="bg-slate-900/50 border-2 border-dashed border-blue-500/50 rounded-xl p-6 min-h-[200px]"
         >
-          {showConnections ? 'Hide' : 'Show'} Connections
-        </button>
-
-        {showConnections && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="bg-slate-800/50 rounded-lg p-6"
-          >
-            <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
-              {foodWebItems.map((item, index) => (
-                <div key={item.id} className="relative">
-                  <div className="text-center">
-                    <div
-                      className={`w-16 h-16 mx-auto mb-2 rounded-full flex items-center justify-center ${
-                        index === 0
-                          ? 'bg-green-500/30'
-                          : index === 1
-                          ? 'bg-blue-500/30'
-                          : index === 2
-                          ? 'bg-purple-500/30'
-                          : index === 3
-                          ? 'bg-red-500/30'
-                          : 'bg-gray-500/30'
-                      }`}
-                    >
-                      <span className="text-2xl">{item.icon}</span>
+          <h4 className="text-white font-semibold mb-4 text-center">
+            Your Food Chain (Bottom to Top):
+          </h4>
+          {foodChain.length === 0 ? (
+            <p className="text-gray-400 text-center">Drop organisms here to build the food chain</p>
+          ) : (
+            <div className="space-y-3">
+              {foodChain.map((organism, index) => (
+                <div key={organism.id}>
+                  <div className="flex items-center justify-between bg-slate-800/50 rounded-lg p-4">
+                    <div className="flex items-center gap-4">
+                      <div className="text-3xl">{organism.emoji}</div>
+                      <div>
+                        <div className="text-white font-semibold">{organism.name}</div>
+                        <div className="text-gray-400 text-sm">Level {organism.level}</div>
+                      </div>
                     </div>
-                    <div className="text-white font-semibold text-sm">{item.name}</div>
+                    <button
+                      onClick={() => removeFromChain(organism)}
+                      className="text-red-400 hover:text-red-300 text-xl"
+                    >
+                      ✕
+                    </button>
                   </div>
-
-                  {/* Connection Lines */}
-                  {index < foodWebItems.length - 1 && (
-                    <div className="hidden md:block absolute top-8 -right-2 w-8 h-0.5 bg-gradient-to-r from-current to-transparent opacity-50">
-                      <div className="absolute right-0 top-0 w-0 h-0 border-l-[6px] border-l-current border-y-[4px] border-y-transparent"></div>
+                  {index < foodChain.length - 1 && (
+                    <div className="flex justify-center py-2">
+                      <div className="text-gray-500 text-xl">↑ eats ↑</div>
                     </div>
                   )}
                 </div>
               ))}
             </div>
+          )}
+        </div>
 
-            <div className="mt-6 text-center">
+        {/* Check button */}
+        {foodChain.length === 5 && (
+          <div className="mt-6 text-center">
+            <button
+              onClick={checkAnswer}
+              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all"
+            >
+              Check My Answer
+            </button>
+          </div>
+        )}
+
+        {/* Feedback */}
+        {isCorrect !== null && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className={`mt-6 p-6 rounded-xl border-2 ${
+              isCorrect ? 'bg-green-500/20 border-green-500' : 'bg-red-500/20 border-red-500'
+            }`}
+          >
+            {isCorrect ? (
+              <div>
+                <div className="text-2xl font-bold text-green-400 mb-2">🎉 Correct! Well done!</div>
+                <p className="text-green-300">
+                  You've successfully arranged the ocean food chain. Energy flows from the sun to
+                  phytoplankton, then up through each level to reach apex predators like sharks!
+                </p>
+              </div>
+            ) : (
+              <div>
+                <div className="text-2xl font-bold text-red-400 mb-2">Not quite right!</div>
+                <p className="text-red-300 mb-4">
+                  Think about what each organism eats. Start with the smallest organisms that make
+                  their own food, and work your way up to the largest predators.
+                </p>
+                <button
+                  onClick={resetActivity}
+                  className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </motion.div>
+
+      {/* Why This Matters */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-4">🔬 Why This Matters for Sharks</h3>
+        <p className="text-gray-300 text-lg mb-6">
+          By tracking phytoplankton (Level 1) with satellites, we can predict where Level 5 sharks
+          will be! Here's how:
+        </p>
+
+        <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
+          <div className="text-center mb-4">
+            <div className="text-lg font-mono text-cyan-400">
+              Satellite → Chlorophyll → Phytoplankton → Zooplankton → Small Fish → Large Fish →
+              Sharks
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">📡</div>
+            <div>
+              <h4 className="text-white font-semibold mb-1">Step 1: Satellite Detection</h4>
               <p className="text-gray-300 text-sm">
-                Click on any organism above to learn more about its role in the food web
+                NASA's MODIS and PACE satellites measure chlorophyll-a concentration by detecting
+                green light reflected from the ocean surface.
               </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">🦠</div>
+            <div>
+              <h4 className="text-white font-semibold mb-1">Step 2: Phytoplankton Blooms</h4>
+              <p className="text-gray-300 text-sm">
+                High chlorophyll indicates phytoplankton blooms - areas where microscopic algae are
+                thriving and producing oxygen.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">🐟</div>
+            <div>
+              <h4 className="text-white font-semibold mb-1">Step 3: Food Chain Cascade</h4>
+              <p className="text-gray-300 text-sm">
+                Zooplankton eat the phytoplankton, small fish eat the zooplankton, large fish eat
+                the small fish - energy flows up the chain!
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <div className="text-3xl">🦈</div>
+            <div>
+              <h4 className="text-white font-semibold mb-1">Step 4: Shark Prediction</h4>
+              <p className="text-gray-300 text-sm">
+                After a time delay (typically 1-3 weeks), sharks arrive to hunt the large fish that
+                have concentrated in these productive areas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Energy Transfer */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-4">⚡ Energy Transfer Efficiency</h3>
+        <p className="text-gray-300 mb-6">
+          Only about 10% of energy is transferred from one level to the next. This is why it takes a
+          LOT of phytoplankton to support just one shark!
+        </p>
+
+        <div className="space-y-3">
+          <EnergyBar level="Phytoplankton" energy={100} color="green" />
+          <EnergyBar level="Zooplankton" energy={10} color="blue" />
+          <EnergyBar level="Small Fish" energy={1} color="cyan" />
+          <EnergyBar level="Large Fish" energy={0.1} color="purple" />
+          <EnergyBar level="Sharks" energy={0.01} color="red" />
+        </div>
+
+        <div className="mt-6 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
+          <p className="text-yellow-300">
+            <strong>💡 Key Insight:</strong> It takes approximately 10,000 kg of phytoplankton to
+            produce 1 kg of shark! This is why protecting the entire food web is crucial for shark
+            conservation.
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+// ============================================================================
+// LESSON 4: Bio-Sensor Technology
+// ============================================================================
+export function Lesson4Content() {
+  const [selectedComponents, setSelectedComponents] = useState({
+    phProbe: false,
+    ammoniaSensor: false,
+    membrane: false,
+    transducer: false,
+    battery: false,
+    casing: false,
+  })
+
+  const [designScore, setDesignScore] = useState(null)
+
+  const components = {
+    phProbe: {
+      name: 'pH Probe',
+      description: 'Measures stomach acidity to detect feeding events',
+      required: true,
+      emoji: '🔬',
+    },
+    ammoniaSensor: {
+      name: 'Ammonia Sensor',
+      description: 'Detects NH₄⁺ levels to identify prey type',
+      required: true,
+      emoji: '🧪',
+    },
+    membrane: {
+      name: 'Semipermeable Membrane (ePTFE)',
+      description: 'Converts ammonium ions to gas phase',
+      required: true,
+      emoji: '🧬',
+    },
+    transducer: {
+      name: 'Piezoelectric Transducer',
+      description: 'Sends acoustic signals to external tag',
+      required: true,
+      emoji: '📡',
+    },
+    battery: {
+      name: 'Lithium Battery',
+      description: 'Powers the sensor for extended periods',
+      required: true,
+      emoji: '🔋',
+    },
+    casing: {
+      name: 'Biocompatible Casing',
+      description: 'Delrin exterior with epoxy coating',
+      required: true,
+      emoji: '🛡️',
+    },
+  }
+
+  const toggleComponent = (key) => {
+    setSelectedComponents({ ...selectedComponents, [key]: !selectedComponents[key] })
+    setDesignScore(null)
+  }
+
+  const evaluateDesign = () => {
+    const requiredComponents = Object.keys(components).filter((key) => components[key].required)
+    const selectedRequired = requiredComponents.filter((key) => selectedComponents[key])
+    const score = (selectedRequired.length / requiredComponents.length) * 100
+    setDesignScore(score)
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Introduction */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-red-500/20 border border-purple-500/30 rounded-2xl p-8"
+      >
+        <h2 className="text-3xl font-bold text-white mb-4">🔬 Bio-Sensor Technology</h2>
+        <p className="text-gray-300 text-lg leading-relaxed">
+          Sharks can be monitored using two complementary types of tags. The dorsal fin tag measures
+          environmental and behavioral data, while the gastric tag records internal digestive
+          conditions to understand feeding habits and diet.
+        </p>
+      </motion.div>
+
+      {/* The Challenge */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            ❗
+          </div>
+          <h3 className="text-2xl font-bold text-white">The Challenge</h3>
+        </div>
+        <p className="text-gray-300 text-lg mb-6">
+          Current shark tags track WHERE sharks go, but not WHAT they eat. We need to validate our
+          predictions by knowing when sharks actually feed and what prey they consume!
+        </p>
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+          <p className="text-red-300">
+            <strong>Problem:</strong> Traditional tags can't tell if a shark is hunting, resting, or
+            just swimming through an area. We need real-time feeding data to improve our
+            predictions.
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Gastric Sensor Package */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-6">💊 Gastric Sensor Package</h3>
+        <p className="text-gray-300 mb-6">
+          A pill-shaped capsule that attaches to the stomach wall inside the shark, similar to how
+          acoustic tags are implanted. This sensor package consists of several key components:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-slate-900/50 rounded-xl p-6">
+            <div className="text-4xl mb-3">🔬</div>
+            <h4 className="text-xl font-bold text-white mb-2">pH Probe</h4>
+            <p className="text-gray-300 text-sm">
+              Regularly checks the ambient acidity of the stomach environment. A sustained spike in
+              pH indicates a "feeding event" and activates the ammonia sensor.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/50 rounded-xl p-6">
+            <div className="text-4xl mb-3">🧪</div>
+            <h4 className="text-xl font-bold text-white mb-2">Ammonia Sensor</h4>
+            <p className="text-gray-300 text-sm">
+              Activated during digestion to measure NH₄⁺ levels. Protein-rich prey releases more
+              ammonia, allowing us to classify different food sources (fish vs. squid vs. seal).
+            </p>
+          </div>
+
+          <div className="bg-slate-900/50 rounded-xl p-6">
+            <div className="text-4xl mb-3">🧬</div>
+            <h4 className="text-xl font-bold text-white mb-2">Semipermeable Membrane</h4>
+            <p className="text-gray-300 text-sm">
+              ePTFE membrane converts ammonium ions in the stomach to gas phase ammonia, which can
+              be more easily detected by the sensor.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/50 rounded-xl p-6">
+            <div className="text-4xl mb-3">📡</div>
+            <h4 className="text-xl font-bold text-white mb-2">Piezoelectric Transducer</h4>
+            <p className="text-gray-300 text-sm">
+              Sends acoustic signals over short range underwater to the external dorsal tag, which
+              then transmits data to satellites.
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* How It Works */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-6">⚙️ How It Works</h3>
+
+        <div className="space-y-4">
+          <WorkflowStep
+            number="1"
+            title="Deployment"
+            description="Shark swallows capsule hidden in bait fish during tagging procedure"
+            color="blue"
+          />
+          <WorkflowStep
+            number="2"
+            title="Attachment"
+            description="Capsule attaches to stomach wall using biocompatible adhesive"
+            color="cyan"
+          />
+          <WorkflowStep
+            number="3"
+            title="Monitoring"
+            description="pH sensor continuously monitors stomach acidity levels"
+            color="purple"
+          />
+          <WorkflowStep
+            number="4"
+            title="Detection"
+            description="Feeding event detected when pH spikes above threshold"
+            color="pink"
+          />
+          <WorkflowStep
+            number="5"
+            title="Analysis"
+            description="Ammonia sensor activates to analyze prey composition"
+            color="green"
+          />
+          <WorkflowStep
+            number="6"
+            title="Transmission"
+            description="Data sent via acoustic signal to external dorsal tag"
+            color="red"
+          />
+        </div>
+      </motion.div>
+
+      {/* Dorsal Tag */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-6">🏷️ External Dorsal Tag</h3>
+        <p className="text-gray-300 mb-6">
+          Our dorsal tag adopts a hydrodynamic design similar to other SPOT (Smart Position or
+          Temperature) tags. It collects data from both internal sensors and its own environmental
+          sensors.
+        </p>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+            <div className="text-3xl mb-3">🎤</div>
+            <h4 className="text-white font-semibold mb-2">Hydrophone</h4>
+            <p className="text-gray-300 text-sm">
+              Receives acoustic data from the gastric sensor package
+            </p>
+          </div>
+          <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-xl p-6">
+            <div className="text-3xl mb-3">🌡️</div>
+            <h4 className="text-white font-semibold mb-2">Temperature Sensor</h4>
+            <p className="text-gray-300 text-sm">Measures water temperature at shark's depth</p>
+          </div>
+          <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-6">
+            <div className="text-3xl mb-3">📊</div>
+            <h4 className="text-white font-semibold mb-2">Pressure Sensor</h4>
+            <p className="text-gray-300 text-sm">Tracks diving depth and behavior patterns</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Materials */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.0 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-6">🔧 Materials Selection</h3>
+        <p className="text-gray-300 mb-6">
+          Careful material selection ensures durability, biocompatibility, and long-term
+          functionality in harsh marine environments.
+        </p>
+
+        <div className="space-y-4">
+          <MaterialCard
+            name="Delrin Exterior"
+            properties="High durability, chemical resistance, low friction"
+            use="Main casing for both gastric and dorsal tags"
+          />
+          <MaterialCard
+            name="Epoxy Coating"
+            properties="Waterproof seal, biocompatible, corrosion resistant"
+            use="Protective layer over electronics"
+          />
+          <MaterialCard
+            name="Lithium-Thionyl Chloride Cells"
+            properties="High energy density, long shelf life, wide temperature range"
+            use="Primary power source for extended deployments"
+          />
+          <MaterialCard
+            name="ePTFE Membrane"
+            properties="Selective permeability, chemical inert, durable"
+            use="Gas conversion in ammonia sensor"
+          />
+          <MaterialCard
+            name="Stainless Steel Alloy"
+            properties="Corrosion resistant, strong, biocompatible"
+            use="Fasteners and attachment points"
+          />
+        </div>
+      </motion.div>
+
+      {/* Design Challenge */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2 }}
+        className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl p-8"
+      >
+        <h3 className="text-2xl font-bold text-white mb-6">🎨 Your Design Challenge</h3>
+        <p className="text-gray-300 mb-6">
+          Select the components you would include in your gastric tag design. Consider
+          functionality, durability, and feasibility!
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4 mb-6">
+          {Object.entries(components).map(([key, component]) => (
+            <button
+              key={key}
+              onClick={() => toggleComponent(key)}
+              className={`p-6 rounded-xl border-2 transition-all text-left ${
+                selectedComponents[key]
+                  ? 'bg-green-500/20 border-green-500'
+                  : 'bg-slate-800/50 border-white/10 hover:border-white/30'
+              }`}
+            >
+              <div className="flex items-start gap-4">
+                <div className="text-4xl">{component.emoji}</div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h4 className="text-white font-semibold">{component.name}</h4>
+                    {selectedComponents[key] && <span className="text-green-400">✓</span>}
+                  </div>
+                  <p className="text-gray-300 text-sm">{component.description}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <button
+            onClick={evaluateDesign}
+            className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all"
+          >
+            Evaluate My Design
+          </button>
+        </div>
+
+        {designScore !== null && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className={`mt-6 p-6 rounded-xl border-2 ${
+              designScore === 100
+                ? 'bg-green-500/20 border-green-500'
+                : 'bg-yellow-500/20 border-yellow-500'
+            }`}
+          >
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">{designScore}%</div>
+              <p className="text-gray-300 mb-4">
+                {designScore === 100
+                  ? '🎉 Perfect! You included all essential components for a functional gastric tag.'
+                  : `You included ${Object.values(selectedComponents).filter(Boolean).length}/${
+                      Object.keys(components).length
+                    } components. All components are essential for full functionality!`}
+              </p>
+              {designScore < 100 && (
+                <p className="text-yellow-300 text-sm">
+                  Hint: Each component plays a crucial role in detecting, analyzing, and
+                  transmitting feeding data.
+                </p>
+              )}
             </div>
           </motion.div>
         )}
@@ -1306,568 +1531,334 @@ export function Lesson3Content() {
   )
 }
 
-// Lesson 4: Bio-Sensor Technology
-export function Lesson4Content() {
-  const [selectedComponents, setSelectedComponents] = useState({})
-  const [selectedMaterials, setSelectedMaterials] = useState({})
-  const [testScenario, setTestScenario] = useState('normal')
-  const [showDesign, setShowDesign] = useState(false)
+// ============================================================================
+// HELPER COMPONENTS
+// ============================================================================
 
-  const gastricComponents = [
-    {
-      id: 'ph_probe',
-      name: 'pH Probe',
-      description: 'Measures stomach acidity changes during feeding',
-      required: true,
-    },
-    {
-      id: 'ammonia_sensor',
-      name: 'Ammonia Sensor',
-      description: 'Detects protein breakdown from different prey types',
-      required: true,
-    },
-    {
-      id: 'semipermeable_membrane',
-      name: 'Semipermeable Membrane',
-      description: 'Allows ammonia gas to pass while blocking liquids',
-      required: true,
-    },
-    {
-      id: 'piezoelectric_transducer',
-      name: 'Piezoelectric Transducer',
-      description: 'Converts mechanical energy to electrical signals',
-      required: true,
-    },
-    {
-      id: 'microcontroller',
-      name: 'Microcontroller',
-      description: 'Processes sensor data and controls transmission',
-      required: false,
-    },
-    {
-      id: 'temperature_sensor',
-      name: 'Temperature Sensor',
-      description: 'Monitors stomach temperature for digestion patterns',
-      required: false,
-    },
-    {
-      id: 'accelerometer',
-      name: 'Accelerometer',
-      description: 'Detects shark movement and feeding behavior',
-      required: false,
-    },
-  ]
-
-  const dorsalComponents = [
-    {
-      id: 'hydrophone',
-      name: 'External Hydrophone',
-      description: 'Receives acoustic data from gastric sensor',
-      required: true,
-    },
-    {
-      id: 'pressure_sensor',
-      name: 'Pressure Sensor',
-      description: 'Measures water depth and diving behavior',
-      required: true,
-    },
-    {
-      id: 'temperature_sensor',
-      name: 'Temperature Sensor',
-      description: 'Records external water temperature',
-      required: true,
-    },
-    {
-      id: 'antenna',
-      name: 'Satellite Antenna',
-      description: 'Transmits data to satellites for global tracking',
-      required: true,
-    },
-    {
-      id: 'battery',
-      name: 'Extended Battery',
-      description: 'Provides power for multi-year deployments',
-      required: false,
-    },
-    {
-      id: 'solar_cell',
-      name: 'Solar Cell',
-      description: 'Harnesses sunlight to extend battery life',
-      required: false,
-    },
-    {
-      id: 'gps_receiver',
-      name: 'GPS Receiver',
-      description: 'Provides precise location data when surfaced',
-      required: false,
-    },
-  ]
-
-  const materials = [
-    {
-      id: 'delrin',
-      name: 'Delrin Exterior',
-      description: 'High durability and biocompatibility',
-      selected: false,
-    },
-    {
-      id: 'epoxy_coating',
-      name: 'Epoxy Coating',
-      description: 'Protects against corrosion and wear',
-      selected: false,
-    },
-    {
-      id: 'lithium_battery',
-      name: 'Lithium-Thionyl Chloride Battery',
-      description: 'Extended battery life for long deployments',
-      selected: false,
-    },
-    {
-      id: 'eptfe_membrane',
-      name: 'ePTFE Membrane',
-      description: 'Converts ammonium ions to gas phase',
-      selected: false,
-    },
-    {
-      id: 'stainless_steel',
-      name: 'Stainless Steel Fasteners',
-      description: 'Corrosion-resistant attachment points',
-      selected: false,
-    },
-    {
-      id: 'platinum',
-      name: 'Platinum Sensors',
-      description: 'Inert and highly accurate for chemical sensing',
-      selected: false,
-    },
-  ]
-
-  const testScenarios = {
-    normal: { name: 'Normal Conditions', success: 95, issues: [] },
-    acidic: {
-      name: 'High Acidity',
-      success: 78,
-      issues: ['Membrane degradation', 'Sensor corrosion'],
-    },
-    deep: { name: 'Deep Water', success: 82, issues: ['Pressure effects', 'Signal attenuation'] },
-    long_term: {
-      name: 'Long Deployment',
-      success: 65,
-      issues: ['Battery depletion', 'Biofouling'],
-    },
-  }
-
-  const calculateDesignScore = () => {
-    const componentScore = Object.values(selectedComponents).filter(Boolean).length
-    const materialScore = Object.values(selectedMaterials).filter(Boolean).length
-    return Math.round(
-      ((componentScore + materialScore) /
-        (gastricComponents.length + dorsalComponents.length + materials.length)) *
-        100
-    )
-  }
-
-  const handleComponentToggle = (componentId, isGastric) => {
-    const key = `${isGastric ? 'gastric' : 'dorsal'}_${componentId}`
-    setSelectedComponents({ ...selectedComponents, [key]: !selectedComponents[key] })
-  }
-
-  const handleMaterialToggle = (materialId) => {
-    setSelectedMaterials({ ...selectedMaterials, [materialId]: !selectedMaterials[materialId] })
+function ClickableWord({ term, onClick, color }) {
+  const colorMap = {
+    green: 'text-green-400 hover:text-green-300 border-green-400',
+    blue: 'text-blue-400 hover:text-blue-300 border-blue-400',
+    cyan: 'text-cyan-400 hover:text-cyan-300 border-cyan-400',
+    red: 'text-red-400 hover:text-red-300 border-red-400',
   }
 
   return (
-    <div className="space-y-6">
-      {/* Shark Monitoring Technologies */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-            1
-          </div>
-          <h3 className="text-xl font-bold text-white">Shark Monitoring Technologies</h3>
+    <button
+      onClick={onClick}
+      className={`${colorMap[color]} border-b-2 border-dotted font-semibold cursor-help transition-colors`}
+    >
+      {term}
+    </button>
+  )
+}
+
+function TemperatureChart() {
+  const data = Array.from({ length: 30 }, (_, i) => {
+    const temp = i + 5
+    const greatWhite = Math.exp(-Math.pow(temp - 18, 2) / (2 * 25))
+    const tigerShark = Math.exp(-Math.pow(temp - 24, 2) / (2 * 16))
+    return { temp, greatWhite, tigerShark }
+  })
+
+  return (
+    <div className="bg-slate-900/50 rounded-xl p-6">
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <XAxis
+            dataKey="temp"
+            stroke="#94a3b8"
+            label={{ value: 'Temperature (°C)', position: 'insideBottom', offset: -5 }}
+          />
+          <YAxis
+            stroke="#94a3b8"
+            label={{ value: 'Foraging Probability', angle: -90, position: 'insideLeft' }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#1e293b',
+              border: '1px solid #334155',
+              borderRadius: '8px',
+            }}
+          />
+          <Line
+            type="monotone"
+            dataKey="greatWhite"
+            stroke="#3b82f6"
+            name="Great White"
+            strokeWidth={2}
+          />
+          <Line
+            type="monotone"
+            dataKey="tigerShark"
+            stroke="#f59e0b"
+            name="Tiger Shark"
+            strokeWidth={2}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+      <div className="flex justify-center gap-6 mt-4">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-1 bg-blue-500"></div>
+          <span className="text-gray-300 text-sm">Great White (optimal: 18°C)</span>
         </div>
-        <p className="text-gray-300 mb-4">
-          Sharks can be monitored using two complementary types of tags. The dorsal fin tag measures
-          environmental and behavioral data, while the gastric tag records internal digestive
-          conditions.
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-            <div className="text-3xl mb-3">🏷️</div>
-            <h4 className="text-white font-semibold mb-2">Dorsal Fin Tag</h4>
-            <p className="text-blue-300 text-sm mb-3">
-              External tag that tracks location and environment
-            </p>
-            <div className="space-y-1">
-              <div className="text-xs text-gray-400">• GPS Location Tracking</div>
-              <div className="text-xs text-gray-400">• Water Temperature & Depth</div>
-              <div className="text-xs text-gray-400">• Satellite Communication</div>
-              <div className="text-xs text-gray-400">• Multi-year Battery Life</div>
-            </div>
-          </div>
-
-          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-            <div className="text-3xl mb-3">💊</div>
-            <h4 className="text-white font-semibold mb-2">Gastric Bio-Sensor</h4>
-            <p className="text-red-300 text-sm mb-3">Internal tag that monitors feeding behavior</p>
-            <div className="space-y-1">
-              <div className="text-xs text-gray-400">• pH Stomach Monitoring</div>
-              <div className="text-xs text-gray-400">• Ammonia Detection</div>
-              <div className="text-xs text-gray-400">• Feeding Event Detection</div>
-              <div className="text-xs text-gray-400">• Acoustic Data Transmission</div>
-            </div>
-          </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-1 bg-orange-500"></div>
+          <span className="text-gray-300 text-sm">Tiger Shark (optimal: 24°C)</span>
         </div>
-      </motion.div>
+      </div>
+    </div>
+  )
+}
 
-      {/* Gastric Sensor Package Design */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-            2
-          </div>
-          <h3 className="text-xl font-bold text-white">Gastric Sensor Package Design</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          A pill-shaped capsule that attaches to the stomach wall inside the shark, similar to how
-          acoustic tags are implanted.
-        </p>
-
-        <div className="bg-slate-800/50 rounded-lg p-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="text-white font-semibold mb-3">Core Components</h4>
-              <div className="space-y-2">
-                {gastricComponents.map((component) => (
-                  <div key={component.id} className="flex items-start gap-3 p-2 rounded">
-                    <input
-                      type="checkbox"
-                      checked={selectedComponents[`gastric_${component.id}`] || false}
-                      onChange={() => handleComponentToggle(component.id, true)}
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <div className="text-white text-sm font-semibold">{component.name}</div>
-                      <div className="text-gray-400 text-xs">{component.description}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-slate-900/50 rounded-lg p-4">
-              <h4 className="text-white font-semibold mb-3">How It Works</h4>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 bg-red-500/20 rounded-full flex items-center justify-center text-xs font-bold">
-                    1
-                  </div>
-                  <div>
-                    <div className="text-white font-semibold">Feeding Detection</div>
-                    <div className="text-gray-400">
-                      pH probe detects sustained pH drops during meals
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center text-xs font-bold">
-                    2
-                  </div>
-                  <div>
-                    <div className="text-white font-semibold">Diet Analysis</div>
-                    <div className="text-gray-400">
-                      Ammonia levels reveal protein vs. fat content
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center text-xs font-bold">
-                    3
-                  </div>
-                  <div>
-                    <div className="text-white font-semibold">Data Transmission</div>
-                    <div className="text-gray-400">
-                      Acoustic signals sent to external dorsal tag
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Dorsal Tag Design */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
-            3
-          </div>
-          <h3 className="text-xl font-bold text-white">Dorsal Tag Design</h3>
-        </div>
-        <p className="text-gray-300 mb-4">
-          Our dorsal tag adopts a hydrodynamic design similar to other SPOT dorsal tags, with
-          enhanced sensor capabilities.
-        </p>
-
-        <div className="bg-slate-800/50 rounded-lg p-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="text-white font-semibold mb-3">External Components</h4>
-              <div className="space-y-2">
-                {dorsalComponents.map((component) => (
-                  <div key={component.id} className="flex items-start gap-3 p-2 rounded">
-                    <input
-                      type="checkbox"
-                      checked={selectedComponents[`dorsal_${component.id}`] || false}
-                      onChange={() => handleComponentToggle(component.id, false)}
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <div className="text-white text-sm font-semibold">{component.name}</div>
-                      <div className="text-gray-400 text-xs">{component.description}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-slate-900/50 rounded-lg p-4">
-              <h4 className="text-white font-semibold mb-3">Design Features</h4>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                  <span className="text-gray-300">Hydrodynamic casing reduces drag</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                  <span className="text-gray-300">External hydrophone for gastric data</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                  <span className="text-gray-300">Onboard environmental sensors</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                  <span className="text-gray-300">Satellite antenna for data relay</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Materials Selection */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-slate-700/30 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">
-            4
-          </div>
-          <h3 className="text-xl font-bold text-white">Materials & Durability</h3>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {materials.map((material) => (
-            <motion.div
-              key={material.id}
-              className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                selectedMaterials[material.id]
-                  ? 'bg-green-500/20 border-green-500'
-                  : 'bg-slate-800/50 border-white/10 hover:bg-slate-800/70'
-              }`}
-              onClick={() => handleMaterialToggle(material.id)}
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  checked={selectedMaterials[material.id] || false}
-                  onChange={() => handleMaterialToggle(material.id)}
-                  className="mt-1"
-                />
-                <div>
-                  <div className="text-white font-semibold text-sm">{material.name}</div>
-                  <div className="text-gray-400 text-xs">{material.description}</div>
-                </div>
-              </div>
-            </motion.div>
+function DataPipelineStep({ number, title, items }) {
+  return (
+    <div className="flex gap-4">
+      <div className="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+        {number}
+      </div>
+      <div className="flex-1">
+        <h4 className="text-white font-semibold mb-2">{title}</h4>
+        <ul className="space-y-1">
+          {items.map((item, idx) => (
+            <li key={idx} className="text-gray-300 text-sm flex items-start gap-2">
+              <span className="text-cyan-400 mt-1">•</span>
+              <span>{item}</span>
+            </li>
           ))}
-        </div>
-      </motion.div>
+        </ul>
+      </div>
+    </div>
+  )
+}
 
-      {/* Virtual Testing */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-slate-700/30 rounded-xl p-6"
+function TemperatureSuitabilityChart({ tempOptimal, tempSensitivity }) {
+  const data = Array.from({ length: 40 }, (_, i) => {
+    const temp = i
+    const suitability = Math.exp(
+      -Math.pow(temp - tempOptimal, 2) / (2 * Math.pow(tempSensitivity, 2))
+    )
+    return { temp, suitability }
+  })
+
+  return (
+    <div className="bg-slate-900/50 rounded-xl p-6">
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart data={data}>
+          <defs>
+            <linearGradient id="suitabilityGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <XAxis
+            dataKey="temp"
+            stroke="#94a3b8"
+            label={{ value: 'Temperature (°C)', position: 'insideBottom', offset: -5 }}
+          />
+          <YAxis
+            stroke="#94a3b8"
+            label={{ value: 'Suitability', angle: -90, position: 'insideLeft' }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#1e293b',
+              border: '1px solid #334155',
+              borderRadius: '8px',
+            }}
+          />
+          <Area
+            type="monotone"
+            dataKey="suitability"
+            stroke="#ef4444"
+            fillOpacity={1}
+            fill="url(#suitabilityGradient)"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+function DepthTemperatureChart({ lapseRate }) {
+  const data = Array.from({ length: 20 }, (_, i) => {
+    const depth = i * 50
+    const temp1 = 25 - lapseRate * depth
+    const temp2 = 25 - 0.02 * depth
+    const temp3 = 25 - 0.04 * depth
+    return { depth, temp1, temp2, temp3 }
+  })
+
+  return (
+    <div className="bg-slate-900/50 rounded-xl p-6">
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <XAxis
+            dataKey="depth"
+            stroke="#94a3b8"
+            label={{ value: 'Depth (m)', position: 'insideBottom', offset: -5 }}
+          />
+          <YAxis
+            stroke="#94a3b8"
+            label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#1e293b',
+              border: '1px solid #334155',
+              borderRadius: '8px',
+            }}
+          />
+          <Line
+            type="monotone"
+            dataKey="temp1"
+            stroke="#3b82f6"
+            name={`Current (${lapseRate.toFixed(3)})`}
+            strokeWidth={3}
+          />
+          <Line
+            type="monotone"
+            dataKey="temp2"
+            stroke="#6366f1"
+            name="Moderate (0.02)"
+            strokeWidth={2}
+            strokeDasharray="5 5"
+          />
+          <Line
+            type="monotone"
+            dataKey="temp3"
+            stroke="#8b5cf6"
+            name="Steep (0.04)"
+            strokeWidth={2}
+            strokeDasharray="5 5"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+function DepthScalingChart({ thermoclineDepth, depthVariability }) {
+  const data = Array.from({ length: 50 }, (_, i) => {
+    const depth = i * 10
+    const scaling = Math.exp(
+      -Math.pow(depth - thermoclineDepth, 2) / (2 * Math.pow(depthVariability, 2))
+    )
+    return { depth, scaling }
+  })
+
+  return (
+    <div className="bg-slate-900/50 rounded-xl p-6">
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart data={data}>
+          <defs>
+            <linearGradient id="scalingGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#10b981" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <XAxis
+            dataKey="depth"
+            stroke="#94a3b8"
+            label={{ value: 'Depth (m)', position: 'insideBottom', offset: -5 }}
+          />
+          <YAxis
+            stroke="#94a3b8"
+            label={{ value: 'Prey/Eddy Scaling', angle: -90, position: 'insideLeft' }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#1e293b',
+              border: '1px solid #334155',
+              borderRadius: '8px',
+            }}
+          />
+          <Area
+            type="monotone"
+            dataKey="scaling"
+            stroke="#10b981"
+            fillOpacity={1}
+            fill="url(#scalingGradient)"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+      <p className="text-gray-400 text-sm text-center mt-4">
+        Peak prey concentration occurs at {thermoclineDepth}m depth (thermocline)
+      </p>
+    </div>
+  )
+}
+
+function EnergyBar({ level, energy, color }) {
+  const colorMap = {
+    green: 'bg-green-500',
+    blue: 'bg-blue-500',
+    cyan: 'bg-cyan-500',
+    purple: 'bg-purple-500',
+    red: 'bg-red-500',
+  }
+
+  const width = Math.log10(energy + 1) * 33.33
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-white font-semibold">{level}</span>
+        <span className="text-gray-400 text-sm">{energy}% energy</span>
+      </div>
+      <div className="w-full bg-slate-700 rounded-full h-6 overflow-hidden">
+        <div
+          className={`${colorMap[color]} h-full transition-all duration-500`}
+          style={{ width: `${width}%` }}
+        ></div>
+      </div>
+    </div>
+  )
+}
+
+function WorkflowStep({ number, title, description, color }) {
+  const colorMap = {
+    blue: 'bg-blue-500',
+    cyan: 'bg-cyan-500',
+    purple: 'bg-purple-500',
+    pink: 'bg-pink-500',
+    green: 'bg-green-500',
+    red: 'bg-red-500',
+  }
+
+  return (
+    <div className="flex gap-4 items-start">
+      <div
+        className={`flex-shrink-0 w-10 h-10 ${colorMap[color]} rounded-full flex items-center justify-center text-white font-bold`}
       >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
-            5
-          </div>
-          <h3 className="text-xl font-bold text-white">Virtual Testing</h3>
+        {number}
+      </div>
+      <div className="flex-1 bg-slate-900/50 rounded-xl p-4">
+        <h4 className="text-white font-semibold mb-1">{title}</h4>
+        <p className="text-gray-300 text-sm">{description}</p>
+      </div>
+    </div>
+  )
+}
+
+function MaterialCard({ name, properties, use }) {
+  return (
+    <div className="bg-slate-900/50 rounded-xl p-6">
+      <h4 className="text-white font-semibold mb-2">{name}</h4>
+      <div className="grid md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <div className="text-gray-400 mb-1">Properties:</div>
+          <div className="text-gray-300">{properties}</div>
         </div>
-        <p className="text-gray-300 mb-4">
-          Test your bio-sensor design in different scenarios to see how it performs.
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">Test Scenarios</h4>
-            <div className="space-y-2">
-              {Object.entries(testScenarios).map(([key, scenario]) => (
-                <button
-                  key={key}
-                  onClick={() => setTestScenario(key)}
-                  className={`w-full p-3 rounded-lg border transition-all ${
-                    testScenario === key
-                      ? 'bg-blue-500/20 border-blue-500 text-white'
-                      : 'bg-slate-700 border-white/10 text-gray-300 hover:bg-slate-700/50'
-                  }`}
-                >
-                  <div className="font-semibold text-sm">{scenario.name}</div>
-                  <div className="text-xs text-gray-400">Success Rate: {scenario.success}%</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-slate-800/50 rounded-lg p-4">
-            <h4 className="text-white font-semibold mb-3">Test Results</h4>
-            <div className="mb-4">
-              <div className="w-full bg-slate-700 rounded-full h-3">
-                <div
-                  className={`h-3 rounded-full transition-all ${
-                    testScenarios[testScenario].success > 80
-                      ? 'bg-green-400'
-                      : testScenarios[testScenario].success > 60
-                      ? 'bg-yellow-400'
-                      : 'bg-red-400'
-                  }`}
-                  style={{ width: `${testScenarios[testScenario].success}%` }}
-                ></div>
-              </div>
-              <div className="text-sm text-gray-400 mt-1">
-                Success Rate:{' '}
-                <span
-                  className={`font-semibold ${
-                    testScenarios[testScenario].success > 80
-                      ? 'text-green-400'
-                      : testScenarios[testScenario].success > 60
-                      ? 'text-yellow-400'
-                      : 'text-red-400'
-                  }`}
-                >
-                  {testScenarios[testScenario].success}%
-                </span>
-              </div>
-            </div>
-
-            {testScenarios[testScenario].issues.length > 0 && (
-              <div>
-                <div className="text-red-400 text-sm font-semibold mb-2">Potential Issues:</div>
-                <div className="space-y-1">
-                  {testScenarios[testScenario].issues.map((issue, index) => (
-                    <div key={index} className="text-xs text-gray-400">
-                      • {issue}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+        <div>
+          <div className="text-gray-400 mb-1">Use:</div>
+          <div className="text-gray-300">{use}</div>
         </div>
-
-        <div className="mt-6 bg-slate-900/50 rounded-lg p-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-cyan-400 mb-2">
-              Design Score: {calculateDesignScore()}%
-            </div>
-            <div className="text-sm text-gray-400">
-              Based on {Object.values(selectedComponents).filter(Boolean).length} components and{' '}
-              {Object.values(selectedMaterials).filter(Boolean).length} materials selected
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Design Challenge Toggle */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-6"
-      >
-        <div className="text-center">
-          <h3 className="text-xl font-bold text-white mb-4">🎯 Your Design Challenge</h3>
-          <p className="text-gray-300 mb-6">
-            Design a bio-sensor tag that balances functionality, durability, and cost while
-            surviving in a shark's stomach.
-          </p>
-
-          <button
-            onClick={() => setShowDesign(!showDesign)}
-            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all"
-          >
-            {showDesign ? 'Hide' : 'Show'} Design Summary
-          </button>
-        </div>
-
-        {showDesign && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 bg-slate-800/50 rounded-lg p-4"
-          >
-            <h4 className="text-white font-semibold mb-3">Your Bio-Sensor Design</h4>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <div className="text-cyan-400 font-semibold mb-2">Selected Components:</div>
-                <div className="space-y-1 text-gray-300">
-                  {Object.entries(selectedComponents).map(
-                    ([key, selected]) =>
-                      selected && (
-                        <div key={key}>
-                          • {key.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-                        </div>
-                      )
-                  )}
-                </div>
-              </div>
-              <div>
-                <div className="text-green-400 font-semibold mb-2">Selected Materials:</div>
-                <div className="space-y-1 text-gray-300">
-                  {Object.entries(selectedMaterials).map(
-                    ([key, selected]) =>
-                      selected && <div key={key}>• {materials.find((m) => m.id === key)?.name}</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </motion.div>
+      </div>
     </div>
   )
 }
