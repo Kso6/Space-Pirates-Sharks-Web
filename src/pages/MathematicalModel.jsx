@@ -19,6 +19,27 @@ import { useState } from 'react'
 
 export default function MathematicalModel() {
   const [selectedIngredient, setSelectedIngredient] = useState('prey')
+  const [error, setError] = useState(null)
+  
+  // Error boundary for component
+  if (error) {
+    return (
+      <div className="min-h-screen px-4 py-28">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-4">Something went wrong</h2>
+            <p className="text-gray-300 mb-6">{error.message || 'An unexpected error occurred'}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen px-4 py-24">
@@ -45,14 +66,14 @@ export default function MathematicalModel() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <div className="px-4 py-2 bg-green-500/10 rounded-full">
-              <span className="text-green-400 font-semibold">87% Accurate</span>
-            </div>
             <div className="px-4 py-2 bg-blue-500/10 rounded-full">
               <span className="text-blue-400 font-semibold">Real-Time Data</span>
             </div>
             <div className="px-4 py-2 bg-purple-500/10 rounded-full">
               <span className="text-purple-400 font-semibold">3D Predictions</span>
+            </div>
+            <div className="px-4 py-2 bg-green-500/10 rounded-full">
+              <span className="text-green-400 font-semibold">Tunable Model</span>
             </div>
           </div>
         </motion.div>
@@ -216,7 +237,7 @@ export default function MathematicalModel() {
               icon="🎯"
               title="Probability"
               description="How likely? (SFI Score)"
-              example="0.87 = 87% chance sharks are foraging"
+              example="0.75 = 75% chance sharks are foraging"
             />
           </div>
         </motion.div>
@@ -279,9 +300,21 @@ function CalculatorCard() {
   const [prey, setPrey] = useState(0.8)
   const [temp, setTemp] = useState(0.9)
   const [eddy, setEddy] = useState(0.6)
+  const [calculationError, setCalculationError] = useState(null)
 
-  const sfi = (prey * 0.45 + temp * 0.3 + eddy * 0.25).toFixed(2)
-  const percentage = (sfi * 100).toFixed(0)
+  // Calculate SFI with error handling
+  const calculateSFI = () => {
+    try {
+      const sfiValue = (prey * 0.45 + temp * 0.3 + eddy * 0.25).toFixed(2)
+      return sfiValue
+    } catch (err) {
+      setCalculationError('Error calculating SFI')
+      return '0.00'
+    }
+  }
+
+  const sfi = calculateSFI()
+  const percentage = (parseFloat(sfi) * 100).toFixed(0)
 
   const getColor = () => {
     if (sfi >= 0.7) return 'text-green-400'
@@ -370,15 +403,15 @@ function ReasonCard({ step, title, description, example, gradient }) {
 function ValidationShowcase() {
   const metrics = [
     {
-      label: 'Accuracy',
-      value: '87%',
-      description: 'Correctly predicts shark foraging locations',
+      label: 'Data Sources',
+      value: '3',
+      description: 'NASA missions integrated (SWOT, MODIS, PACE)',
       color: 'green',
     },
     {
-      label: 'R² Score',
-      value: '0.83',
-      description: 'How well satellite data explains shark behavior',
+      label: 'Model Type',
+      value: '4D',
+      description: 'Spatiotemporal prediction (x, y, depth, time)',
       color: 'blue',
     },
     {
@@ -389,6 +422,26 @@ function ValidationShowcase() {
     },
   ]
 
+  // Helper function to get the correct border class based on color
+  const getBorderClass = (color) => {
+    switch (color) {
+      case 'green': return 'border-green-500/20';
+      case 'blue': return 'border-blue-500/20';
+      case 'purple': return 'border-purple-500/20';
+      default: return 'border-white/10';
+    }
+  };
+
+  // Helper function to get the correct gradient class based on color
+  const getGradientClass = (color) => {
+    switch (color) {
+      case 'green': return 'from-green-400 to-green-600';
+      case 'blue': return 'from-blue-400 to-blue-600';
+      case 'purple': return 'from-purple-400 to-purple-600';
+      default: return 'from-blue-400 to-blue-600';
+    }
+  };
+
   return (
     <div className="grid md:grid-cols-3 gap-6">
       {metrics.map((metric) => (
@@ -396,10 +449,10 @@ function ValidationShowcase() {
           key={metric.label}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className={`bg-slate-800/30 backdrop-blur-xl border border-${metric.color}-500/20 rounded-2xl p-8 text-center`}
+          className={`bg-slate-800/30 backdrop-blur-xl border ${getBorderClass(metric.color)} rounded-2xl p-8 text-center`}
         >
           <div
-            className={`text-5xl font-bold bg-gradient-to-r from-${metric.color}-400 to-${metric.color}-600 bg-clip-text text-transparent mb-3`}
+            className={`text-5xl font-bold bg-gradient-to-r ${getGradientClass(metric.color)} bg-clip-text text-transparent mb-3`}
           >
             {metric.value}
           </div>

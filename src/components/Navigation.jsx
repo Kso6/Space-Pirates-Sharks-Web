@@ -79,6 +79,8 @@ export default function Navigation({ currentPage, onNavigate, onReplayIntro }) {
             className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMobileMenuOpen ? (
@@ -104,6 +106,7 @@ export default function Navigation({ currentPage, onNavigate, onReplayIntro }) {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
+              id="mobile-menu"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
