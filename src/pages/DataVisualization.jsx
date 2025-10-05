@@ -436,56 +436,65 @@ function ForagingHotspotMap({
         {/* Hotspot markers */}
         {hotspotData &&
           hotspotData.length > 0 &&
-          hotspotData.slice(0, 15).map((point, idx) => (
-            <div
-              key={idx}
-              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-              style={{
-                left: `${((point.lon + 80) / 20) * 100}%`,
-                top: `${(1 - (point.lat - 25) / 15) * 100}%`,
-              }}
-              role="button"
-              tabIndex="0"
-              onKeyPress={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  // Trigger the same behavior as clicking would
-                  e.preventDefault()
-                  // In a real app, this could show details or trigger an action
-                }
-              }}
-              aria-label={`Hotspot with ${(point.probability * 100).toFixed(
-                0
-              )}% probability at depth ${point.depth}m`}
-            >
-              <div
-                className={`w-4 h-4 rounded-full ${
-                  point.probability > 0.7
-                    ? 'bg-red-500'
-                    : point.probability > 0.5
-                    ? 'bg-yellow-500'
-                    : 'bg-green-500'
-                } animate-ping absolute`}
-              ></div>
-              <div
-                className={`w-4 h-4 rounded-full ${
-                  point.probability > 0.7
-                    ? 'bg-red-500'
-                    : point.probability > 0.5
-                    ? 'bg-yellow-500'
-                    : 'bg-green-500'
-                }`}
-              ></div>
+          hotspotData.slice(0, 15).map((point, idx) => {
+            // Normalize coordinates to stay within bounds (5% padding)
+            const normalizedLon = Math.max(0, Math.min(100, ((point.lon + 180) / 360) * 100))
+            const normalizedLat = Math.max(0, Math.min(100, ((90 - point.lat) / 180) * 100))
+            // Clamp to 5-95% range to keep markers fully visible
+            const clampedLon = Math.max(5, Math.min(95, normalizedLon))
+            const clampedLat = Math.max(5, Math.min(95, normalizedLat))
 
-              {/* Tooltip */}
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 border border-blue-500/30 rounded-lg px-3 py-2 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                <div className="text-white font-medium">SFI: {point.sfi.toFixed(2)}</div>
-                <div className="text-gray-400">
-                  Probability: {(point.probability * 100).toFixed(0)}%
+            return (
+              <div
+                key={idx}
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                style={{
+                  left: `${clampedLon}%`,
+                  top: `${clampedLat}%`,
+                }}
+                role="button"
+                tabIndex="0"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    // Trigger the same behavior as clicking would
+                    e.preventDefault()
+                    // In a real app, this could show details or trigger an action
+                  }
+                }}
+                aria-label={`Hotspot with ${(point.probability * 100).toFixed(
+                  0
+                )}% probability at depth ${point.depth}m`}
+              >
+                <div
+                  className={`w-4 h-4 rounded-full ${
+                    point.probability > 0.7
+                      ? 'bg-red-500'
+                      : point.probability > 0.5
+                      ? 'bg-yellow-500'
+                      : 'bg-green-500'
+                  } animate-ping absolute`}
+                ></div>
+                <div
+                  className={`w-4 h-4 rounded-full ${
+                    point.probability > 0.7
+                      ? 'bg-red-500'
+                      : point.probability > 0.5
+                      ? 'bg-yellow-500'
+                      : 'bg-green-500'
+                  }`}
+                ></div>
+
+                {/* Tooltip */}
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 border border-blue-500/30 rounded-lg px-3 py-2 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  <div className="text-white font-medium">SFI: {point.sfi.toFixed(2)}</div>
+                  <div className="text-gray-400">
+                    Probability: {(point.probability * 100).toFixed(0)}%
+                  </div>
+                  <div className="text-gray-400">Depth: {point.depth}m</div>
                 </div>
-                <div className="text-gray-400">Depth: {point.depth}m</div>
               </div>
-            </div>
-          ))}
+            )
+          })}
 
         {/* Legend */}
         <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm border border-blue-500/30 rounded-lg p-3">
@@ -601,11 +610,45 @@ function SatelliteDataOverlay({
       // Use real SSHA data
       const timeSeries = binDataForTimeSeries(sshaData, 24)
       return timeSeries
+    } else if (dataset === 'modis-chlorophyll' && modisData && modisData.depths) {
+      // Generate timeseries from MODIS data
+      const depthKey = String(seaDepth)
+      if (modisData.depths[depthKey] && modisData.depths[depthKey].data) {
+        const chlorData = modisData.depths[depthKey].data.filter((d) => d.chlorophyll > 0)
+        // Sample 24 points for hourly simulation
+        const step = Math.max(1, Math.floor(chlorData.length / 24))
+        return Array.from({ length: 24 }, (_, i) => {
+          const dataPoint = chlorData[i * step] || chlorData[chlorData.length - 1]
+          return {
+            hour: i,
+            value: dataPoint.chlorophyll,
+            anomaly: dataPoint.chlorophyll * (1 + (Math.random() - 0.5) * 0.2),
+          }
+        })
+      }
+      return []
+    } else if (dataset === 'nasa-sst' && modisData && modisData.depths) {
+      // Generate timeseries from SST proxy data
+      const depthKey = String(seaDepth)
+      if (modisData.depths[depthKey] && modisData.depths[depthKey].data) {
+        const sstData = modisData.depths[depthKey].data.filter((d) => d.sst > 0 && d.sst < 35)
+        // Sample 24 points for hourly simulation
+        const step = Math.max(1, Math.floor(sstData.length / 24))
+        return Array.from({ length: 24 }, (_, i) => {
+          const dataPoint = sstData[i * step] || sstData[sstData.length - 1]
+          return {
+            hour: i,
+            value: dataPoint.sst,
+            anomaly: dataPoint.sst * (1 + (Math.random() - 0.5) * 0.05),
+          }
+        })
+      }
+      return []
     } else {
       // No real data available - return empty array
       return []
     }
-  }, [dataset, sshaData, seaDepth])
+  }, [dataset, sshaData, modisData, seaDepth])
 
   // Calculate statistics from real data
   const stats = useMemo(() => {
@@ -632,7 +675,13 @@ function SatelliteDataOverlay({
       // No real data available
       return 'N/A'
     } else if (dataset === 'nasa-sst') {
-      // No real SST data available
+      // Use real SST proxy data if available
+      if (modisData && modisData.depths) {
+        const depthKey = String(seaDepth)
+        if (modisData.depths[depthKey] && modisData.depths[depthKey].stats) {
+          return modisData.depths[depthKey].stats.mean_sst.toFixed(1)
+        }
+      }
       return 'N/A'
     }
     return 'N/A'
