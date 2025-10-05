@@ -33,6 +33,44 @@ import {
   isValidSSHAPoint,
 } from '../utils/oceanography'
 
+// Stratified sampling function to ensure better geographic distribution
+function stratifiedSample(data, bounds, targetCount) {
+  if (!data || data.length === 0) return []
+  if (data.length <= targetCount) return data
+
+  // Create a grid for stratified sampling (5x5 grid)
+  const gridSize = 5
+  const latStep = (bounds.latMax - bounds.latMin) / gridSize
+  const lonStep = (bounds.lonMax - bounds.lonMin) / gridSize
+  
+  // Organize data into grid cells
+  const grid = {}
+  data.forEach(point => {
+    const latIdx = Math.min(Math.floor((point.lat - bounds.latMin) / latStep), gridSize - 1)
+    const lonIdx = Math.min(Math.floor((point.lon - bounds.lonMin) / lonStep), gridSize - 1)
+    const key = `${latIdx},${lonIdx}`
+    
+    if (!grid[key]) grid[key] = []
+    grid[key].push(point)
+  })
+  
+  // Sample evenly from each cell
+  const result = []
+  const cellKeys = Object.keys(grid)
+  const samplesPerCell = Math.ceil(targetCount / cellKeys.length)
+  
+  cellKeys.forEach(key => {
+    const cellData = grid[key]
+    const step = Math.max(1, Math.floor(cellData.length / samplesPerCell))
+    
+    for (let i = 0; i < cellData.length && result.length < targetCount; i += step) {
+      result.push(cellData[i])
+    }
+  })
+  
+  return result.slice(0, targetCount)
+}
+
 export default function DataVisualization() {
   const [activeDataset, setActiveDataset] = useState('noaa-ssha')
   const [seaDepth, setSeaDepth] = useState(100)
@@ -368,7 +406,8 @@ function ForagingHotspotMap({
           throw new Error(`No data available for region: ${region}`)
         }
 
-        const sampledData = sampleData(regionalData, 50)
+        // Use stratified sampling to get better distribution across the region
+        const sampledData = stratifiedSample(regionalData, regionBounds, 50)
 
         return sampledData.map((point) => ({
           lat: point.lat,
@@ -447,7 +486,7 @@ function ForagingHotspotMap({
         {/* Hotspot markers */}
         {hotspotData &&
           hotspotData.length > 0 &&
-          hotspotData.slice(0, 15).map((point, idx) => {
+          hotspotData.slice(0, 30).map((point, idx) => {
             // Normalize coordinates relative to the region bounds for accurate positioning
             const lonRange = regionBounds.lonMax - regionBounds.lonMin
             const latRange = regionBounds.latMax - regionBounds.latMin
@@ -456,9 +495,9 @@ function ForagingHotspotMap({
             const normalizedLon = ((point.lon - regionBounds.lonMin) / lonRange) * 100
             const normalizedLat = ((regionBounds.latMax - point.lat) / latRange) * 100
             
-            // Clamp to 5-95% range to keep markers fully visible within the panel
-            const clampedLon = Math.max(5, Math.min(95, normalizedLon))
-            const clampedLat = Math.max(5, Math.min(95, normalizedLat))
+            // Clamp to 2-98% range to keep markers visible with minimal compression
+            const clampedLon = Math.max(2, Math.min(98, normalizedLon))
+            const clampedLat = Math.max(2, Math.min(98, normalizedLat))
 
             return (
               <div
