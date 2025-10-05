@@ -270,8 +270,8 @@ export default function MLForecasting() {
               <div className="text-2xl">🌡️</div>
               <div className="flex-1">
                 <p className="text-gray-300 text-sm">
-                  <strong className="text-orange-400">Temperature Effect:</strong> At {depth}m depth,
-                  SST decreases by approximately{' '}
+                  <strong className="text-orange-400">Temperature Effect:</strong> At {depth}m
+                  depth, SST decreases by approximately{' '}
                   <span className="text-cyan-400 font-bold">
                     {(depth * 0.025).toFixed(1)}-{(depth * 0.03).toFixed(1)}°C
                   </span>{' '}
@@ -433,7 +433,7 @@ function GlobalIntensityMap({ data, stats, depth }) {
       'North Pacific': { lat: [20, 55], lon: [-180, -100], data: [] },
       'South Pacific': { lat: [-50, -10], lon: [140, -70], data: [] },
       'Indian Ocean': { lat: [-40, 25], lon: [40, 120], data: [] },
-      'Mediterranean': { lat: [30, 45], lon: [-5, 40], data: [] },
+      Mediterranean: { lat: [30, 45], lon: [-5, 40], data: [] },
     }
 
     data.forEach((point) => {
@@ -590,9 +590,7 @@ function GlobalIntensityMap({ data, stats, depth }) {
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Avg Intensity:</span>
-                  <span className="text-cyan-400 font-semibold">
-                    {region.intensity.toFixed(2)}
-                  </span>
+                  <span className="text-cyan-400 font-semibold">{region.intensity.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Data Points:</span>
@@ -788,8 +786,8 @@ function ModelInformation() {
       content: (
         <p className="text-gray-300 leading-relaxed">
           Temperature decreases with depth using a{' '}
-          <strong className="text-purple-400">latitude-dependent lapse rate</strong> (0.02-0.03 °C/m).
-          The model adjusts SST values for each depth slice, with{' '}
+          <strong className="text-purple-400">latitude-dependent lapse rate</strong> (0.02-0.03
+          °C/m). The model adjusts SST values for each depth slice, with{' '}
           <span className="text-blue-300 font-semibold">Arctic suppression</span> filtering out
           predictions below <span className="text-cyan-400 font-mono">18.1°C</span>.
         </p>
@@ -826,7 +824,9 @@ function ModelInformation() {
     >
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-white mb-2">Model Methodology</h2>
-        <p className="text-gray-400">Interactive technical deep-dive into the SHARK Gaussian Model</p>
+        <p className="text-gray-400">
+          Interactive technical deep-dive into the SHARK Gaussian Model
+        </p>
       </div>
 
       {/* Interactive Sections */}
@@ -942,8 +942,8 @@ function ModelInformation() {
                 <div className="w-2 h-2 rounded-full bg-yellow-400 mt-2"></div>
                 <p className="text-gray-300">
                   Currently using{' '}
-                  <strong className="text-orange-300">synthetic SST and Chlorophyll data</strong> for
-                  demonstration. Full implementation requires complete MODIS datasets.
+                  <strong className="text-orange-300">synthetic SST and Chlorophyll data</strong>{' '}
+                  for demonstration. Full implementation requires complete MODIS datasets.
                 </p>
               </motion.div>
               <motion.div
@@ -953,7 +953,9 @@ function ModelInformation() {
                 <div className="w-2 h-2 rounded-full bg-yellow-400 mt-2"></div>
                 <p className="text-gray-300">
                   Predictions are based on environmental correlations and should be{' '}
-                  <strong className="text-purple-300">validated with actual shark tracking data</strong>
+                  <strong className="text-purple-300">
+                    validated with actual shark tracking data
+                  </strong>
                   .
                 </p>
               </motion.div>
