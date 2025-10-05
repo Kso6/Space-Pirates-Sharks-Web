@@ -180,10 +180,10 @@ export default function SFIDashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full mb-6">
-            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-            <span className="text-orange-400 text-sm font-bold">
-              LIVE • Processing {globalStats?.totalPoints.toLocaleString()}+ Data Points
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-full mb-6">
+            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+            <span className="text-blue-400 text-sm font-bold">
+              DEMO • Analyzing {globalStats?.totalPoints.toLocaleString()}+ Data Points
             </span>
           </div>
 
@@ -221,7 +221,12 @@ export default function SFIDashboard() {
               trend="Demo Model"
               color="blue"
             />
-            <MetricCard value="Hypothetical" label="Model Status" trend="Proof of Concept" color="purple" />
+            <MetricCard
+              value="Hypothetical"
+              label="Model Status"
+              trend="Proof of Concept"
+              color="purple"
+            />
           </div>
         </motion.div>
 
@@ -452,7 +457,7 @@ export default function SFIDashboard() {
               SFI = (SSHA × 0.4) + (Chl-a × 0.3) + (SST × 0.3)
             </div>
             <div className="text-sm text-gray-400">
-              Validated against {globalStats?.totalPoints.toLocaleString()}+ real ocean measurements
+              Conceptual model using {globalStats?.totalPoints.toLocaleString()}+ ocean data points
             </div>
           </div>
         </motion.div>
@@ -468,8 +473,8 @@ export default function SFIDashboard() {
             Hypothetical Conservation Framework
           </h2>
           <p className="text-white/90 text-xl mb-8 max-w-2xl mx-auto">
-            This conceptual SFI model could help researchers, conservationists, and policymakers protect marine
-            ecosystems worldwide
+            This conceptual SFI model could help researchers, conservationists, and policymakers
+            protect marine ecosystems worldwide
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg">
