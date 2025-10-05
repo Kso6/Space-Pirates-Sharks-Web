@@ -1,6 +1,8 @@
 import React, { Suspense, useRef, useEffect, useState } from 'react'
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, useLoader, useThree } from '@react-three/fiber'
 import { OrbitControls, Html, useProgress } from '@react-three/drei'
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { Box3, Vector3 } from 'three'
 
 // ✅ Loading screen while model loads
@@ -16,94 +18,43 @@ function Loader() {
   )
 }
 
-// ✅ 3D Model component with proper centering
-function CenteredDorsalTag() {
+// ✅ Dorsal Tag Model with proper loading and centering
+function DorsalTagModel() {
   const groupRef = useRef()
   const { camera, controls } = useThree()
   const [modelLoaded, setModelLoaded] = useState(false)
 
+  // Load materials first
+  const materials = useLoader(MTLLoader, '/models/Dorsal_Tag.mtl')
+
+  // Then load OBJ with materials
+  const obj = useLoader(OBJLoader, '/models/Dorsal_Tag.obj', (loader) => {
+    loader.setMaterials(materials)
+  })
+
   useEffect(() => {
-    const loadModel = async () => {
-      try {
-        // For now, we'll use a simple geometric representation
-        // In production, this would load the actual OBJ file using:
-        // const { OBJLoader } = await import('three/examples/jsm/loaders/OBJLoader.js')
-        // const { MTLLoader } = await import('three/examples/jsm/loaders/MTLLoader.js')
+    if (obj && groupRef.current && !modelLoaded) {
+      // Calculate bounding box to find the center of the model
+      const box = new Box3().setFromObject(obj)
+      const center = box.getCenter(new Vector3())
 
-        // Simulate model loading
-        await new Promise(resolve => setTimeout(resolve, 1500))
+      // Move the model so its center is at the origin
+      obj.position.sub(center)
 
-        // Once loaded, center the model
-        if (groupRef.current && !modelLoaded) {
-          // Update camera and controls to look at the model center
-          camera.position.set(0, 0, 6)
-          camera.lookAt(0, 0, 0)
+      // Update camera and controls to look at the model center
+      camera.position.set(0, 0, 6)
+      camera.lookAt(0, 0, 0)
 
-          if (controls) {
-            controls.target.set(0, 0, 0)
-            controls.update()
-          }
-
-          setModelLoaded(true)
-        }
-      } catch (error) {
-        console.error('Failed to load 3D model:', error)
+      if (controls) {
+        controls.target.set(0, 0, 0)
+        controls.update()
       }
+
+      setModelLoaded(true)
     }
+  }, [obj, camera, controls, modelLoaded])
 
-    loadModel()
-  }, [camera, controls, modelLoaded])
-
-  return (
-    <group ref={groupRef}>
-      {/* 3D representation of the Dorsal Tag */}
-      <mesh position={[0, 0, 0]} castShadow receiveShadow>
-        <boxGeometry args={[3, 1.5, 0.6]} />
-        <meshStandardMaterial color="#0e7490" metalness={0.3} roughness={0.4} />
-      </mesh>
-
-      {/* Solar panel array */}
-      <mesh position={[0, 0.8, 0]} castShadow>
-        <boxGeometry args={[2.5, 0.2, 0.5]} />
-        <meshStandardMaterial color="#1e40af" metalness={0.1} roughness={0.2} />
-      </mesh>
-
-      {/* Satellite antenna */}
-      <group position={[0, 1.2, 0]}>
-        <mesh>
-          <cylinderGeometry args={[0.05, 0.05, 2]} />
-          <meshStandardMaterial color="#fbbf24" />
-        </mesh>
-        {/* Antenna tip */}
-        <mesh position={[0, 1.1, 0]}>
-          <sphereGeometry args={[0.15]} />
-          <meshStandardMaterial color="#f59e0b" emissive="#f59e0b" emissiveIntensity={0.2} />
-        </mesh>
-      </group>
-
-      {/* Inductive receiver coil */}
-      <mesh position={[0, -0.6, 0]}>
-        <torusGeometry args={[0.8, 0.15]} />
-        <meshStandardMaterial color="#ea580c" metalness={0.5} roughness={0.3} />
-      </mesh>
-
-      {/* Attachment bolts */}
-      <mesh position={[-1.2, -0.8, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.4]} />
-        <meshStandardMaterial color="#64748b" />
-      </mesh>
-      <mesh position={[1.2, -0.8, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.4]} />
-        <meshStandardMaterial color="#64748b" />
-      </mesh>
-
-      {/* Depth sensor window */}
-      <mesh position={[-1, 0, 0.31]}>
-        <sphereGeometry args={[0.2]} />
-        <meshStandardMaterial color="#7c3aed" transparent opacity={0.7} />
-      </mesh>
-    </group>
-  )
+  return <primitive ref={groupRef} object={obj} scale={0.5} />
 }
 
 // ✅ The actual viewer component with proper centering
@@ -111,18 +62,29 @@ export default function ThreeDModelViewer() {
   return (
     <div className="w-full h-[500px] bg-white rounded-lg overflow-hidden relative">
       <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
+        {/* Soft ambient light */}
+        <ambientLight intensity={0.4} />
+
+        {/* Directional key light */}
+        <directionalLight
+          position={[5, 5, 5]}
+          intensity={1}
+          castShadow
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
+        />
+
+        {/* Fill light */}
         <pointLight position={[-5, -5, -5]} intensity={0.4} />
 
-        {/* Ground plane for reference */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]} receiveShadow>
+        {/* Ground plane for reference and shadows */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>
           <planeGeometry args={[20, 20]} />
-          <meshStandardMaterial color="#f8fafc" transparent opacity={0.3} />
+          <shadowMaterial opacity={0.3} />
         </mesh>
 
         <Suspense fallback={<Loader />}>
-          <CenteredDorsalTag />
+          <DorsalTagModel />
         </Suspense>
 
         <OrbitControls
