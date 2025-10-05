@@ -8,7 +8,7 @@ export default function Education() {
 
   const handleStartLesson = (lessonNumber) => {
     setShowingContent(true)
-    setActiveLesson(lessonNumber)
+    setActiveLesson(parseInt(lessonNumber))
   }
 
   const handleBackToLessons = () => {
@@ -167,7 +167,7 @@ export default function Education() {
 
           <div className="grid md:grid-cols-2 gap-6">
             <LessonCard
-              number="1"
+              number={1}
               title="How Satellites Track Ocean Life"
               duration="15 min"
               difficulty="Beginner"
@@ -179,7 +179,7 @@ export default function Education() {
             />
 
             <LessonCard
-              number="2"
+              number={2}
               title="The Shark Foraging Index"
               duration="20 min"
               difficulty="Intermediate"
@@ -191,7 +191,7 @@ export default function Education() {
             />
 
             <LessonCard
-              number="3"
+              number={3}
               title="Ocean Food Webs"
               duration="12 min"
               difficulty="Beginner"
@@ -203,7 +203,7 @@ export default function Education() {
             />
 
             <LessonCard
-              number="4"
+              number={4}
               title="Bio-Sensor Technology"
               duration="18 min"
               difficulty="Advanced"
