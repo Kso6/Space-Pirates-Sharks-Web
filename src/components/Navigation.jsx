@@ -5,6 +5,7 @@ export default function Navigation({ currentPage, onNavigate, onReplayIntro }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const navItems = [
+    { id: 'sfi', label: 'SFI Dashboard', icon: '🎯' },
     { id: 'education', label: 'Learn', icon: '🎓' },
     { id: 'visualization', label: 'Forecast', icon: '📊' },
     { id: 'ml-forecast', label: 'ML Model', icon: '🧠' },

@@ -36,8 +36,16 @@ export default function Hero({ onNavigate }) {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <motion.button
+              onClick={() => onNavigate('sfi')}
+              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white text-lg font-bold rounded-xl hover:from-orange-600 hover:to-red-600 transition-all shadow-2xl hover:shadow-orange-500/50 flex items-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              🎯 SFI Dashboard
+            </motion.button>
+            <motion.button
               onClick={() => onNavigate('education')}
-              className="px-8 py-4 bg-white text-gray-900 text-lg font-bold rounded-xl hover:bg-gray-100 transition-all shadow-2xl hover:shadow-blue-500/50 hover:scale-105"
+              className="px-8 py-4 bg-white text-gray-900 text-lg font-bold rounded-xl hover:bg-gray-100 transition-all shadow-2xl hover:shadow-blue-500/50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

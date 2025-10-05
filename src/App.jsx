@@ -48,6 +48,7 @@ class ErrorBoundary extends Component {
 const MathematicalModel = lazy(() => import('./pages/MathematicalModel'))
 const DataVisualization = lazy(() => import('./pages/DataVisualization'))
 const MLForecasting = lazy(() => import('./pages/MLForecasting'))
+const SFIDashboard = lazy(() => import('./pages/SFIDashboard'))
 const TagSensor = lazy(() => import('./pages/TagSensor'))
 const About = lazy(() => import('./pages/About'))
 const Education = lazy(() => import('./pages/Education'))
@@ -99,6 +100,8 @@ function App() {
               return <DataVisualization />
             case 'ml-forecast':
               return <MLForecasting />
+            case 'sfi':
+              return <SFIDashboard />
             case 'tag':
               return <TagSensor />
             case 'about':
