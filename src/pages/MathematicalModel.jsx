@@ -19,27 +19,6 @@ import { useState } from 'react'
 
 export default function MathematicalModel() {
   const [selectedIngredient, setSelectedIngredient] = useState('prey')
-  const [error, setError] = useState(null)
-  
-  // Error boundary for component
-  if (error) {
-    return (
-      <div className="min-h-screen px-4 py-28">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-4">Something went wrong</h2>
-            <p className="text-gray-300 mb-6">{error.message || 'An unexpected error occurred'}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg"
-            >
-              Reload Page
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen px-4 py-24">
@@ -230,7 +209,7 @@ export default function MathematicalModel() {
             <DimensionCard
               icon="⏰"
               title="Time"
-              description="When? (T coordinate)"
+              description="When? (t coordinate)"
               example="Updated every 3 hours with new satellite data"
             />
             <DimensionCard
@@ -300,7 +279,6 @@ function CalculatorCard() {
   const [prey, setPrey] = useState(0.8)
   const [temp, setTemp] = useState(0.9)
   const [eddy, setEddy] = useState(0.6)
-  const [calculationError, setCalculationError] = useState(null)
 
   // Calculate SFI with error handling
   const calculateSFI = () => {
@@ -308,7 +286,7 @@ function CalculatorCard() {
       const sfiValue = (prey * 0.45 + temp * 0.3 + eddy * 0.25).toFixed(2)
       return sfiValue
     } catch (err) {
-      setCalculationError('Error calculating SFI')
+      console.error('Error calculating SFI:', err)
       return '0.00'
     }
   }
