@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
-import { useState, useMemo, useEffect, useRef } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { useState, useMemo, useEffect } from 'react'
+import ThreeDModelViewer from '../components/ThreeDModelViewer'
 import {
   LineChart,
   Line,
@@ -229,17 +228,12 @@ function ArchitectureSection() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Interactive 3D Model Viewer */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-8 h-96 flex items-center justify-center border-4 border-cyan-500/30">
-              <div className="text-center space-y-4 w-full">
-                <div className="relative w-full h-64 bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
-                  <ThreeDModelViewer />
-                  <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded">
-                    Interactive 3D Model
-                  </div>
-                  <div className="absolute bottom-2 right-2 bg-slate-900/90 text-cyan-400 text-xs px-2 py-1 rounded">
-                    Click & drag to rotate
-                  </div>
-                </div>
+            <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-8 border-4 border-cyan-500/30">
+              <div className="mb-4">
+                <div className="text-cyan-400 text-sm font-semibold mb-2">Interactive 3D Model</div>
+                <ThreeDModelViewer />
+              </div>
+              <div className="text-center space-y-2">
                 <div className="text-white font-bold text-xl">External Dorsal Tag</div>
                 <div className="text-gray-400 text-sm">Dimensions: 80mm × 40mm × 15mm</div>
                 <div className="text-gray-400 text-sm">Weight: ~45 grams (in air)</div>
@@ -1264,159 +1258,6 @@ function DeploymentSection() {
   )
 }
 
-// 3D Model Viewer Component using React Three Fiber with actual OBJ loading
-function ThreeDModelViewer() {
-  const [model, setModel] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const loadOBJModel = async () => {
-      try {
-        setLoading(true)
-
-        // For now, create a simple 3D representation using basic Three.js shapes
-        // In a production environment, you would use proper OBJ/MTL loaders
-
-        // Simulate loading time for the actual model
-        await new Promise((resolve) => setTimeout(resolve, 1500))
-
-        // Create a simple geometric representation of the dorsal tag
-        // This is a placeholder until proper OBJ loading is implemented
-        setModel({
-          type: 'simple_geometry',
-          geometry: 'box',
-          dimensions: { width: 80, height: 40, depth: 15 },
-        })
-
-        setLoading(false)
-      } catch (err) {
-        console.error('Failed to load 3D model:', err)
-        setError('Failed to load 3D model')
-        setLoading(false)
-      }
-    }
-
-    loadOBJModel()
-  }, [])
-
-  if (loading) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-slate-900/50 rounded-lg">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400 mx-auto mb-2"></div>
-          <div className="text-cyan-400 text-sm">Loading 3D Model...</div>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-slate-800/50 rounded-lg">
-        <div className="text-center">
-          <div className="text-red-400 text-4xl mb-2">⚠️</div>
-          <div className="text-gray-400 text-sm">3D Model Unavailable</div>
-          <div className="text-gray-500 text-xs mt-1">Check console for details</div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="w-full h-full bg-gradient-to-br from-slate-900/50 to-slate-800/50 rounded-lg overflow-hidden relative">
-      <Canvas camera={{ position: [0, 0, 8], fov: 50 }} className="w-full h-full">
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-        <pointLight position={[-10, -10, -5]} intensity={0.3} />
-
-        {/* OrbitControls for user interaction */}
-        <OrbitControls
-          enablePan={true}
-          enableZoom={true}
-          enableRotate={true}
-          minDistance={3}
-          maxDistance={15}
-          autoRotate={true}
-          autoRotateSpeed={0.5}
-        />
-
-        {/* 3D representation of the External Dorsal Tag */}
-        <group>
-          {/* Main housing - represents the tag body */}
-          <mesh position={[0, 0, 0]} castShadow receiveShadow>
-            <boxGeometry args={[3, 1.5, 0.6]} />
-            <meshStandardMaterial color="#0e7490" metalness={0.3} roughness={0.4} />
-          </mesh>
-
-          {/* Solar panel array */}
-          <mesh position={[0, 0.8, 0]} castShadow>
-            <boxGeometry args={[2.5, 0.2, 0.5]} />
-            <meshStandardMaterial color="#1e40af" metalness={0.1} roughness={0.2} />
-          </mesh>
-
-          {/* Satellite antenna */}
-          <group position={[0, 1.2, 0]}>
-            <mesh>
-              <cylinderGeometry args={[0.05, 0.05, 2]} />
-              <meshStandardMaterial color="#fbbf24" />
-            </mesh>
-            {/* Antenna tip */}
-            <mesh position={[0, 1.1, 0]}>
-              <sphereGeometry args={[0.15]} />
-              <meshStandardMaterial color="#f59e0b" emissive="#f59e0b" emissiveIntensity={0.2} />
-            </mesh>
-          </group>
-
-          {/* Inductive receiver coil */}
-          <mesh position={[0, -0.6, 0]}>
-            <torusGeometry args={[0.8, 0.15]} />
-            <meshStandardMaterial color="#ea580c" metalness={0.5} roughness={0.3} />
-          </mesh>
-
-          {/* Attachment bolts */}
-          <mesh position={[-1.2, -0.8, 0]}>
-            <cylinderGeometry args={[0.08, 0.08, 0.4]} />
-            <meshStandardMaterial color="#64748b" />
-          </mesh>
-          <mesh position={[1.2, -0.8, 0]}>
-            <cylinderGeometry args={[0.08, 0.08, 0.4]} />
-            <meshStandardMaterial color="#64748b" />
-          </mesh>
-
-          {/* Depth sensor window */}
-          <mesh position={[-1, 0, 0.31]}>
-            <sphereGeometry args={[0.2]} />
-            <meshStandardMaterial color="#7c3aed" transparent opacity={0.7} />
-          </mesh>
-        </group>
-
-        {/* Optional: Add a simple ground plane for reference */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]} receiveShadow>
-          <planeGeometry args={[20, 20]} />
-          <meshStandardMaterial color="#1a1a2e" transparent opacity={0.2} />
-        </mesh>
-      </Canvas>
-
-      {/* Control instructions overlay */}
-      <div className="absolute bottom-3 left-3 right-3 text-center">
-        <div className="text-cyan-300 text-xs font-mono bg-slate-900/60 px-2 py-1 rounded backdrop-blur-sm">
-          🖱️ Drag to rotate • 🔄 Scroll to zoom • 🖱️ Right-click to pan
-        </div>
-      </div>
-
-      {/* Model info badge */}
-      <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
-        Interactive 3D Model
-      </div>
-
-      {/* Note about actual model loading */}
-      <div className="absolute top-2 right-2 bg-slate-800/80 text-cyan-300 text-xs px-2 py-1 rounded backdrop-blur-sm">
-        OBJ Model Ready
-      </div>
-    </div>
-  )
-}
 
 // Helper Components
 function ComponentLayer({ title, description, color, icon }) {
