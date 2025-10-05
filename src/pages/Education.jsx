@@ -327,39 +327,6 @@ export default function Education() {
           </div>
         </motion.div>
 
-        {/* Hands-On Activities */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-12"
-        >
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">Try It Yourself</h2>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <ActivityCard
-              title="Build Your Own Foraging Index"
-              description="Use real NASA data to calculate where sharks might hunt"
-              tools={['Excel/Google Sheets', 'NASA SWOT data', 'Our formula']}
-              time="30 min"
-            />
-
-            <ActivityCard
-              title="Design a Bio-Sensor"
-              description="Sketch and prototype a tag that could track shark feeding"
-              tools={['Paper & pencil', 'Arduino (optional)', 'Creativity']}
-              time="45 min"
-            />
-
-            <ActivityCard
-              title="Create a Food Web"
-              description="Map the connections from phytoplankton to sharks"
-              tools={['String & paper', 'Our data viz', 'Teamwork']}
-              time="20 min"
-            />
-          </div>
-        </motion.div>
-
         {/* Community Impact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -423,6 +390,7 @@ function LessonCard({
   description,
   isActive,
   onClick,
+  onStartLesson,
 }) {
   const difficultyColors = {
     Beginner: 'text-green-400 bg-green-500/10',
@@ -474,7 +442,10 @@ function LessonCard({
           className="mt-4 pt-4 border-t border-white/10"
         >
           <button
-            onClick={() => onClick(number)}
+            onClick={(e) => {
+              e.stopPropagation()
+              onStartLesson(number)
+            }}
             className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
           >
             Start Lesson →
@@ -527,30 +498,6 @@ function DecisionCard({ icon, title, scenario, decision, outcome }) {
             <span className="text-green-400 font-semibold">{outcome}</span>
           </div>
         </div>
-      </div>
-    </div>
-  )
-}
-
-function ActivityCard({ title, description, tools, time }) {
-  return (
-    <div className="bg-slate-700/30 rounded-xl p-6">
-      <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
-      <p className="text-gray-300 text-sm mb-4">{description}</p>
-
-      <div className="mb-4">
-        <div className="text-xs font-semibold text-gray-400 mb-2">YOU'LL NEED:</div>
-        <div className="flex flex-wrap gap-2">
-          {tools.map((tool, idx) => (
-            <span key={idx} className="text-xs px-2 py-1 bg-blue-500/10 text-blue-400 rounded">
-              {tool}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex items-center text-sm text-gray-400">
-        <span>⏱️ {time}</span>
       </div>
     </div>
   )
