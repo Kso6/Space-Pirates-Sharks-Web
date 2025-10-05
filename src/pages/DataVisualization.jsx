@@ -42,32 +42,32 @@ function stratifiedSample(data, bounds, targetCount) {
   const gridSize = 5
   const latStep = (bounds.latMax - bounds.latMin) / gridSize
   const lonStep = (bounds.lonMax - bounds.lonMin) / gridSize
-  
+
   // Organize data into grid cells
   const grid = {}
-  data.forEach(point => {
+  data.forEach((point) => {
     const latIdx = Math.min(Math.floor((point.lat - bounds.latMin) / latStep), gridSize - 1)
     const lonIdx = Math.min(Math.floor((point.lon - bounds.lonMin) / lonStep), gridSize - 1)
     const key = `${latIdx},${lonIdx}`
-    
+
     if (!grid[key]) grid[key] = []
     grid[key].push(point)
   })
-  
+
   // Sample evenly from each cell
   const result = []
   const cellKeys = Object.keys(grid)
   const samplesPerCell = Math.ceil(targetCount / cellKeys.length)
-  
-  cellKeys.forEach(key => {
+
+  cellKeys.forEach((key) => {
     const cellData = grid[key]
     const step = Math.max(1, Math.floor(cellData.length / samplesPerCell))
-    
+
     for (let i = 0; i < cellData.length && result.length < targetCount; i += step) {
       result.push(cellData[i])
     }
   })
-  
+
   return result.slice(0, targetCount)
 }
 
@@ -490,11 +490,11 @@ function ForagingHotspotMap({
             // Normalize coordinates relative to the region bounds for accurate positioning
             const lonRange = regionBounds.lonMax - regionBounds.lonMin
             const latRange = regionBounds.latMax - regionBounds.latMin
-            
+
             // Calculate position as percentage within region bounds
             const normalizedLon = ((point.lon - regionBounds.lonMin) / lonRange) * 100
             const normalizedLat = ((regionBounds.latMax - point.lat) / latRange) * 100
-            
+
             // Clamp to 2-98% range to keep markers visible with minimal compression
             const clampedLon = Math.max(2, Math.min(98, normalizedLon))
             const clampedLat = Math.max(2, Math.min(98, normalizedLat))
