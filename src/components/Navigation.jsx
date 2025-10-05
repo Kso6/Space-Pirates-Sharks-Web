@@ -7,6 +7,7 @@ export default function Navigation({ currentPage, onNavigate, onReplayIntro }) {
   const navItems = [
     { id: 'education', label: 'Learn', icon: '🎓' },
     { id: 'visualization', label: 'Forecast', icon: '📊' },
+    { id: 'ml-forecast', label: 'ML Model', icon: '🧠' },
     { id: 'model', label: 'How It Works', icon: '⚡' },
     { id: 'tag', label: 'Technology', icon: '🔬' },
   ]

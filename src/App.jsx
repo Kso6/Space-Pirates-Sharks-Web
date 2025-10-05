@@ -47,6 +47,7 @@ class ErrorBoundary extends Component {
 // Lazy load page components for better performance
 const MathematicalModel = lazy(() => import('./pages/MathematicalModel'))
 const DataVisualization = lazy(() => import('./pages/DataVisualization'))
+const MLForecasting = lazy(() => import('./pages/MLForecasting'))
 const TagSensor = lazy(() => import('./pages/TagSensor'))
 const About = lazy(() => import('./pages/About'))
 const Education = lazy(() => import('./pages/Education'))
@@ -96,6 +97,8 @@ function App() {
               return <MathematicalModel />
             case 'visualization':
               return <DataVisualization />
+            case 'ml-forecast':
+              return <MLForecasting />
             case 'tag':
               return <TagSensor />
             case 'about':
