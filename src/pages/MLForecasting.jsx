@@ -57,23 +57,23 @@ export default function MLForecasting() {
       // Stratified sampling to ensure representative data
       const sampleSize = Math.min(500, sshaData.length)
       const sampled = []
-      
+
       // Sort data by latitude to enable stratified sampling
       const sortedData = [...sshaData].sort((a, b) => a.lat - b.lat)
-      
+
       // Divide into latitude bands
       const bands = 5
       const bandSize = Math.floor(sortedData.length / bands)
-      
+
       for (let band = 0; band < bands; band++) {
         const start = band * bandSize
         const end = (band + 1) * bandSize
         const bandData = sortedData.slice(start, end)
-        
+
         // Sample proportionally from each band
         const bandSampleSize = Math.floor(sampleSize / bands)
         const step = Math.max(1, Math.floor(bandData.length / bandSampleSize))
-        
+
         for (let i = 0; i < bandData.length; i += step) {
           sampled.push(bandData[i])
           if (sampled.length >= sampleSize) break
@@ -90,7 +90,7 @@ export default function MLForecasting() {
       // Generate synthetic SST and Chlorophyll for demonstration
       for (let i = 0; i < sampled.length; i++) {
         const point = sampled[i]
-        
+
         // Synthetic SST (18-30°C based on latitude)
         const sst = 26 - Math.abs(point.lat) * 0.15 + (Math.random() - 0.5) * 2
 

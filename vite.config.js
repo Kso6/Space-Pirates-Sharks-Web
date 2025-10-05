@@ -22,7 +22,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
           'vendor-viz': ['d3', 'recharts', 'plotly.js'],
           'vendor-maps': ['mapbox-gl', 'react-map-gl', 'leaflet', 'react-leaflet'],
         },
