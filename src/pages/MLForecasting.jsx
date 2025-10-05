@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import {
   ResponsiveContainer,
@@ -149,22 +149,50 @@ export default function MLForecasting() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-12"
+          className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-12 hover:border-cyan-500/30 transition-all"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-2">Depth Adjustment</h3>
+              <h3 className="text-2xl font-bold text-white mb-2">🌊 Depth Adjustment</h3>
               <p className="text-gray-400">
                 Adjust depth to see how temperature lapse rate affects predictions
               </p>
             </div>
-            <div className="text-right">
-              <div className="text-4xl font-bold text-cyan-400">{depth}m</div>
-              <div className="text-sm text-gray-400">Current Depth</div>
+            <motion.div
+              key={depth}
+              initial={{ scale: 1.2, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="text-right bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-xl p-4"
+            >
+              <div className="text-5xl font-bold text-cyan-400">{depth}m</div>
+              <div className="text-sm text-gray-400 mt-1">Current Depth</div>
+            </motion.div>
+          </div>
+
+          {/* Visual Depth Indicator */}
+          <div className="relative mb-6">
+            <div className="absolute top-0 left-0 right-0 h-full bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-indigo-500/10 rounded-xl"></div>
+            <div className="relative p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-cyan-400 text-sm font-semibold">↑ Shallow (Warmer)</span>
+                <span className="text-indigo-400 text-sm font-semibold">↓ Deep (Colder)</span>
+              </div>
+              <div className="relative h-12 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-lg overflow-hidden shadow-lg">
+                <motion.div
+                  className="absolute h-full w-1 bg-white shadow-lg"
+                  animate={{ left: `${((depth - 50) / 250) * 100}%` }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white text-slate-900 px-3 py-1 rounded-lg text-xs font-bold shadow-lg">
+                    {depth}m
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </div>
 
-          <div className="relative">
+          {/* Enhanced Slider */}
+          <div className="relative mb-8">
             <input
               type="range"
               min="50"
@@ -172,55 +200,86 @@ export default function MLForecasting() {
               step="50"
               value={depth}
               onChange={(e) => setDepth(parseInt(e.target.value))}
-              className="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer range-slider"
+              className="w-full h-4 bg-slate-700 rounded-lg appearance-none cursor-pointer range-slider"
               style={{
                 background: `linear-gradient(to right, #06b6d4 0%, #06b6d4 ${
                   ((depth - 50) / 250) * 100
                 }%, #334155 ${((depth - 50) / 250) * 100}%, #334155 100%)`,
               }}
             />
-            <div className="flex justify-between mt-2 text-sm text-gray-400">
-              <span>50m</span>
-              <span>100m</span>
-              <span>150m</span>
-              <span>200m</span>
-              <span>250m</span>
-              <span>300m</span>
+            {/* Tick Marks */}
+            <div className="flex justify-between mt-3">
+              {[50, 100, 150, 200, 250, 300].map((tick) => (
+                <div
+                  key={tick}
+                  className="flex flex-col items-center cursor-pointer group"
+                  onClick={() => setDepth(tick)}
+                >
+                  <div
+                    className={`w-0.5 h-2 mb-1 transition-all ${
+                      depth === tick ? 'bg-cyan-400 h-3' : 'bg-gray-600 group-hover:bg-gray-400'
+                    }`}
+                  ></div>
+                  <span
+                    className={`text-xs transition-all ${
+                      depth === tick
+                        ? 'text-cyan-400 font-bold'
+                        : 'text-gray-400 group-hover:text-gray-300'
+                    }`}
+                  >
+                    {tick}m
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 mt-6">
-            <button
-              onClick={() => setDepth(80)}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all ${
-                depth === 80
-                  ? 'bg-cyan-500 text-white'
-                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700'
-              }`}
-            >
-              Shallow (80m)
-            </button>
-            <button
-              onClick={() => setDepth(150)}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all ${
-                depth === 150
-                  ? 'bg-cyan-500 text-white'
-                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700'
-              }`}
-            >
-              Mid-depth (150m)
-            </button>
-            <button
-              onClick={() => setDepth(250)}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all ${
-                depth === 250
-                  ? 'bg-cyan-500 text-white'
-                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700'
-              }`}
-            >
-              Deep (250m)
-            </button>
+          {/* Quick Preset Buttons */}
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { value: 80, label: 'Shallow', icon: '🏖️', desc: 'Warm waters' },
+              { value: 150, label: 'Mid-depth', icon: '🌊', desc: 'Thermocline' },
+              { value: 250, label: 'Deep', icon: '🌑', desc: 'Cold depths' },
+            ].map((preset) => (
+              <motion.button
+                key={preset.value}
+                onClick={() => setDepth(preset.value)}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={`px-6 py-4 rounded-xl font-semibold transition-all ${
+                  depth === preset.value
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/30'
+                    : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 border border-white/10'
+                }`}
+              >
+                <div className="text-2xl mb-1">{preset.icon}</div>
+                <div className="font-bold">{preset.label}</div>
+                <div className="text-xs opacity-80 mt-1">{preset.desc}</div>
+              </motion.button>
+            ))}
           </div>
+
+          {/* Temperature Info */}
+          <motion.div
+            key={depth}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg p-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">🌡️</div>
+              <div className="flex-1">
+                <p className="text-gray-300 text-sm">
+                  <strong className="text-orange-400">Temperature Effect:</strong> At {depth}m depth,
+                  SST decreases by approximately{' '}
+                  <span className="text-cyan-400 font-bold">
+                    {(depth * 0.025).toFixed(1)}-{(depth * 0.03).toFixed(1)}°C
+                  </span>{' '}
+                  (latitude dependent)
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
         {/* Visualization */}
@@ -283,78 +342,309 @@ function ForecastMap({ data, stats, depth }) {
   )
 
   return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8"
+      >
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-2">Shark Foraging Intensity Map</h2>
+            <p className="text-gray-400">ML-predicted intensity (λ) at {depth}m depth</p>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-full">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-xs text-green-400 font-semibold">Live Forecast</span>
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height={500}>
+          <ScatterChart margin={{ top: 20, right: 20, bottom: 60, left: 60 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+            <XAxis
+              type="number"
+              dataKey="lon"
+              name="Longitude"
+              stroke="#94a3b8"
+              domain={['dataMin', 'dataMax']}
+              label={{
+                value: 'Longitude (°)',
+                position: 'insideBottom',
+                offset: -10,
+                fill: '#94a3b8',
+              }}
+            />
+            <YAxis
+              type="number"
+              dataKey="lat"
+              name="Latitude"
+              stroke="#94a3b8"
+              domain={['dataMin', 'dataMax']}
+              label={{ value: 'Latitude (°)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+            />
+            <ZAxis type="number" dataKey="intensity" name="Intensity" range={[50, 400]} />
+            <Tooltip content={CustomTooltip} />
+            <Scatter
+              name="Shark Intensity"
+              data={data}
+              fill="#06b6d4"
+              fillOpacity={0.6}
+              shape={renderShape}
+            />
+          </ScatterChart>
+        </ResponsiveContainer>
+
+        {/* Color Legend */}
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <span className="text-gray-400 text-sm">Low Intensity</span>
+          <div className="flex h-6 w-64 rounded-full overflow-hidden shadow-lg">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  background: getIntensityColor(
+                    stats.p2 + ((stats.p98 - stats.p2) * i) / 19,
+                    stats.p2,
+                    stats.p98
+                  ),
+                  width: '5%',
+                }}
+              />
+            ))}
+          </div>
+          <span className="text-gray-400 text-sm">High Intensity</span>
+        </div>
+      </motion.div>
+
+      {/* Global Ocean Intensity Map */}
+      <GlobalIntensityMap data={data} stats={stats} depth={depth} />
+    </>
+  )
+}
+
+function GlobalIntensityMap({ data, stats, depth }) {
+  // Group data into regions for better visualization
+  const regions = useMemo(() => {
+    const regionGroups = {
+      'North Atlantic': { lat: [25, 50], lon: [-80, -10], data: [] },
+      'South Atlantic': { lat: [-50, -10], lon: [-70, 20], data: [] },
+      'North Pacific': { lat: [20, 55], lon: [-180, -100], data: [] },
+      'South Pacific': { lat: [-50, -10], lon: [140, -70], data: [] },
+      'Indian Ocean': { lat: [-40, 25], lon: [40, 120], data: [] },
+      'Mediterranean': { lat: [30, 45], lon: [-5, 40], data: [] },
+    }
+
+    data.forEach((point) => {
+      Object.entries(regionGroups).forEach(([name, region]) => {
+        if (
+          point.lat >= region.lat[0] &&
+          point.lat <= region.lat[1] &&
+          point.lon >= region.lon[0] &&
+          point.lon <= region.lon[1]
+        ) {
+          region.data.push(point)
+        }
+      })
+    })
+
+    // Calculate average intensity per region
+    return Object.entries(regionGroups).map(([name, region]) => {
+      const avgIntensity =
+        region.data.length > 0
+          ? region.data.reduce((sum, d) => sum + d.intensity, 0) / region.data.length
+          : 0
+      return {
+        name,
+        intensity: avgIntensity,
+        count: region.data.length,
+        color: getIntensityColor(avgIntensity, stats.p2, stats.p98),
+      }
+    })
+  }, [data, stats])
+
+  return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
+      transition={{ delay: 0.3 }}
       className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8"
     >
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-2">Shark Foraging Intensity Map</h2>
-          <p className="text-gray-400">ML-predicted intensity (λ) at {depth}m depth</p>
-        </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-full">
-          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-          <span className="text-xs text-green-400 font-semibold">Live Forecast</span>
-        </div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-white mb-2">
+          Global Ocean Shark Foraging Intensity
+        </h2>
+        <p className="text-gray-400">Regional analysis at {depth}m depth based on MODIS data</p>
       </div>
 
-      <ResponsiveContainer width="100%" height={500}>
-        <ScatterChart margin={{ top: 20, right: 20, bottom: 60, left: 60 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-          <XAxis
-            type="number"
-            dataKey="lon"
-            name="Longitude"
-            stroke="#94a3b8"
-            domain={['dataMin', 'dataMax']}
-            label={{
-              value: 'Longitude (°)',
-              position: 'insideBottom',
-              offset: -10,
-              fill: '#94a3b8',
-            }}
-          />
-          <YAxis
-            type="number"
-            dataKey="lat"
-            name="Latitude"
-            stroke="#94a3b8"
-            domain={['dataMin', 'dataMax']}
-            label={{ value: 'Latitude (°)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
-          />
-          <ZAxis type="number" dataKey="intensity" name="Intensity" range={[50, 400]} />
-          <Tooltip content={CustomTooltip} />
-          <Scatter
-            name="Shark Intensity"
-            data={data}
-            fill="#06b6d4"
-            fillOpacity={0.6}
-            shape={renderShape}
-          />
-        </ScatterChart>
-      </ResponsiveContainer>
-
-      {/* Color Legend */}
-      <div className="mt-6 flex items-center justify-center gap-4">
-        <span className="text-gray-400 text-sm">Low Intensity</span>
-        <div className="flex h-6 w-64 rounded-full overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <div
+      {/* World Map Visualization (Simplified) */}
+      <div className="relative w-full h-96 bg-gradient-to-b from-blue-950/50 to-blue-900/30 rounded-xl overflow-hidden mb-6">
+        {/* Ocean Texture */}
+        <div className="absolute inset-0 opacity-10">
+          {[...Array(30)].map((_, i) => (
+            <motion.div
               key={i}
+              className="absolute bg-white/5 rounded-full blur-2xl"
               style={{
-                background: getIntensityColor(
-                  stats.p2 + ((stats.p98 - stats.p2) * i) / 19,
-                  stats.p2,
-                  stats.p98
-                ),
-                width: '5%',
+                left: `${(i * 13) % 100}%`,
+                top: `${(i * 17) % 100}%`,
+                width: `${80 + (i % 5) * 20}px`,
+                height: `${80 + (i % 5) * 20}px`,
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 4 + (i % 3),
+                repeat: Infinity,
+                delay: i * 0.2,
               }}
             />
           ))}
         </div>
-        <span className="text-gray-400 text-sm">High Intensity</span>
+
+        {/* Region Markers */}
+        <div className="relative w-full h-full">
+          {/* North Atlantic */}
+          <RegionMarker
+            name="North Atlantic"
+            left="35%"
+            top="25%"
+            intensity={regions.find((r) => r.name === 'North Atlantic')?.intensity || 0}
+            color={regions.find((r) => r.name === 'North Atlantic')?.color}
+            count={regions.find((r) => r.name === 'North Atlantic')?.count || 0}
+          />
+          {/* South Atlantic */}
+          <RegionMarker
+            name="South Atlantic"
+            left="40%"
+            top="70%"
+            intensity={regions.find((r) => r.name === 'South Atlantic')?.intensity || 0}
+            color={regions.find((r) => r.name === 'South Atlantic')?.color}
+            count={regions.find((r) => r.name === 'South Atlantic')?.count || 0}
+          />
+          {/* North Pacific */}
+          <RegionMarker
+            name="North Pacific"
+            left="75%"
+            top="30%"
+            intensity={regions.find((r) => r.name === 'North Pacific')?.intensity || 0}
+            color={regions.find((r) => r.name === 'North Pacific')?.color}
+            count={regions.find((r) => r.name === 'North Pacific')?.count || 0}
+          />
+          {/* South Pacific */}
+          <RegionMarker
+            name="South Pacific"
+            left="80%"
+            top="65%"
+            intensity={regions.find((r) => r.name === 'South Pacific')?.intensity || 0}
+            color={regions.find((r) => r.name === 'South Pacific')?.color}
+            count={regions.find((r) => r.name === 'South Pacific')?.count || 0}
+          />
+          {/* Indian Ocean */}
+          <RegionMarker
+            name="Indian Ocean"
+            left="60%"
+            top="55%"
+            intensity={regions.find((r) => r.name === 'Indian Ocean')?.intensity || 0}
+            color={regions.find((r) => r.name === 'Indian Ocean')?.color}
+            count={regions.find((r) => r.name === 'Indian Ocean')?.count || 0}
+          />
+          {/* Mediterranean */}
+          <RegionMarker
+            name="Mediterranean"
+            left="48%"
+            top="32%"
+            intensity={regions.find((r) => r.name === 'Mediterranean')?.intensity || 0}
+            color={regions.find((r) => r.name === 'Mediterranean')?.color}
+            count={regions.find((r) => r.name === 'Mediterranean')?.count || 0}
+          />
+        </div>
+
+        {/* Equator Line */}
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-white/20"></div>
+        <div className="absolute top-1/2 left-4 bg-slate-900/80 px-2 py-1 rounded text-xs text-white/60">
+          Equator
+        </div>
+      </div>
+
+      {/* Region Statistics Grid */}
+      <div className="grid md:grid-cols-3 gap-4">
+        {regions
+          .sort((a, b) => b.intensity - a.intensity)
+          .map((region) => (
+            <motion.div
+              key={region.name}
+              whileHover={{ scale: 1.02 }}
+              className="bg-slate-900/50 border border-white/10 rounded-xl p-4 hover:border-cyan-500/30 transition-all"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div
+                  className="w-4 h-4 rounded-full shadow-lg"
+                  style={{ backgroundColor: region.color }}
+                ></div>
+                <h4 className="text-white font-semibold">{region.name}</h4>
+              </div>
+              <div className="space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Avg Intensity:</span>
+                  <span className="text-cyan-400 font-semibold">
+                    {region.intensity.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Data Points:</span>
+                  <span className="text-white">{region.count}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+      </div>
+    </motion.div>
+  )
+}
+
+function RegionMarker({ name, left, top, intensity, color, count }) {
+  return (
+    <motion.div
+      className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
+      style={{ left, top }}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ delay: 0.2, type: 'spring' }}
+      whileHover={{ scale: 1.3 }}
+    >
+      {/* Pulsing Ring */}
+      <motion.div
+        className="absolute inset-0 rounded-full"
+        style={{ backgroundColor: color }}
+        animate={{
+          scale: [1, 2, 1],
+          opacity: [0.8, 0, 0.8],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+        }}
+      />
+
+      {/* Main Marker */}
+      <div
+        className="w-8 h-8 rounded-full border-2 border-white shadow-xl relative"
+        style={{ backgroundColor: color }}
+      >
+        <div className="absolute inset-0 rounded-full bg-white/30"></div>
+      </div>
+
+      {/* Tooltip */}
+      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        <div className="bg-slate-900 border border-cyan-500/30 rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-xl">
+          <div className="text-white font-semibold mb-1">{name}</div>
+          <div className="text-cyan-400">Intensity: {intensity.toFixed(2)}</div>
+          <div className="text-gray-400">Points: {count}</div>
+        </div>
       </div>
     </motion.div>
   )
@@ -467,6 +757,66 @@ function ParameterCard({ title, data, unit, color }) {
 }
 
 function ModelInformation() {
+  const [expandedSection, setExpandedSection] = useState('gaussian')
+
+  const sections = [
+    {
+      id: 'gaussian',
+      title: 'SHARK Gaussian Model',
+      color: 'cyan',
+      icon: '🎯',
+      formula: 'Bp = 0.4·SST + 0.2·SSHA + 0.4·Chl',
+      content: (
+        <p className="text-gray-300 leading-relaxed">
+          The model uses a <strong className="text-cyan-400">weighted Gaussian framework</strong> to
+          predict shark foraging intensity based on three key parameters: Sea Surface Temperature (
+          <span className="text-orange-400 font-semibold">40% weight</span>), normalized Sea Surface
+          Height Anomaly (<span className="text-blue-400 font-semibold">20% weight</span>), and
+          Chlorophyll-a concentration (
+          <span className="text-green-400 font-semibold">40% weight</span>).
+        </p>
+      ),
+      gradient: 'from-cyan-500/20 to-blue-500/20',
+      borderColor: 'border-cyan-500/30 hover:border-cyan-500/60',
+    },
+    {
+      id: 'depth',
+      title: 'Depth Adjustment',
+      color: 'purple',
+      icon: '⬇️',
+      formula: 'SST_adj = SST - (0.02 + 0.01·sin²(lat)) · depth',
+      content: (
+        <p className="text-gray-300 leading-relaxed">
+          Temperature decreases with depth using a{' '}
+          <strong className="text-purple-400">latitude-dependent lapse rate</strong> (0.02-0.03 °C/m).
+          The model adjusts SST values for each depth slice, with{' '}
+          <span className="text-blue-300 font-semibold">Arctic suppression</span> filtering out
+          predictions below <span className="text-cyan-400 font-mono">18.1°C</span>.
+        </p>
+      ),
+      gradient: 'from-purple-500/20 to-pink-500/20',
+      borderColor: 'border-purple-500/30 hover:border-purple-500/60',
+    },
+    {
+      id: 'transform',
+      title: 'Log-Linear Transformation',
+      color: 'orange',
+      icon: '📊',
+      formula: 'λ = exp(β₀ + β₁·P + ε)',
+      content: (
+        <p className="text-gray-300 leading-relaxed">
+          Foraging probabilities (0-1) are transformed to{' '}
+          <strong className="text-orange-400">intensity values (λ)</strong> using an exponential
+          function where <span className="text-gray-400 font-mono">β₀=0</span>,{' '}
+          <span className="text-gray-400 font-mono">β₁=2</span>, and{' '}
+          <span className="text-gray-400 font-mono">ε</span> is random noise for natural variation.
+        </p>
+      ),
+      gradient: 'from-orange-500/20 to-red-500/20',
+      borderColor: 'border-orange-500/30 hover:border-orange-500/60',
+    },
+  ]
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -474,60 +824,141 @@ function ModelInformation() {
       transition={{ delay: 0.5 }}
       className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
     >
-      <h2 className="text-2xl font-bold text-white mb-6">Model Methodology</h2>
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-white mb-2">Model Methodology</h2>
+        <p className="text-gray-400">Interactive technical deep-dive into the SHARK Gaussian Model</p>
+      </div>
 
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-semibold text-cyan-400 mb-3">SHARK Gaussian Model</h3>
-          <p className="text-gray-300 leading-relaxed">
-            The model uses a weighted Gaussian framework to predict shark foraging intensity based
-            on three key parameters: Sea Surface Temperature (40% weight), normalized Sea Surface
-            Height Anomaly (20% weight), and Chlorophyll-a concentration (40% weight).
-          </p>
-        </div>
+      {/* Interactive Sections */}
+      <div className="space-y-4 mb-8">
+        {sections.map((section) => (
+          <motion.div
+            key={section.id}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className={`border ${section.borderColor} rounded-xl overflow-hidden transition-all cursor-pointer bg-gradient-to-r ${section.gradient}`}
+            onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">{section.icon}</span>
+                  <h3 className={`text-xl font-bold text-${section.color}-400`}>{section.title}</h3>
+                </div>
+                <motion.div
+                  animate={{ rotate: expandedSection === section.id ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-gray-400"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </motion.div>
+              </div>
 
-        <div>
-          <h3 className="text-lg font-semibold text-purple-400 mb-3">Depth Adjustment</h3>
-          <p className="text-gray-300 leading-relaxed">
-            Temperature decreases with depth using a latitude-dependent lapse rate (0.02-0.03 °C/m).
-            The model adjusts SST values for each depth slice, with Arctic suppression filtering out
-            predictions below 18.1°C.
-          </p>
-        </div>
+              {/* Formula Badge */}
+              <div className="bg-slate-900/50 border border-white/10 rounded-lg px-4 py-2 mb-4 inline-block">
+                <code className="text-white font-mono text-sm">{section.formula}</code>
+              </div>
 
-        <div>
-          <h3 className="text-lg font-semibold text-orange-400 mb-3">Log-Linear Transformation</h3>
-          <p className="text-gray-300 leading-relaxed">
-            Foraging probabilities (0-1) are transformed to intensity values (λ) using: λ = exp(β₀ +
-            β₁·P + ε), where β₀=0, β₁=2, and ε is random noise for natural variation.
-          </p>
-        </div>
+              <AnimatePresence>
+                {expandedSection === section.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-4 border-t border-white/10">{section.content}</div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-yellow-400 mb-3">⚠️ Model Limitations</h3>
-          <ul className="space-y-2 text-gray-300">
-            <li className="flex items-start gap-2">
-              <span className="text-yellow-400 mt-1">•</span>
-              <span>
-                This is a <strong>Machine Learning model</strong>, not AI. It uses statistical
-                relationships from oceanographic data.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-yellow-400 mt-1">•</span>
-              <span>
-                Currently using synthetic SST and Chlorophyll data for demonstration. Full
-                implementation requires complete MODIS datasets.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-yellow-400 mt-1">•</span>
-              <span>
-                Predictions are based on environmental correlations and should be validated with
-                actual shark tracking data.
-              </span>
-            </li>
-          </ul>
+      {/* Model Parameters */}
+      <div className="grid md:grid-cols-3 gap-4 mb-8">
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-xl p-6"
+        >
+          <div className="text-3xl mb-2">🌡️</div>
+          <h4 className="text-orange-400 font-bold text-lg mb-2">SST Weight</h4>
+          <div className="text-4xl font-bold text-white mb-1">40%</div>
+          <p className="text-gray-400 text-sm">μ=24°C, σ=2.5°C</p>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl p-6"
+        >
+          <div className="text-3xl mb-2">🌊</div>
+          <h4 className="text-blue-400 font-bold text-lg mb-2">SSHA Weight</h4>
+          <div className="text-4xl font-bold text-white mb-1">20%</div>
+          <p className="text-gray-400 text-sm">μ=50, σ=30</p>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-6"
+        >
+          <div className="text-3xl mb-2">🌿</div>
+          <h4 className="text-green-400 font-bold text-lg mb-2">Chlorophyll-a</h4>
+          <div className="text-4xl font-bold text-white mb-1">40%</div>
+          <p className="text-gray-400 text-sm">μ=0.5mg/m³, σ=0.3</p>
+        </motion.div>
+      </div>
+
+      {/* Limitations */}
+      <div className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl p-6">
+        <div className="flex items-start gap-4">
+          <div className="text-4xl">⚠️</div>
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-yellow-400 mb-4">Model Limitations</h3>
+            <div className="space-y-3">
+              <motion.div
+                whileHover={{ x: 4 }}
+                className="flex items-start gap-3 bg-slate-900/30 rounded-lg p-3"
+              >
+                <div className="w-2 h-2 rounded-full bg-yellow-400 mt-2"></div>
+                <p className="text-gray-300">
+                  This is a <strong className="text-yellow-300">Machine Learning model</strong>, not
+                  AI. It uses statistical relationships from oceanographic data.
+                </p>
+              </motion.div>
+              <motion.div
+                whileHover={{ x: 4 }}
+                className="flex items-start gap-3 bg-slate-900/30 rounded-lg p-3"
+              >
+                <div className="w-2 h-2 rounded-full bg-yellow-400 mt-2"></div>
+                <p className="text-gray-300">
+                  Currently using{' '}
+                  <strong className="text-orange-300">synthetic SST and Chlorophyll data</strong> for
+                  demonstration. Full implementation requires complete MODIS datasets.
+                </p>
+              </motion.div>
+              <motion.div
+                whileHover={{ x: 4 }}
+                className="flex items-start gap-3 bg-slate-900/30 rounded-lg p-3"
+              >
+                <div className="w-2 h-2 rounded-full bg-yellow-400 mt-2"></div>
+                <p className="text-gray-300">
+                  Predictions are based on environmental correlations and should be{' '}
+                  <strong className="text-purple-300">validated with actual shark tracking data</strong>
+                  .
+                </p>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>
