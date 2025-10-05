@@ -373,35 +373,107 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* Team & Contact */}
+        {/* Team & Founders - YC Style */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl p-8 text-center"
+          className="mb-8"
         >
-          <h2 className="text-3xl font-bold text-white mb-4">Team Space Pirates</h2>
-          <p className="text-white/90 text-lg mb-6">
-            NASA Space Apps Challenge 2025 • September 2025
-          </p>
+          <div className="bg-gradient-to-br from-orange-500/10 via-red-500/10 to-pink-500/10 border-2 border-orange-500/30 rounded-3xl p-8 md:p-12">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-full mb-6">
+                <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                <span className="text-orange-400 text-sm font-bold">
+                  MEET THE TEAM • SPACE PIRATES
+                </span>
+              </div>
 
-          <div className="flex justify-center space-x-8 mb-6">
-            <div className="text-white">
-              <div className="text-4xl font-bold">3</div>
-              <div className="text-sm">Pipelines</div>
-            </div>
-            <div className="text-white">
-              <div className="text-4xl font-bold">4</div>
-              <div className="text-sm">NASA Missions</div>
-            </div>
-            <div className="text-white">
-              <div className="text-4xl font-bold">∞</div>
-              <div className="text-sm">Potential Impact</div>
-            </div>
-          </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-400 to-pink-400">
+                  Five Students. One Mission.
+                </span>
+              </h2>
 
-          <div className="text-white/80 text-sm">
-            <p className="mt-2">Built with React, Vite, and passion for ocean conservation</p>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                We're building the future of shark conservation from our university in Sydney.
+                <br />
+                <span className="text-orange-400 font-semibold">
+                  NASA Space Apps Challenge 2025
+                </span>
+              </p>
+            </div>
+
+            {/* Team Photo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="mb-12"
+            >
+              <div className="relative rounded-2xl overflow-hidden border-4 border-orange-500/30 shadow-2xl shadow-orange-500/20">
+                <img
+                  src="/team-photo.png"
+                  alt="Team Space Pirates - Kayra, Cornelius, Lachlan, Ishan, and Ansh"
+                  className="w-full h-auto"
+                />
+                {/* Overlay Badge */}
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+                  <div className="bg-slate-900/90 backdrop-blur-sm border-2 border-orange-500/50 rounded-xl px-6 py-3">
+                    <div className="text-orange-400 font-bold text-lg">Team Space Pirates</div>
+                    <div className="text-gray-300 text-sm">University of Sydney • 2025</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Founders Grid */}
+            <div className="grid md:grid-cols-5 gap-6 mb-12">
+              <FounderCard name="Kayra" role="ML & Data Science" icon="🤖" />
+              <FounderCard name="Cornelius" role="Full-Stack Dev" icon="💻" />
+              <FounderCard name="Lachlan" role="Hardware & Sensors" icon="🔬" />
+              <FounderCard name="Ishan" role="Mathematical Modeling" icon="📐" />
+              <FounderCard name="Ansh" role="Data Visualization" icon="📊" />
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div className="bg-slate-900/50 rounded-xl p-6 text-center border border-orange-500/20">
+                <div className="text-4xl font-bold text-orange-400 mb-2">3</div>
+                <div className="text-gray-300 text-sm">Integrated Pipelines</div>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-6 text-center border border-red-500/20">
+                <div className="text-4xl font-bold text-red-400 mb-2">4</div>
+                <div className="text-gray-300 text-sm">NASA Missions</div>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-6 text-center border border-pink-500/20">
+                <div className="text-4xl font-bold text-pink-400 mb-2">48h</div>
+                <div className="text-gray-300 text-sm">Hackathon Sprint</div>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-6 text-center border border-purple-500/20">
+                <div className="text-4xl font-bold text-purple-400 mb-2">∞</div>
+                <div className="text-gray-300 text-sm">Potential Impact</div>
+              </div>
+            </div>
+
+            {/* Mission Statement */}
+            <div className="text-center">
+              <div className="inline-block bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 max-w-3xl">
+                <h3 className="text-2xl font-bold text-white mb-3">Our Mission</h3>
+                <p className="text-white/90 text-lg">
+                  We believe technology can solve the world's biggest conservation challenges.
+                  Starting with sharks, we're building tools that combine{' '}
+                  <span className="font-bold">NASA satellite data</span>,{' '}
+                  <span className="font-bold">machine learning</span>, and{' '}
+                  <span className="font-bold">bio-sensor innovation</span> to protect marine
+                  ecosystems for future generations.
+                </p>
+                <div className="mt-6 text-white/80 text-sm">
+                  Built with React, Vite, and passion for ocean conservation 🌊
+                </div>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -532,5 +604,18 @@ function FutureCard({ phase, title, items, timeline }) {
         ))}
       </ul>
     </div>
+  )
+}
+
+function FounderCard({ name, role, icon }) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.05, y: -5 }}
+      className="bg-slate-900/50 rounded-xl p-6 text-center border border-orange-500/20 hover:border-orange-500/50 transition-all"
+    >
+      <div className="text-5xl mb-3">{icon}</div>
+      <h3 className="text-xl font-bold text-white mb-2">{name}</h3>
+      <p className="text-gray-400 text-sm">{role}</p>
+    </motion.div>
   )
 }
