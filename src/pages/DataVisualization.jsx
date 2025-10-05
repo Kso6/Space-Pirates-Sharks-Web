@@ -324,6 +324,17 @@ function ForagingHotspotMap({
   seaDepth = 100,
   dataset = 'noaa-ssha',
 }) {
+  // Define region bounds for accurate coordinate mapping
+  const regionBounds = useMemo(() => {
+    const bounds = {
+      'gulf-stream': { latMin: 25, latMax: 40, lonMin: -80, lonMax: -60 },
+      sargasso: { latMin: 20, latMax: 35, lonMin: -70, lonMax: -40 },
+      california: { latMin: 32, latMax: 42, lonMin: -125, lonMax: -120 },
+      australia: { latMin: -40, latMax: -25, lonMin: 145, lonMax: 155 },
+    }
+    return bounds[region] || bounds['gulf-stream']
+  }, [region])
+
   // Generate foraging probability data from MODIS or SSHA data if available
   const hotspotData = useMemo(() => {
     try {
@@ -437,10 +448,15 @@ function ForagingHotspotMap({
         {hotspotData &&
           hotspotData.length > 0 &&
           hotspotData.slice(0, 15).map((point, idx) => {
-            // Normalize coordinates to stay within bounds (5% padding)
-            const normalizedLon = Math.max(0, Math.min(100, ((point.lon + 180) / 360) * 100))
-            const normalizedLat = Math.max(0, Math.min(100, ((90 - point.lat) / 180) * 100))
-            // Clamp to 5-95% range to keep markers fully visible
+            // Normalize coordinates relative to the region bounds for accurate positioning
+            const lonRange = regionBounds.lonMax - regionBounds.lonMin
+            const latRange = regionBounds.latMax - regionBounds.latMin
+            
+            // Calculate position as percentage within region bounds
+            const normalizedLon = ((point.lon - regionBounds.lonMin) / lonRange) * 100
+            const normalizedLat = ((regionBounds.latMax - point.lat) / latRange) * 100
+            
+            // Clamp to 5-95% range to keep markers fully visible within the panel
             const clampedLon = Math.max(5, Math.min(95, normalizedLon))
             const clampedLat = Math.max(5, Math.min(95, normalizedLat))
 
