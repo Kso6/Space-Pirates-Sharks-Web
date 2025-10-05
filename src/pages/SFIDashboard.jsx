@@ -229,8 +229,8 @@ export default function SFIDashboard() {
                 Different depths reveal different shark behaviors
               </p>
             </div>
-            <div className="flex gap-2">
-              {[50, 100, 150, 200, 250, 300].map((depth) => (
+            <div className="flex gap-2 flex-wrap">
+              {[50, 100, 150, 200, 250, 300, 400, 500].map((depth) => (
                 <button
                   key={depth}
                   onClick={() => setSelectedDepth(depth)}

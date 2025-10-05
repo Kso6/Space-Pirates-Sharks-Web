@@ -862,10 +862,12 @@ function Ocean3DProfile() {
         <h2 className="text-3xl font-bold text-white mb-4">3D Ocean Profile Analysis</h2>
         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
           <p className="text-gray-300 text-sm leading-relaxed">
-            <span className="text-cyan-400 font-semibold">Visualize 3D ocean data in real-time</span> →{' '}
-            <span className="text-blue-400 font-semibold">Hotspot Prediction</span>: Using NASA SWOT
-            SSH anomaly data collected over a 10-day period, we analyze ocean thermal dynamics and
-            multi-parameter depth profiles to identify optimal foraging zones where temperature,
+            <span className="text-cyan-400 font-semibold">
+              Visualize 3D ocean data in real-time
+            </span>{' '}
+            → <span className="text-blue-400 font-semibold">Hotspot Prediction</span>: Using NASA
+            SWOT SSH anomaly data collected over a 10-day period, we analyze ocean thermal dynamics
+            and multi-parameter depth profiles to identify optimal foraging zones where temperature,
             chlorophyll, and eddy dynamics converge.
           </p>
         </div>

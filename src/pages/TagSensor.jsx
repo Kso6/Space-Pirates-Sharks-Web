@@ -96,76 +96,28 @@ function ArchitectureSection() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Capsule Diagram */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-3xl p-8 h-96 flex items-center justify-center border-4 border-blue-500/30">
-              <div className="text-center space-y-4">
-                {/* CAD-style representation of gastric tag */}
-                <svg
-                  className="w-48 h-48 mx-auto"
-                  viewBox="0 0 200 200"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Outer capsule shell */}
-                  <ellipse cx="100" cy="100" rx="80" ry="35" fill="#3b82f6" opacity="0.2" />
-                  <ellipse cx="100" cy="100" rx="80" ry="35" stroke="#60a5fa" strokeWidth="2" />
-
-                  {/* Cross-section view */}
-                  <rect
-                    x="30"
-                    y="85"
-                    width="140"
-                    height="30"
-                    rx="15"
-                    fill="#1e293b"
-                    stroke="#60a5fa"
-                    strokeWidth="2"
+            <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-3xl p-6 h-full flex items-center justify-center border-4 border-blue-500/30">
+              <div className="text-center space-y-4 w-full">
+                <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-blue-400/30">
+                  <img
+                    src="/Internal Gastric Tag.png"
+                    alt="Internal Gastric Tag"
+                    className="w-full h-auto object-cover"
+                    style={{
+                      filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
+                      borderRadius: '16px',
+                    }}
                   />
-
-                  {/* Internal components */}
-                  <circle cx="50" cy="100" r="8" fill="#ef4444" opacity="0.8" />
-                  <text x="50" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
-                    Battery
-                  </text>
-
-                  <rect x="68" y="93" width="24" height="14" rx="2" fill="#10b981" opacity="0.8" />
-                  <text x="80" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
-                    Sensors
-                  </text>
-
-                  <rect x="102" y="93" width="28" height="14" rx="2" fill="#8b5cf6" opacity="0.8" />
-                  <text x="116" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
-                    MCU
-                  </text>
-
-                  <circle cx="150" cy="100" r="8" fill="#f59e0b" opacity="0.8" />
-                  <text x="150" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
-                    Antenna
-                  </text>
-
-                  {/* ePTFE membrane indicator */}
-                  <line
-                    x1="30"
-                    y1="85"
-                    x2="30"
-                    y2="115"
-                    stroke="#06b6d4"
-                    strokeWidth="3"
-                    opacity="0.6"
-                  />
-                  <line
-                    x1="170"
-                    y1="85"
-                    x2="170"
-                    y2="115"
-                    stroke="#06b6d4"
-                    strokeWidth="3"
-                    opacity="0.6"
-                  />
-                </svg>
+                  <div className="absolute top-2 left-2 bg-blue-600/90 text-white text-xs px-2 py-1 rounded">
+                    Product Visualization
+                  </div>
+                </div>
                 <div className="text-white font-bold text-xl">Internal Gastric Capsule</div>
-                <div className="text-gray-400 text-sm">Dimensions: 25mm × 10mm</div>
-                <div className="text-gray-400 text-sm">Weight: ~5 grams</div>
-                <div className="text-green-400 text-sm">Gastro-retentive Design</div>
+                <div className="text-gray-400 text-sm space-y-1">
+                  <p>Dimensions: 25mm × 10mm</p>
+                  <p>Weight: ~5 grams</p>
+                  <p className="text-green-400 font-semibold">Gastro-retentive Design</p>
+                </div>
               </div>
             </div>
 
@@ -587,21 +539,18 @@ function SensingSection({ feedingData }) {
             type="Fish/Squid"
             icon="🐟"
             characteristics={['High NH₄⁺ (> 5 mM)', 'pH rise > 1.0', 'Fast response']}
-            confidence="85%"
             color="from-blue-500 to-cyan-500"
           />
           <PreyTypeCard
             type="Crustaceans"
             icon="🦐"
             characteristics={['Medium NH₄⁺ (2-5 mM)', 'pH rise 0.5-1.0', 'Moderate response']}
-            confidence="78%"
             color="from-orange-500 to-red-500"
           />
           <PreyTypeCard
             type="Other/Mixed"
             icon="🦑"
             characteristics={['Variable NH₄⁺', 'pH rise < 0.5', 'Slow response']}
-            confidence="65%"
             color="from-purple-500 to-pink-500"
           />
         </div>
@@ -1237,11 +1186,11 @@ function DeploymentSection() {
         </div>
       </div>
 
-      {/* Target Species */}
+      {/* Target Species & Applications */}
       <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
         <h2 className="text-2xl font-bold text-white mb-6">Target Species & Applications</h2>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
           <SpeciesCard
             species="Great White Shark"
             icon="🦈"
@@ -1263,6 +1212,53 @@ function DeploymentSection() {
             habitat="Open ocean"
             foraging="Fast pursuit"
           />
+        </div>
+
+        {/* Applications */}
+        <div className="border-t border-white/10 pt-8">
+          <h3 className="text-xl font-bold text-white mb-4">Real-World Applications</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-slate-700/50 rounded-lg p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">🔬</span>
+                <h4 className="text-white font-semibold">Marine Research</h4>
+              </div>
+              <p className="text-gray-300 text-sm">
+                Validate SFI predictions, study foraging behavior, and understand prey selection
+                patterns in natural habitats
+              </p>
+            </div>
+            <div className="bg-slate-700/50 rounded-lg p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">🌊</span>
+                <h4 className="text-white font-semibold">Conservation</h4>
+              </div>
+              <p className="text-gray-300 text-sm">
+                Identify critical foraging zones, design marine protected areas, and monitor
+                ecosystem health through apex predator behavior
+              </p>
+            </div>
+            <div className="bg-slate-700/50 rounded-lg p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">🎣</span>
+                <h4 className="text-white font-semibold">Fisheries Management</h4>
+              </div>
+              <p className="text-gray-300 text-sm">
+                Reduce bycatch by understanding shark feeding patterns and optimizing fishing zones
+                to minimize conflicts
+              </p>
+            </div>
+            <div className="bg-slate-700/50 rounded-lg p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">📊</span>
+                <h4 className="text-white font-semibold">Model Refinement</h4>
+              </div>
+              <p className="text-gray-300 text-sm">
+                Continuously improve ML predictions by tuning model parameters with real feeding
+                event data from tagged sharks
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -1432,20 +1428,16 @@ function SpecRow({ label, value }) {
   )
 }
 
-function PreyTypeCard({ type, icon, characteristics, confidence, color }) {
+function PreyTypeCard({ type, icon, characteristics, color }) {
   return (
     <div className={`bg-gradient-to-br ${color} rounded-xl p-6`}>
       <div className="text-5xl text-center mb-3">{icon}</div>
       <div className="text-white font-bold text-center text-lg mb-3">{type}</div>
-      <ul className="space-y-2 text-white/90 text-sm mb-4">
+      <ul className="space-y-2 text-white/90 text-sm">
         {characteristics.map((char, idx) => (
           <li key={idx}>• {char}</li>
         ))}
       </ul>
-      <div className="text-center">
-        <div className="text-white/80 text-xs">Classification Confidence</div>
-        <div className="text-white font-bold text-xl">{confidence}</div>
-      </div>
     </div>
   )
 }

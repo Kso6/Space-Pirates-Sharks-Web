@@ -28,8 +28,8 @@ export default function Hero({ onNavigate }) {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Predicting active shark foraging habitats using live NASA satellite data and tagged shark
-            parameters to dynamically tune models, protecting marine ecosystems worldwide.
+            Predicting active shark foraging habitats using live NASA satellite data and tagged
+            shark parameters to dynamically tune models, protecting marine ecosystems worldwide.
           </p>
 
           {/* CTA Buttons */}

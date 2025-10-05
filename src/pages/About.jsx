@@ -181,8 +181,7 @@ export default function About() {
 
           <div className="mt-8 text-center">
             <p className="text-lg text-cyan-300 font-semibold">
-              📊 Processing 50+ GB of satellite data daily • 🔄 Real-time updates every 6 hours • 🌍
-              Global coverage
+              📊 Real NASA satellite data integration • 🔄 Regular data updates • 🌍 Global coverage
             </p>
           </div>
         </motion.div>
@@ -220,7 +219,7 @@ export default function About() {
             />
             <InnovationCard
               title="🏆 Real-Time NASA Data Fusion"
-              description="FIRST platform to integrate SWOT, MODIS, and PACE missions simultaneously for marine predictions. Processes 50+ GB daily with 6-hour refresh cycles. Creates living map of ocean productivity never seen before."
+              description="FIRST platform to integrate SWOT, MODIS, and PACE missions simultaneously for marine predictions. Creates living map of ocean productivity with regular data updates, providing unprecedented insights into shark foraging habitats."
               badge="Breakthrough Integration"
             />
             <InnovationCard

@@ -971,35 +971,45 @@ function ModelInformation() {
       </div>
 
       {/* Model Parameters */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
+      <div className="grid md:grid-cols-4 gap-4 mb-8">
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl p-6"
+        >
+          <div className="text-3xl mb-2">📏</div>
+          <h4 className="text-blue-400 font-bold text-lg mb-2">Mean Foraging Depth</h4>
+          <div className="text-3xl font-bold text-white mb-1">50-250m</div>
+          <p className="text-gray-400 text-sm">Species-dependent range</p>
+        </motion.div>
+
         <motion.div
           whileHover={{ scale: 1.02 }}
           className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-xl p-6"
         >
           <div className="text-3xl mb-2">🌡️</div>
-          <h4 className="text-orange-400 font-bold text-lg mb-2">SST Weight</h4>
-          <div className="text-4xl font-bold text-white mb-1">40%</div>
-          <p className="text-gray-400 text-sm">μ=24°C, σ=2.5°C</p>
+          <h4 className="text-orange-400 font-bold text-lg mb-2">Suitable Temperature</h4>
+          <div className="text-3xl font-bold text-white mb-1">18-26°C</div>
+          <p className="text-gray-400 text-sm">Optimal foraging range</p>
         </motion.div>
 
         <motion.div
           whileHover={{ scale: 1.02 }}
-          className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl p-6"
+          className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-6"
         >
-          <div className="text-3xl mb-2">🌊</div>
-          <h4 className="text-blue-400 font-bold text-lg mb-2">SSHA Weight</h4>
-          <div className="text-4xl font-bold text-white mb-1">20%</div>
-          <p className="text-gray-400 text-sm">μ=50, σ=30</p>
+          <div className="text-3xl mb-2">⚡</div>
+          <h4 className="text-purple-400 font-bold text-lg mb-2">Temp Reactivity</h4>
+          <div className="text-3xl font-bold text-white mb-1">High</div>
+          <p className="text-gray-400 text-sm">Behavioral response rate</p>
         </motion.div>
 
         <motion.div
           whileHover={{ scale: 1.02 }}
           className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-6"
         >
-          <div className="text-3xl mb-2">🌿</div>
-          <h4 className="text-green-400 font-bold text-lg mb-2">Chlorophyll-a</h4>
-          <div className="text-4xl font-bold text-white mb-1">40%</div>
-          <p className="text-gray-400 text-sm">μ=0.5mg/m³, σ=0.3</p>
+          <div className="text-3xl mb-2">📍</div>
+          <h4 className="text-green-400 font-bold text-lg mb-2">Foraging Distance</h4>
+          <div className="text-3xl font-bold text-white mb-1">5-50km</div>
+          <p className="text-gray-400 text-sm">From core habitat</p>
         </motion.div>
       </div>
 
