@@ -51,6 +51,7 @@ const MLForecasting = lazy(() => import('./pages/MLForecasting'))
 const TagSensor = lazy(() => import('./pages/TagSensor'))
 const About = lazy(() => import('./pages/About'))
 const Education = lazy(() => import('./pages/Education'))
+const LessonContent = lazy(() => import('./pages/LessonContent'))
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')

@@ -611,17 +611,6 @@ function SensingSection({ feedingData }) {
 }
 
 function DataSection() {
-  const dataPacket = {
-    t_event: '2025-10-04T14:23:15Z',
-    capsule_ID: 'SC-2025-001',
-    pH_peak: 3.2,
-    dpH_dt: 0.65,
-    NH4_peak: 6.8,
-    NH4_AUC: 142.5,
-    temperature: 18.3,
-    QC_flags: 0x00,
-  }
-
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
       {/* Data Flow */}
@@ -712,41 +701,6 @@ function DataSection() {
             description="Cloud fusion with NASA data"
             latency="Real-time"
           />
-        </div>
-      </div>
-
-      {/* Data Packet Structure */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Event Data Packet (32-48 bytes)</h2>
-
-        <div className="bg-slate-900 rounded-lg p-6 font-mono text-sm">
-          <pre className="text-green-400">
-            {`{
-  "t_event": "${dataPacket.t_event}",
-  "capsule_ID": "${dataPacket.capsule_ID}",
-  "pH_peak": ${dataPacket.pH_peak},
-  "dpH_dt": ${dataPacket.dpH_dt},        // Rate of pH change
-  "NH4_peak": ${dataPacket.NH4_peak},        // mM
-  "NH4_AUC": ${dataPacket.NH4_AUC},       // Area under curve
-  "temperature": ${dataPacket.temperature},    // °C
-  "QC_flags": ${dataPacket.QC_flags}          // Quality control
-}`}
-          </pre>
-        </div>
-
-        <div className="mt-4 grid md:grid-cols-3 gap-4">
-          <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-blue-400">48 bytes</div>
-            <div className="text-sm text-gray-400">Packet Size</div>
-          </div>
-          <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-green-400">2-4/day</div>
-            <div className="text-sm text-gray-400">Typical Events</div>
-          </div>
-          <div className="bg-slate-700/50 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-cyan-400">&lt; 1 hour</div>
-            <div className="text-sm text-gray-400">Latency</div>
-          </div>
         </div>
       </div>
 
