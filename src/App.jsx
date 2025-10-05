@@ -16,7 +16,9 @@ class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('App error:', error, errorInfo)
+    // Silent error handling for production - could implement proper error logging service
+    // console.error('App error:', error, errorInfo)
+    // In production, you would send this to an error tracking service like Sentry
   }
 
   render() {

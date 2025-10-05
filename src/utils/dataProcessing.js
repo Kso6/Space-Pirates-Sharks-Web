@@ -53,7 +53,8 @@ export function getRegionalData(data, region) {
   const bounds = regions[region]
   // If region not found, return a subset of data to avoid overwhelming the UI
   if (!bounds) {
-    console.warn(`Region "${region}" not found, using default subset of data`)
+    // Silent handling for production - could implement proper logging service
+    // console.warn(`Region "${region}" not found, using default subset of data`)
     return data.slice(0, Math.min(data.length, 100))
   }
 
