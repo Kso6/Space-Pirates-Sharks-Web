@@ -222,68 +222,105 @@ function ArchitectureSection() {
 
       {/* External Dorsal Fin Tag */}
       <div className="bg-slate-800/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">External Dorsal Fin Tag</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-white">External Dorsal Fin Tag</h2>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
+            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+            <span className="text-cyan-400 text-xs font-semibold">Revolutionary Tech</span>
+          </div>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Interactive 3D Model Viewer */}
+          {/* Product Image Section */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-8 h-96 flex items-center justify-center border-4 border-cyan-500/30">
+            <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-6 h-full flex items-center justify-center border-4 border-cyan-500/30">
               <div className="text-center space-y-4 w-full">
-                <div className="relative w-full h-64 bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
-                  <ThreeDModelViewer />
+                <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
+                  <img 
+                    src="/External Dorsal Fin.png" 
+                    alt="External Dorsal Fin Tag" 
+                    className="w-full h-auto object-cover"
+                    style={{
+                      filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
+                      borderRadius: '16px'
+                    }}
+                  />
                   <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded">
-                    Interactive 3D Model
-                  </div>
-                  <div className="absolute bottom-2 right-2 bg-slate-900/90 text-cyan-400 text-xs px-2 py-1 rounded">
-                    Click & drag to rotate
+                    Product Visualization
                   </div>
                 </div>
                 <div className="text-white font-bold text-xl">External Dorsal Tag</div>
-                <div className="text-gray-400 text-sm">Dimensions: 80mm × 40mm × 15mm</div>
-                <div className="text-gray-400 text-sm">Weight: ~45 grams (in air)</div>
-                <div className="text-cyan-400 text-sm">Non-invasive Attachment</div>
+                <div className="text-gray-400 text-sm space-y-1">
+                  <p>Dimensions: 80mm × 40mm × 15mm</p>
+                  <p>Weight: ~45 grams (in air)</p>
+                  <p className="text-cyan-400 font-semibold">Non-invasive Attachment</p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Component Stack */}
+          {/* Detailed Specifications */}
           <div className="space-y-4">
-            <ComponentLayer
-              title="Satellite Transceiver"
-              description="Argos/Iridium uplink for feeding event data transmission"
-              color="from-yellow-500 to-orange-500"
-              icon="🛰️"
-            />
-            <ComponentLayer
-              title="Solar Panel"
-              description="Polycrystalline cells for battery recharging"
-              color="from-blue-500 to-cyan-500"
-              icon="☀️"
-            />
-            <ComponentLayer
-              title="Inductive Receiver"
-              description="125 kHz coil receives data from gastric capsule"
-              color="from-orange-500 to-red-500"
-              icon="📡"
-            />
-            <ComponentLayer
-              title="GPS/Depth Sensor"
-              description="Location tracking and dive behavior monitoring"
-              color="from-purple-500 to-pink-500"
-              icon="📍"
-            />
-            <ComponentLayer
-              title="Rechargeable Battery"
-              description="Li-ion battery (1500 mAh) with solar charging"
-              color="from-green-500 to-emerald-500"
-              icon="🔋"
-            />
-            <ComponentLayer
-              title="Attachment System"
-              description="Stainless steel bolts through dorsal fin"
-              color="from-slate-500 to-gray-500"
-              icon="🔩"
-            />
+            <div className="bg-slate-700/50 rounded-xl p-6 border border-cyan-500/20">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                <span className="mr-3 text-2xl">🛰️</span>
+                Satellite Transceiver
+              </h3>
+              <p className="text-gray-300 text-sm mb-3">
+                Advanced Argos/Iridium uplink for real-time feeding event data transmission
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-slate-800/50 rounded-lg p-3">
+                  <div className="text-xs text-gray-400 mb-1">Frequency Band</div>
+                  <div className="text-sm text-white font-medium">L-band</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-3">
+                  <div className="text-xs text-gray-400 mb-1">Data Rate</div>
+                  <div className="text-sm text-white font-medium">Up to 1 kbps</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-700/50 rounded-xl p-6 border border-cyan-500/20">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                <span className="mr-3 text-2xl">☀️</span>
+                Solar Power System
+              </h3>
+              <p className="text-gray-300 text-sm mb-3">
+                High-efficiency polycrystalline cells for continuous battery recharging
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-slate-800/50 rounded-lg p-3">
+                  <div className="text-xs text-gray-400 mb-1">Panel Efficiency</div>
+                  <div className="text-sm text-white font-medium">18-22%</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-3">
+                  <div className="text-xs text-gray-400 mb-1">Daily Charge</div>
+                  <div className="text-sm text-white font-medium">~50 mAh</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-700/50 rounded-xl p-6 border border-cyan-500/20">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                <span className="mr-3 text-2xl">🔋</span>
+                Battery & Power
+              </h3>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-400">Type</span>
+                  <span className="text-sm text-white font-medium">Li-ion</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-400">Capacity</span>
+                  <span className="text-sm text-white font-medium">1500 mAh</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-400">Lifespan</span>
+                  <span className="text-sm text-green-400 font-medium">12-24 months</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1335,7 +1372,7 @@ function ThreeDModelViewer() {
               className="w-auto h-auto max-w-full max-h-96 object-contain rounded-xl shadow-lg"
               style={{
                 filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
-                borderRadius: '16px'
+                borderRadius: '16px',
               }}
             />
 
