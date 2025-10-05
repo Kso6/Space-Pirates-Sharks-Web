@@ -50,12 +50,16 @@ export default function Education() {
           </motion.div>
 
           {/* Lesson content */}
-          <AnimatePresence mode="wait">
-            {activeLesson === 1 && <Lesson1Content key="lesson1" />}
-            {activeLesson === 2 && <Lesson2Content key="lesson2" />}
-            {activeLesson === 3 && <Lesson3Content key="lesson3" />}
-            {activeLesson === 4 && <Lesson4Content key="lesson4" />}
-          </AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            {activeLesson === 1 && <Lesson1Content />}
+            {activeLesson === 2 && <Lesson2Content />}
+            {activeLesson === 3 && <Lesson3Content />}
+            {activeLesson === 4 && <Lesson4Content />}
+          </motion.div>
 
           {/* Completion button */}
           <motion.div

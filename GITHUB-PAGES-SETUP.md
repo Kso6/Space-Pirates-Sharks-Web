@@ -7,15 +7,18 @@ Your site has been deployed to the `gh-pages` branch. Now you need to configure 
 ## 📋 Steps to Enable GitHub Pages
 
 1. **Go to your repository settings:**
+
    - Visit: https://github.com/Kso6/Space-Pirates-Sharks-Web/settings/pages
 
 2. **Configure the source:**
+
    - Under "Build and deployment"
    - **Source**: Select "Deploy from a branch"
    - **Branch**: Select `gh-pages` and `/ (root)`
    - Click **Save**
 
 3. **Configure custom domain:**
+
    - Under "Custom domain"
    - Enter: `globalsharks.wiki`
    - Click **Save**
@@ -29,10 +32,12 @@ Your site has been deployed to the `gh-pages` branch. Now you need to configure 
 ## 🔧 What Was Fixed
 
 ### Problem 1: GitHub Actions Workflow Failure
+
 - **Issue**: The workflow was trying to use GitHub Pages API but the repository wasn't configured for it
 - **Solution**: Created a manual deployment script that pushes to `gh-pages` branch (traditional method)
 
 ### Problem 2: Lesson Content Not Showing
+
 - **Status**: The content IS there in the code (verified 1,864 lines of interactive content)
 - **Likely cause**: The site wasn't deploying properly, so the old version was cached
 - **Solution**: Once the new gh-pages deployment is live, the lessons will work
@@ -46,6 +51,7 @@ To deploy updates in the future, just run:
 ```
 
 This script will:
+
 1. Build the project (`npm run build`)
 2. Create/update the gh-pages branch
 3. Push to GitHub
@@ -68,23 +74,27 @@ Once GitHub Pages is configured (steps above), test the lessons:
 ## ✨ What's Included in Each Lesson
 
 ### Lesson 1: How Satellites Track Ocean Life (15 min)
+
 - ✅ Interactive clickable terms with definitions
 - ✅ 2-question quiz with instant feedback
 - ✅ Side-by-side eddy/shark map comparison
 - ✅ Temperature preference charts
 
 ### Lesson 2: The Shark Foraging Index (20 min)
+
 - ✅ Temperature suitability sliders with live charts
 - ✅ Eddy energy calculator
 - ✅ Prey availability controls
 - ✅ 3D depth scaling visualization
 
 ### Lesson 3: Ocean Food Webs (12 min)
+
 - ✅ Drag-and-drop food chain builder
 - ✅ Energy transfer visualization
 - ✅ Instant validation and feedback
 
 ### Lesson 4: Bio-Sensor Technology (18 min)
+
 - ✅ Interactive component selection
 - ✅ Design challenge with scoring
 - ✅ 6-step workflow visualization
@@ -95,11 +105,13 @@ Once GitHub Pages is configured (steps above), test the lessons:
 If after configuring GitHub Pages the lessons still show only "Complete Lesson" button:
 
 1. **Clear your browser cache:**
+
    - Chrome: Cmd+Shift+Delete (Mac) or Ctrl+Shift+Delete (Windows)
    - Select "Cached images and files"
    - Click "Clear data"
 
 2. **Hard refresh the page:**
+
    - Mac: Cmd+Shift+R
    - Windows: Ctrl+Shift+R
 
@@ -126,11 +138,13 @@ If after configuring GitHub Pages the lessons still show only "Complete Lesson" 
 ## 💡 Why This Method Works Better
 
 The original GitHub Actions workflow required:
+
 - GitHub Pages to be enabled first
 - Proper API permissions
 - Workflow permissions configured
 
 The gh-pages branch method:
+
 - ✅ Works immediately
 - ✅ Traditional and reliable
 - ✅ Easy to troubleshoot

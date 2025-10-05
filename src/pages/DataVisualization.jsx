@@ -739,8 +739,20 @@ function SatelliteDataOverlay({
               contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
               labelStyle={{ color: '#e2e8f0' }}
             />
-            <Area type="monotone" dataKey="value" fill="#3b82f6" stroke="#3b82f6" fillOpacity={0.3} />
-            <Line type="monotone" dataKey="anomaly" stroke="#ef4444" strokeWidth={2} name="Anomaly" />
+            <Area
+              type="monotone"
+              dataKey="value"
+              fill="#3b82f6"
+              stroke="#3b82f6"
+              fillOpacity={0.3}
+            />
+            <Line
+              type="monotone"
+              dataKey="anomaly"
+              stroke="#ef4444"
+              strokeWidth={2}
+              name="Anomaly"
+            />
           </ComposedChart>
         </ResponsiveContainer>
       ) : (
@@ -804,29 +816,26 @@ function Ocean3DProfile() {
     const surfaceTemp = 24 // Base temperature in °C
     const surfaceChl = 0.5 // Base chlorophyll in mg/m³
     const avgLat = 30 // Average latitude for calculations
-    
+
     return Array.from({ length: 20 }, (_, i) => {
       const depth = i * 50
-      
+
       // Calculate real temperature at depth
       const temp = calculateTemperatureAtDepth(surfaceTemp, depth, avgLat)
       const normalizedTemp = Math.max(0, Math.min(1, temp / 30))
-      
+
       // Calculate real chlorophyll at depth
       const chl = calculateChlorophyllAtDepth(surfaceChl, depth)
       const normalizedChl = Math.max(0, Math.min(1, chl / 0.65)) // Normalize to max expected
-      
+
       // Eddy intensity peaks at thermocline depth (~200m)
-      const eddyIntensity = Math.max(
-        0,
-        Math.min(1, Math.exp(-Math.pow((depth - 200) / 100, 2)))
-      )
-      
+      const eddyIntensity = Math.max(0, Math.min(1, Math.exp(-Math.pow((depth - 200) / 100, 2))))
+
       // Calculate SFI based on optimal conditions
       // Peak SFI at thermocline where prey concentrates
       const depthFactor = Math.exp(-Math.pow((depth - 150) / 100, 2))
       const sfi = Math.max(0, Math.min(1, depthFactor * normalizedChl * 0.8))
-      
+
       return {
         depth,
         temperature: normalizedTemp,
