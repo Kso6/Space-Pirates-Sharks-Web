@@ -211,12 +211,7 @@ export default function SFIDashboard() {
               trend="Real-time"
               color="blue"
             />
-            <MetricCard
-              value="98.5%"
-              label="Accuracy"
-              trend="Validated"
-              color="purple"
-            />
+            <MetricCard value="98.5%" label="Accuracy" trend="Validated" color="purple" />
           </div>
         </motion.div>
 
@@ -458,7 +453,9 @@ function MetricCard({ value, label, trend, color }) {
 
   return (
     <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl p-4">
-      <div className={`text-3xl font-bold bg-gradient-to-r ${colorMap[color]} bg-clip-text text-transparent mb-1`}>
+      <div
+        className={`text-3xl font-bold bg-gradient-to-r ${colorMap[color]} bg-clip-text text-transparent mb-1`}
+      >
         {value}
       </div>
       <div className="text-sm text-gray-400 mb-2">{label}</div>
@@ -521,7 +518,9 @@ function FormulaCard({ icon, title, weight, description, color }) {
     <div className="bg-slate-800/50 rounded-xl p-6 text-center">
       <div className="text-5xl mb-4">{icon}</div>
       <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-      <div className={`text-2xl font-bold bg-gradient-to-r ${color} bg-clip-text text-transparent mb-3`}>
+      <div
+        className={`text-2xl font-bold bg-gradient-to-r ${color} bg-clip-text text-transparent mb-3`}
+      >
         {weight}
       </div>
       <p className="text-gray-400 text-sm">{description}</p>
