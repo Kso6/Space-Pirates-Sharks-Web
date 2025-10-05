@@ -1,19 +1,20 @@
-# DNS Configuration Guide for Porkbun
+# DNS Configuration Guide
 
-Complete guide to configure your Porkbun domain `globalsharks.wiki` for deployment.
+Complete guide to configure your domain for deployment.
 
 ## Current Domain Status
 
-**Domain:** globalsharks.wiki  
-**Registry Create Date:** 2025-10-04T12:54:55.61Z  
-**Registry Expire Date:** 2026-10-04T12:54:55.61Z  
-**Registrar:** Porkbun
+**Domain:** [Your Domain]  
+**Registry Create Date:** [Date]  
+**Registry Expire Date:** [Date]  
+**Registrar:** [Your Registrar]
 
 **Current Nameservers:**
-- curitiba.ns.porkbun.com
-- fortaleza.ns.porkbun.com
-- maceio.ns.porkbun.com
-- salvador.ns.porkbun.com
+
+- [nameserver1]
+- [nameserver2]
+- [nameserver3]
+- [nameserver4]
 
 ✅ **Keep these nameservers** - Do not change them!
 
@@ -22,30 +23,31 @@ Complete guide to configure your Porkbun domain `globalsharks.wiki` for deployme
 ## Option 1: GitHub Pages (Recommended)
 
 ### Advantages
+
 - ✅ Free forever
 - ✅ Automatic HTTPS/SSL
 - ✅ Fast global CDN
 - ✅ Easy GitHub Actions integration
 - ✅ Version control built-in
 
-### Step 1: Add DNS Records in Porkbun
+### Step 1: Add DNS Records in Your Registrar
 
-Login to Porkbun dashboard → Domain Management → DNS Records for `globalsharks.wiki`
+Login to your domain registrar dashboard → Domain Management → DNS Records
 
 **Add these 4 A records for apex domain (@):**
 
-| Type | Host | Answer | TTL |
-|------|------|--------|-----|
-| A | @ | 185.199.108.153 | 600 |
-| A | @ | 185.199.109.153 | 600 |
-| A | @ | 185.199.110.153 | 600 |
-| A | @ | 185.199.111.153 | 600 |
+| Type | Host | Answer          | TTL |
+| ---- | ---- | --------------- | --- |
+| A    | @    | 185.199.108.153 | 600 |
+| A    | @    | 185.199.109.153 | 600 |
+| A    | @    | 185.199.110.153 | 600 |
+| A    | @    | 185.199.111.153 | 600 |
 
 **Add CNAME record for www subdomain:**
 
-| Type | Host | Answer | TTL |
-|------|------|--------|-----|
-| CNAME | www | YOUR_GITHUB_USERNAME.github.io | 600 |
+| Type  | Host | Answer                         | TTL |
+| ----- | ---- | ------------------------------ | --- |
+| CNAME | www  | YOUR_GITHUB_USERNAME.github.io | 600 |
 
 Replace `YOUR_GITHUB_USERNAME` with your actual GitHub username.
 
@@ -70,14 +72,15 @@ git push -u origin main
 1. Go to your GitHub repository
 2. Settings → Pages
 3. Source: GitHub Actions (this uses the workflow in `.github/workflows/deploy.yml`)
-4. Custom domain: Enter `globalsharks.wiki`
+4. Custom domain: Enter your domain
 5. Check "Enforce HTTPS" (wait 5 minutes for SSL to provision)
 
 ### Step 4: Verify
 
 Wait 5-15 minutes for DNS propagation, then visit:
-- https://globalsharks.wiki
-- https://www.globalsharks.wiki
+
+- https://yourdomain.com
+- https://www.yourdomain.com
 
 Both should work!
 
@@ -86,6 +89,7 @@ Both should work!
 ## Option 2: Netlify
 
 ### Advantages
+
 - ✅ Free tier generous
 - ✅ Instant deploys
 - ✅ Branch previews
@@ -110,26 +114,26 @@ Or use the Netlify web interface to import from GitHub.
 ### Step 2: Add Custom Domain in Netlify
 
 1. Site settings → Domain management
-2. Add custom domain: `globalsharks.wiki`
+2. Add custom domain: Your domain
 3. Netlify will provide DNS instructions
 
-### Step 3: Update Porkbun DNS
+### Step 3: Update DNS Records
 
 **Option A: Netlify DNS (Recommended)**
 
-| Type | Host | Answer | TTL |
-|------|------|--------|-----|
-| CNAME | @ | apex-loadbalancer.netlify.com | 600 |
-| CNAME | www | YOUR_SITE.netlify.app | 600 |
+| Type  | Host | Answer                        | TTL |
+| ----- | ---- | ----------------------------- | --- |
+| CNAME | @    | apex-loadbalancer.netlify.com | 600 |
+| CNAME | www  | YOUR_SITE.netlify.app         | 600 |
 
 Replace `YOUR_SITE` with your actual Netlify site name.
 
 **Option B: A Record + CNAME**
 
-| Type | Host | Answer | TTL |
-|------|------|--------|-----|
-| A | @ | 75.2.60.5 | 600 |
-| CNAME | www | YOUR_SITE.netlify.app | 600 |
+| Type  | Host | Answer                | TTL |
+| ----- | ---- | --------------------- | --- |
+| A     | @    | 75.2.60.5             | 600 |
+| CNAME | www  | YOUR_SITE.netlify.app | 600 |
 
 ### Step 4: Enable SSL in Netlify
 
@@ -142,6 +146,7 @@ Replace `YOUR_SITE` with your actual Netlify site name.
 ## Option 3: Vercel
 
 ### Advantages
+
 - ✅ Free for hobby projects
 - ✅ Instant global CDN
 - ✅ Automatic SSL
@@ -163,17 +168,17 @@ Or import from GitHub at vercel.com
 ### Step 2: Add Custom Domain
 
 1. Project settings → Domains
-2. Add domain: `globalsharks.wiki`
+2. Add domain: Your domain
 3. Vercel will provide DNS instructions
 
-### Step 3: Update Porkbun DNS
+### Step 3: Update DNS Records
 
 **Recommended Configuration:**
 
-| Type | Host | Answer | TTL |
-|------|------|--------|-----|
-| A | @ | 76.76.21.21 | 600 |
-| CNAME | www | cname.vercel-dns.com | 600 |
+| Type  | Host | Answer               | TTL |
+| ----- | ---- | -------------------- | --- |
+| A     | @    | 76.76.21.21          | 600 |
+| CNAME | www  | cname.vercel-dns.com | 600 |
 
 ### Step 4: Verify SSL
 
@@ -184,6 +189,7 @@ Vercel automatically provisions SSL certificates. Visit your site to verify.
 ## Option 4: Cloudflare (Free CDN + SSL)
 
 ### Why Use Cloudflare?
+
 - ✅ Free CDN and DDoS protection
 - ✅ Faster global performance
 - ✅ Analytics included
@@ -192,25 +198,27 @@ Vercel automatically provisions SSL certificates. Visit your site to verify.
 ### Step 1: Sign Up for Cloudflare
 
 1. Go to [cloudflare.com](https://cloudflare.com)
-2. Add your site: `globalsharks.wiki`
+2. Add your site: Your domain
 3. Choose Free plan
 
-### Step 2: Update Nameservers in Porkbun
+### Step 2: Update Nameservers in Your Registrar
 
 Cloudflare will provide custom nameservers like:
+
 - `alice.ns.cloudflare.com`
 - `bob.ns.cloudflare.com`
 
-**In Porkbun:**
-1. Domain Management → globalsharks.wiki
-2. Authoritative Nameservers
-3. Change from Porkbun nameservers to Cloudflare nameservers
+**In your domain registrar:**
 
-⚠️ **Warning:** This changes DNS management from Porkbun to Cloudflare!
+1. Domain Management → Your domain
+2. Authoritative Nameservers
+3. Change from default nameservers to Cloudflare nameservers
+
+⚠️ **Warning:** This changes DNS management from your registrar to Cloudflare!
 
 ### Step 3: Configure DNS in Cloudflare
 
-Add the DNS records for your hosting provider (GitHub Pages, Netlify, or Vercel) in the Cloudflare dashboard instead of Porkbun.
+Add the DNS records for your hosting provider (GitHub Pages, Netlify, or Vercel) in the Cloudflare dashboard instead of your registrar.
 
 ### Step 4: Enable SSL
 
@@ -223,22 +231,26 @@ Add the DNS records for your hosting provider (GitHub Pages, Netlify, or Vercel)
 ## DNS Record Types Explained
 
 ### A Record
+
 - Points domain to IP address
-- Use for apex domain (`globalsharks.wiki`)
+- Use for apex domain (yourdomain.com)
 - Example: `@ → 185.199.108.153`
 
 ### CNAME Record
+
 - Points domain to another domain
-- Use for subdomains (`www.globalsharks.wiki`)
+- Use for subdomains (www.yourdomain.com)
 - Example: `www → username.github.io`
 - ⚠️ Cannot use for apex domain (use A record or ALIAS)
 
 ### ALIAS Record (if supported)
+
 - Like CNAME but works for apex domain
-- Porkbun doesn't support ALIAS records
+- Some registrars don't support ALIAS records
 - Use A records instead for apex domain
 
 ### TTL (Time To Live)
+
 - How long DNS records are cached
 - 600 = 10 minutes
 - Lower TTL = faster updates, more DNS queries
@@ -290,33 +302,33 @@ MX      @       mail.example.com        10          600
 
 ```bash
 # Command line
-dig globalsharks.wiki
-nslookup globalsharks.wiki
+dig yourdomain.com
+nslookup yourdomain.com
 
 # For Windows
-nslookup globalsharks.wiki
+nslookup yourdomain.com
 ```
 
 ### Online Tools
 
-- [What's My DNS](https://www.whatsmydns.net/#A/globalsharks.wiki)
-- [DNS Checker](https://dnschecker.org/#A/globalsharks.wiki)
-- [DNS Lookup](https://mxtoolbox.com/SuperTool.aspx?action=a%3aglobalsharks.wiki)
+- [What's My DNS](https://www.whatsmydns.net/)
+- [DNS Checker](https://dnschecker.org/)
+- [DNS Lookup](https://mxtoolbox.com/SuperTool.aspx)
 
 ### Test SSL Certificate
 
 ```bash
 # Command line
-curl -vI https://globalsharks.wiki
+curl -vI https://yourdomain.com
 
 # Check SSL details
-openssl s_client -connect globalsharks.wiki:443 -servername globalsharks.wiki
+openssl s_client -connect yourdomain.com:443 -servername yourdomain.com
 ```
 
 ### Online SSL Checker
 
-- [SSL Labs](https://www.ssllabs.com/ssltest/analyze.html?d=globalsharks.wiki)
-- [SSL Checker](https://www.sslshopper.com/ssl-checker.html#hostname=globalsharks.wiki)
+- [SSL Labs](https://www.ssllabs.com/ssltest/)
+- [SSL Checker](https://www.sslshopper.com/ssl-checker.html)
 
 ---
 
@@ -327,19 +339,22 @@ openssl s_client -connect globalsharks.wiki:443 -servername globalsharks.wiki
 **Symptom:** Domain doesn't load or shows "DNS_PROBE_FINISHED_NXDOMAIN"
 
 **Solutions:**
+
 1. Wait 15-30 minutes for DNS propagation
 2. Clear your DNS cache:
+
    ```bash
    # macOS
    sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
-   
+
    # Windows
    ipconfig /flushdns
-   
+
    # Linux
    sudo systemd-resolve --flush-caches
    ```
-3. Verify DNS records in Porkbun dashboard
+
+3. Verify DNS records in your registrar dashboard
 4. Check nameservers are correct
 
 ### SSL Certificate Not Working
@@ -347,6 +362,7 @@ openssl s_client -connect globalsharks.wiki:443 -servername globalsharks.wiki
 **Symptom:** "Your connection is not private" or "NET::ERR_CERT_COMMON_NAME_INVALID"
 
 **Solutions:**
+
 1. Wait 15-30 minutes after DNS configuration
 2. Verify DNS is pointing to correct IP/domain
 3. Enable "Enforce HTTPS" in hosting provider
@@ -354,9 +370,10 @@ openssl s_client -connect globalsharks.wiki:443 -servername globalsharks.wiki
 
 ### www Not Working
 
-**Symptom:** `www.globalsharks.wiki` doesn't load but `globalsharks.wiki` works
+**Symptom:** `www.yourdomain.com` doesn't load but `yourdomain.com` works
 
 **Solutions:**
+
 1. Add CNAME record for `www` subdomain
 2. Enable "www redirect" in hosting provider
 3. Wait for DNS propagation
@@ -366,6 +383,7 @@ openssl s_client -connect globalsharks.wiki:443 -servername globalsharks.wiki
 **Symptom:** Page keeps redirecting endlessly
 
 **Solutions:**
+
 1. Check SSL mode in Cloudflare (if using)
 2. Verify "Force HTTPS" settings
 3. Clear browser cache and cookies
@@ -375,6 +393,7 @@ openssl s_client -connect globalsharks.wiki:443 -servername globalsharks.wiki
 **Symptom:** "This page contains insecure content"
 
 **Solutions:**
+
 1. Ensure all assets use `https://` not `http://`
 2. Check for hardcoded http:// URLs in code
 3. Use relative URLs instead of absolute URLs
@@ -383,15 +402,15 @@ openssl s_client -connect globalsharks.wiki:443 -servername globalsharks.wiki
 
 ## DNS Propagation Timeline
 
-| Time | What Happens |
-|------|-------------|
-| 0 min | DNS records updated in Porkbun |
-| 5 min | Some DNS servers see new records |
-| 15 min | Most DNS servers updated |
-| 30 min | Majority of users can access site |
-| 2 hours | Almost all DNS servers updated |
-| 24 hours | Complete worldwide propagation |
-| 48 hours | 100% propagation guaranteed |
+| Time     | What Happens                      |
+| -------- | --------------------------------- |
+| 0 min    | DNS records updated in registrar  |
+| 5 min    | Some DNS servers see new records  |
+| 15 min   | Most DNS servers updated          |
+| 30 min   | Majority of users can access site |
+| 2 hours  | Almost all DNS servers updated    |
+| 24 hours | Complete worldwide propagation    |
+| 48 hours | 100% propagation guaranteed       |
 
 💡 **Tip:** Use a different network (mobile data) to test if DNS has propagated, as your computer may cache old DNS records.
 
@@ -410,14 +429,16 @@ Set up monitoring to get alerts if your site goes down:
 ### SSL Certificate Renewal
 
 All recommended hosting providers automatically renew SSL certificates:
+
 - GitHub Pages: Automatic (Let's Encrypt)
 - Netlify: Automatic (Let's Encrypt)
 - Vercel: Automatic (Let's Encrypt)
 - Cloudflare: Automatic (Cloudflare Universal SSL)
 
 Check SSL expiry:
+
 ```bash
-echo | openssl s_client -servername globalsharks.wiki -connect globalsharks.wiki:443 2>/dev/null | openssl x509 -noout -dates
+echo | openssl s_client -servername yourdomain.com -connect yourdomain.com:443 2>/dev/null | openssl x509 -noout -dates
 ```
 
 ---
@@ -442,8 +463,9 @@ These are already configured in `netlify.toml` and `vercel.json`.
 
 DNSSEC adds an extra layer of security to DNS.
 
-**Enable in Porkbun:**
-1. Domain Management → globalsharks.wiki
+**Enable in your registrar:**
+
+1. Domain Management → Your domain
 2. DNSSEC section
 3. Enable DNSSEC
 4. Add DS records if required
@@ -452,34 +474,8 @@ DNSSEC adds an extra layer of security to DNS.
 
 ---
 
-## Quick Reference: Porkbun Dashboard
-
-### Where to Find Things
-
-**DNS Records:**
-1. Login to Porkbun
-2. Account → Domain Management
-3. Click on `globalsharks.wiki`
-4. Scroll to "DNS Records" section
-
-**Nameservers:**
-1. Domain Management → globalsharks.wiki
-2. "Details" tab
-3. "Authoritative Nameservers" section
-
-**Auto-Renew:**
-1. Domain Management → globalsharks.wiki
-2. Toggle "Auto Renew" switch
-
-**SSL Certificate (if using Porkbun hosting):**
-1. Domain Management → globalsharks.wiki
-2. "SSL" section
-
----
-
 ## Support Resources
 
-- **Porkbun Docs:** [kb.porkbun.com](https://kb.porkbun.com)
 - **GitHub Pages Docs:** [docs.github.com/pages](https://docs.github.com/pages)
 - **Netlify Docs:** [docs.netlify.com](https://docs.netlify.com)
 - **Vercel Docs:** [vercel.com/docs](https://vercel.com/docs)
@@ -487,8 +483,6 @@ DNSSEC adds an extra layer of security to DNS.
 
 ---
 
-**Domain:** globalsharks.wiki  
 **Project:** Sharks from Space  
 **Team:** Space Pirates  
 **NASA Space Apps Challenge 2025**
-

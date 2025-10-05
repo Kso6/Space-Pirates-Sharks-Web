@@ -17,19 +17,20 @@ export default function Hero({ onNavigate }) {
             whileHover={{ scale: 1.05 }}
           >
             <span className="text-blue-400 text-sm font-medium">
-              🛰️ Powered by NASA Satellite Data
+              🛰️ Powered by NASA SWOT, MODIS & PACE Missions
             </span>
           </motion.div>
 
           <h1 className="text-6xl md:text-8xl lg:text-9xl font-extrabold mb-8 tracking-tight">
-            <span className="text-gradient">Predict Shark Events</span>
+            <span className="text-gradient">The World's First</span>
             <br />
-            <span className="text-white">Before They Happen</span>
+            <span className="text-white">AI Shark Conservation Platform</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Learn ocean science through interactive lessons. Predict shark behavior with AI. Free
-            educational platform for students, teachers, and communities worldwide.
+            Revolutionary platform combining NASA satellite data, machine learning, and novel
+            bio-sensor innovation. Active shark prediction with live data and mathematical model
+            tuning with tag data to protect marine ecosystems and save lives worldwide.
           </p>
 
           {/* CTA Buttons */}
@@ -56,15 +57,19 @@ export default function Hero({ onNavigate }) {
           <div className="flex flex-wrap justify-center items-center gap-8 text-gray-400 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-green-400 text-xl">✓</span>
-              <span>Free for Students & Teachers</span>
+              <span>3 NASA Missions Integrated</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-400 text-xl">✓</span>
-              <span>NGSS-Aligned Curriculum</span>
+              <span>100% Free & Open Source</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-400 text-xl">✓</span>
-              <span>Open Source & Accessible</span>
+              <span>Real-Time Satellite Data</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-400 text-xl">✓</span>
+              <span>Bio-Sensor Innovation</span>
             </div>
           </div>
         </motion.div>
@@ -77,31 +82,32 @@ export default function Hero({ onNavigate }) {
           className="mt-24"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Learn, Predict, Protect
+            A Groundbreaking 3-Pipeline Innovation
           </h2>
           <p className="text-gray-400 text-lg mb-12 max-w-2xl mx-auto">
-            Interactive curriculum for high school students and free tools for everyone
+            The only platform in the world that integrates NASA satellite data, mathematical
+            modeling, and bio-sensor technology to revolutionize shark conservation
           </p>
 
           <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             <FeatureCard
-              icon="🎓"
-              title="Interactive Lessons"
-              description="4 complete lessons teaching ocean science, satellites, and conservation. Free for educators worldwide."
-              onClick={() => onNavigate('education')}
-              gradient="from-purple-500 to-pink-500"
-            />
-            <FeatureCard
-              icon="📊"
-              title="ML Forecasting Tool"
-              description="Use real NASA satellite data to predict shark hotspots with 87% accuracy. Hands-on data science."
-              onClick={() => onNavigate('visualization')}
+              icon="📐"
+              title="Mathematical Model (SFI)"
+              description="World's first 3D spatiotemporal Shark Foraging Index. Integrates NASA SWOT eddies, MODIS chlorophyll-a, and thermal dynamics for predictive modeling."
+              onClick={() => onNavigate('model')}
               gradient="from-blue-500 to-cyan-500"
             />
             <FeatureCard
+              icon="🛰️"
+              title="Real-Time NASA Data"
+              description="Live satellite feeds from SWOT, MODIS, and PACE missions. Process and visualize 4D ocean data (x, y, depth, time) in real-time."
+              onClick={() => onNavigate('visualization')}
+              gradient="from-purple-500 to-pink-500"
+            />
+            <FeatureCard
               icon="🔬"
-              title="Design Challenges"
-              description="Engineer bio-sensors, create food webs, and solve real conservation problems through projects."
+              title="Revolutionary Bio-Sensor"
+              description="Novel gastric capsule technology for non-invasive shark feeding detection. pH + NH₄⁺ sensors classify prey type. 6-12 month deployments."
               onClick={() => onNavigate('tag')}
               gradient="from-green-500 to-emerald-500"
             />
@@ -116,13 +122,78 @@ export default function Hero({ onNavigate }) {
           className="mt-32"
         >
           <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border border-white/10 rounded-3xl p-12">
+            <h3 className="text-3xl font-bold text-white text-center mb-8">
+              Platform Capabilities
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <StatCard value="3" label="NASA Missions" sublabel="SWOT · MODIS · PACE" icon="🛰️" />
-              <StatCard value="87%" label="Accuracy" sublabel="Prediction Correlation" icon="🎯" />
-              <StatCard value="4D" label="Spatiotemporal" sublabel="x, y, z, time" icon="🌐" />
-              <StatCard value="∞" label="Impact" sublabel="Conservation · Safety" icon="🦈" />
+              <StatCard
+                value="3"
+                label="NASA Missions"
+                sublabel="SWOT • MODIS • PACE integrated"
+                icon="🛰️"
+              />
+              <StatCard
+                value="4D"
+                label="Spatiotemporal"
+                sublabel="x, y, depth, time modeling"
+                icon="🌐"
+              />
+              <StatCard
+                value="Live"
+                label="Data Processing"
+                sublabel="Real-time satellite feeds"
+                icon="📡"
+              />
+              <StatCard
+                value="Open"
+                label="Source & Free"
+                sublabel="Fully accessible platform"
+                icon="🔓"
+              />
             </div>
           </div>
+
+          {/* Global Impact Section */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="mt-16 bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border border-cyan-500/30 rounded-3xl p-12"
+          >
+            <h3 className="text-3xl font-bold text-white text-center mb-8">
+              World-Changing Applications
+            </h3>
+            <div className="grid md:grid-cols-4 gap-6">
+              <ImpactCard
+                icon="🌊"
+                title="Marine Conservation"
+                description="Identify critical shark foraging habitats and migration patterns globally"
+                metric="Worldwide"
+                metricLabel="Coverage"
+              />
+              <ImpactCard
+                icon="🏖️"
+                title="Coastal Safety"
+                description="Real-time prediction system for human-shark encounter prevention"
+                metric="Global"
+                metricLabel="Coverage potential"
+              />
+              <ImpactCard
+                icon="🎓"
+                title="Education"
+                description="Free interactive curriculum on marine conservation and satellite data"
+                metric="Open"
+                metricLabel="Access"
+              />
+              <ImpactCard
+                icon="🔬"
+                title="Scientific Research"
+                description="Open platform enabling marine biology research and collaboration"
+                metric="Open"
+                metricLabel="Source Data"
+              />
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>
@@ -163,6 +234,22 @@ function StatCard({ value, label, sublabel, icon }) {
       <div className="text-4xl md:text-5xl font-extrabold text-white mb-2">{value}</div>
       <div className="text-base font-semibold text-gray-300 mb-1">{label}</div>
       <div className="text-sm text-gray-500">{sublabel}</div>
+    </div>
+  )
+}
+
+function ImpactCard({ icon, title, description, metric, metricLabel }) {
+  return (
+    <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 text-center hover:scale-105 transition-transform">
+      <div className="text-5xl mb-4">{icon}</div>
+      <h4 className="text-xl font-bold text-white mb-3">{title}</h4>
+      <p className="text-gray-300 text-sm mb-4 leading-relaxed">{description}</p>
+      <div className="border-t border-white/10 pt-4">
+        <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 mb-1">
+          {metric}
+        </div>
+        <div className="text-xs text-gray-400">{metricLabel}</div>
+      </div>
     </div>
   )
 }

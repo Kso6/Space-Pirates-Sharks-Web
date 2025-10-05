@@ -5,7 +5,7 @@
 
 set -e
 
-echo "🦈 Deploying Sharks from Space to globalsharks.wiki..."
+echo "🦈 Deploying Sharks from Space to your domain..."
 echo ""
 
 # Check if we're in the right directory
@@ -82,7 +82,7 @@ case $choice in
         git push origin main
         echo ""
         echo "✅ Pushed to GitHub! GitHub Actions will deploy automatically."
-        echo "🌐 Your site will be live at https://globalsharks.wiki in a few minutes"
+        echo "🌐 Your site will be live at your custom domain in a few minutes"
         echo "📊 Check deployment status: https://github.com/YOUR_USERNAME/YOUR_REPO/actions"
         ;;
         
@@ -113,7 +113,7 @@ case $choice in
         vercel --prod
         echo ""
         echo "✅ Deployed to Vercel!"
-        echo "🌐 Don't forget to add globalsharks.wiki as a custom domain in Vercel dashboard"
+        echo "🌐 Don't forget to add your custom domain in Vercel dashboard"
         ;;
         
     4)
@@ -129,15 +129,15 @@ esac
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "🦈 Sharks from Space - Space Pirates"
-echo "🌐 globalsharks.wiki"
+echo "🌐 Your custom domain"
 echo "🛰️  NASA Space Apps Challenge 2025"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "Next steps:"
-echo "1. Configure DNS in Porkbun (see DEPLOYMENT.md)"
+echo "1. Configure DNS in your registrar (see DEPLOYMENT.md)"
 echo "2. Wait for DNS propagation (usually 15 minutes)"
 echo "3. Enable SSL/HTTPS in your hosting provider"
-echo "4. Test your site at https://globalsharks.wiki"
+echo "4. Test your site at your custom domain"
 echo ""
 echo "For detailed instructions, see DEPLOYMENT.md"
 

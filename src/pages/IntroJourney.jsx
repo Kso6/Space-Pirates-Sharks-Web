@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 export default function IntroJourney({ onComplete }) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const timeoutRef = useRef(null)
 
   const slides = [
     {
@@ -28,12 +29,26 @@ export default function IntroJourney({ onComplete }) {
     },
   ]
 
+  // Cleanup timeout on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
   const handleNext = () => {
     if (currentSlide < slides.length - 1) {
       setIsTransitioning(true)
-      setTimeout(() => {
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => {
         setCurrentSlide(currentSlide + 1)
         setIsTransitioning(false)
+        timeoutRef.current = null
       }, 500)
     } else {
       onComplete()
@@ -43,9 +58,14 @@ export default function IntroJourney({ onComplete }) {
   const handleBack = () => {
     if (currentSlide > 0) {
       setIsTransitioning(true)
-      setTimeout(() => {
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => {
         setCurrentSlide(currentSlide - 1)
         setIsTransitioning(false)
+        timeoutRef.current = null
       }, 500)
     }
   }
@@ -150,9 +170,7 @@ function WelcomeSlide() {
           </div>
         </div>
 
-        <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-6">
-          Global Sharks
-        </h1>
+        <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-6">Global Sharks</h1>
         <p className="text-xl text-blue-400 font-semibold mb-4">Team Space Pirates</p>
         <p className="text-lg text-gray-400">NASA Space Apps Challenge 2025</p>
       </motion.div>
@@ -178,11 +196,7 @@ function WelcomeSlide() {
 function ConnectingSlide() {
   return (
     <div className="text-center max-w-4xl">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="mb-12"
-      >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-12">
         <div className="relative w-64 h-64 mx-auto mb-12">
           {/* Satellite animation */}
           <motion.div
@@ -277,11 +291,7 @@ function ConnectingSlide() {
 function ProblemSlide() {
   return (
     <div className="text-center max-w-5xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-12"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
         <div className="text-7xl mb-6">❓</div>
         <h2 className="text-5xl font-extrabold text-white mb-8">The Challenge</h2>
       </motion.div>
@@ -330,11 +340,7 @@ function ProblemSlide() {
 function SolutionSlide() {
   return (
     <div className="text-center max-w-5xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-12"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
         <div className="text-7xl mb-6">💡</div>
         <h2 className="text-5xl font-extrabold text-white mb-4">Our Solution</h2>
         <p className="text-xl text-gray-400">
@@ -354,7 +360,7 @@ function SolutionSlide() {
           icon="📊"
           number="2"
           title="AI Forecasting"
-          description="87% accurate predictions of shark foraging hotspots using satellite data"
+          description="Real-time predictions of shark foraging hotspots using NASA satellite data"
           gradient="from-blue-500 to-cyan-500"
         />
         <SolutionCard
@@ -401,7 +407,9 @@ function MissionSlide() {
         transition={{ delay: 0.3 }}
         className="space-y-8"
       >
-        <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">Learn • Predict • Protect</div>
+        <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
+          Learn • Predict • Protect
+        </div>
 
         <div className="grid md:grid-cols-3 gap-6 text-left">
           <div className="bg-slate-800/30 border border-white/10 rounded-2xl p-6">
@@ -416,7 +424,7 @@ function MissionSlide() {
             <div className="text-4xl mb-4">📊</div>
             <h3 className="text-xl font-bold text-white mb-2">Predict</h3>
             <p className="text-gray-400">
-              Use NASA satellite data to forecast shark behavior with 87% accuracy
+              Use NASA satellite data to forecast shark behavior in real-time
             </p>
           </div>
 
@@ -437,8 +445,8 @@ function MissionSlide() {
         >
           <p className="text-2xl text-white font-semibold mb-4">Ready to dive in?</p>
           <p className="text-lg text-gray-300">
-            Explore interactive forecasting tools, learn ocean science, and join a global
-            community protecting our oceans using NASA's eyes in space.
+            Explore interactive forecasting tools, learn ocean science, and join a global community
+            protecting our oceans using NASA's eyes in space.
           </p>
         </motion.div>
       </motion.div>
@@ -456,7 +464,9 @@ function ProblemCard({ icon, title, stat, description, color }) {
       className="bg-slate-800/50 border border-white/10 rounded-2xl p-6"
     >
       <div className="text-5xl mb-4">{icon}</div>
-      <div className={`text-4xl font-extrabold bg-gradient-to-r ${color} bg-clip-text text-transparent mb-2`}>
+      <div
+        className={`text-4xl font-extrabold bg-gradient-to-r ${color} bg-clip-text text-transparent mb-2`}
+      >
         {stat}
       </div>
       <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
@@ -473,11 +483,15 @@ function SolutionCard({ icon, number, title, description, gradient }) {
       transition={{ delay: 0.2 * parseInt(number) }}
       className="relative bg-slate-800/50 border border-white/10 rounded-2xl p-6 overflow-hidden group hover:border-white/30 transition-all"
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity`}
+      ></div>
       <div className="relative">
         <div className="flex items-center justify-between mb-4">
           <div className="text-5xl">{icon}</div>
-          <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold`}>
+          <div
+            className={`w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold`}
+          >
             {number}
           </div>
         </div>
@@ -496,4 +510,3 @@ function Badge({ text, icon }) {
     </div>
   )
 }
-
