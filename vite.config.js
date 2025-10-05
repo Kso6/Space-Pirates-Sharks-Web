@@ -12,7 +12,11 @@ export default defineConfig({
       // Polyfill Node.js modules for browser compatibility
       stream: 'stream-browserify',
       assert: 'assert',
+      buffer: 'buffer',
     },
+  },
+  define: {
+    global: 'globalThis',
   },
   build: {
     outDir: 'dist',
