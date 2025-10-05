@@ -46,17 +46,22 @@ function generateDistributedHotspots(data, bounds, targetCount) {
   // Generate evenly distributed points across the entire region
   const result = []
   const gridSize = Math.ceil(Math.sqrt(targetCount))
-  const latStep = (bounds.latMax - bounds.latMin) / (gridSize + 1)
-  const lonStep = (bounds.lonMax - bounds.lonMin) / (gridSize + 1)
+  
+  // Use full range (0 to gridSize-1) and map to 0-100% of bounds
+  const latRange = bounds.latMax - bounds.latMin
+  const lonRange = bounds.lonMax - bounds.lonMin
 
-  for (let i = 1; i <= gridSize && result.length < targetCount; i++) {
-    for (let j = 1; j <= gridSize && result.length < targetCount; j++) {
-      // Calculate position with slight randomization for natural look
-      const lat = bounds.latMin + i * latStep + (Math.random() - 0.5) * latStep * 0.3
-      const lon = bounds.lonMin + j * lonStep + (Math.random() - 0.5) * lonStep * 0.3
+  for (let i = 0; i < gridSize && result.length < targetCount; i++) {
+    for (let j = 0; j < gridSize && result.length < targetCount; j++) {
+      // Calculate position as percentage through the grid (0 to 1)
+      const latPercent = (i + 0.5) / gridSize  // Center of each cell
+      const lonPercent = (j + 0.5) / gridSize
+      
+      // Map to actual coordinates with slight randomization
+      const lat = bounds.latMin + latRange * latPercent + (Math.random() - 0.5) * latRange * 0.05
+      const lon = bounds.lonMin + lonRange * lonPercent + (Math.random() - 0.5) * lonRange * 0.05
 
       // Use real data statistics to generate realistic values
-      // Vary the values based on position for visual interest
       const positionFactor = (i + j) / (gridSize * 2)
       const value =
         minValue + (maxValue - minValue) * positionFactor + (Math.random() - 0.5) * avgValue * 0.5

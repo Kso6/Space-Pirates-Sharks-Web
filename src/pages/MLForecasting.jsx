@@ -50,7 +50,12 @@ export default function MLForecasting() {
 
   // Process data with current depth (optimized)
   const forecastData = useMemo(() => {
-    if (!modisData || !modisData.depths) return null
+    if (!modisData || !modisData.depths) {
+      if (import.meta.env.DEV) {
+        console.log('No MODIS data available')
+      }
+      return null
+    }
 
     try {
       // Find the closest depth level in the data
@@ -63,30 +68,54 @@ export default function MLForecasting() {
       const depthData = modisData.depths[closestDepth.toString()]
 
       if (!depthData || !depthData.data || depthData.data.length === 0) {
+        if (import.meta.env.DEV) {
+          console.log(`No data for depth ${closestDepth}m`)
+        }
         return null
       }
 
-      // Filter out invalid data points (e.g., chlorophyll = -32767 indicates no data)
+      if (import.meta.env.DEV) {
+        console.log(`Processing ${depthData.data.length} points for depth ${closestDepth}m`)
+      }
+
+      // Filter out invalid data points
+      // Note: chlorophyll < 0 indicates fill values (-32767), but we'll be more lenient
       const validData = depthData.data.filter(
         (point) =>
-          point.chlorophyll > 0 &&
-          point.sst > 0 &&
+          point.chlorophyll > -10000 && // Accept more data, filter only extreme fill values
+          point.sst > 15 && // Slightly more lenient temperature range
           point.sst < 35 &&
           !isNaN(point.intensity) &&
-          !isNaN(point.probability)
+          !isNaN(point.probability) &&
+          point.intensity > 0
       )
+
+      if (import.meta.env.DEV) {
+        console.log(`Valid points after filtering: ${validData.length}`)
+      }
+
+      if (validData.length === 0) {
+        if (import.meta.env.DEV) {
+          console.warn('No valid data points after filtering')
+        }
+        return null
+      }
 
       // Sample data for performance (take every nth point if too many)
       const maxPoints = 1000
       const samplingRate = Math.ceil(validData.length / maxPoints)
       const sampledData = validData.filter((_, index) => index % samplingRate === 0)
 
+      if (import.meta.env.DEV) {
+        console.log(`Sampled ${sampledData.length} points for visualization`)
+      }
+
       // Return processed data with proper structure
       return sampledData.map((point) => ({
         lat: point.lat,
         lon: point.lon,
         sst: point.sst,
-        chlorophyll: point.chlorophyll,
+        chlorophyll: Math.max(0, point.chlorophyll), // Convert negative fill values to 0
         ssha: 0, // SSHA already incorporated in the model
         probability: point.probability,
         intensity: point.intensity,
@@ -1050,9 +1079,9 @@ function ModelInformation() {
               >
                 <div className="w-2 h-2 rounded-full bg-yellow-400 mt-2"></div>
                 <p className="text-gray-300">
-                  Predictions are based on environmental correlations and should be{' '}
+                  Predictions are based on environmental correlations and would require{' '}
                   <strong className="text-purple-300">
-                    validated with actual shark tracking data
+                    comparison with actual shark tracking data for validation
                   </strong>
                   .
                 </p>

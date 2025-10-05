@@ -300,8 +300,8 @@ function ProblemSlide() {
         <ProblemCard
           icon="🌊"
           title="Sharks are declining"
-          stat="100M"
-          description="sharks killed annually while only 5 humans die from shark encounters"
+          stat="~100M"
+          description="sharks estimated killed annually while shark encounters with humans remain rare"
           color="from-red-500 to-orange-500"
         />
         <ProblemCard

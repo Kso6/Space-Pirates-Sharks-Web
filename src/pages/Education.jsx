@@ -100,7 +100,7 @@ export default function Education() {
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             Train the next generation of ocean scientists with NASA satellite technology. Free,
-            validated curriculum reaching students in 50+ countries.
+            educational curriculum designed for global accessibility.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">

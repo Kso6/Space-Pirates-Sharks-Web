@@ -286,7 +286,9 @@ function CalculatorCard() {
       const sfiValue = (prey * 0.45 + temp * 0.3 + eddy * 0.25).toFixed(2)
       return sfiValue
     } catch (err) {
-      console.error('Error calculating SFI:', err)
+      if (import.meta.env.DEV) {
+        console.error('Error calculating SFI:', err)
+      }
       return '0.00'
     }
   }
