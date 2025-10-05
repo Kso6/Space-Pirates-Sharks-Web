@@ -837,14 +837,21 @@ function PowerSection() {
               <div className="relative">
                 <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-6 h-full flex items-center justify-center border-4 border-cyan-500/30">
                   <div className="text-center space-y-4 w-full">
-                    <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
+                    <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30 min-h-[200px] flex items-center justify-center">
                       <img
                         src="/internal-gastric-tag.png"
                         alt="Internal Gastric Capsule"
-                        className="w-full h-auto object-cover"
+                        className="w-full h-auto object-contain max-h-[180px]"
                         style={{
                           filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
                           borderRadius: '16px',
+                        }}
+                        onError={(e) => {
+                          console.error('Image failed to load:', e)
+                          e.target.style.display = 'none'
+                        }}
+                        onLoad={(e) => {
+                          console.log('Image loaded successfully')
                         }}
                       />
                       <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded">
