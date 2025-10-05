@@ -22,19 +22,29 @@ import { parseSSHAData, calculateStats } from '../utils/dataProcessing'
 export default function MLForecasting() {
   const [depth, setDepth] = useState(80)
   const [sshaData, setSSHAData] = useState(null)
+  const [modisData, setModisData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [selectedMetric, setSelectedMetric] = useState('intensity')
 
-  // Load SSHA data on mount
+  // Load SSHA and MODIS data on mount
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true)
-        const response = await fetch('/SSHA-2025-data.csv')
-        if (!response.ok) throw new Error('Failed to load data')
-        const text = await response.text()
-        const parsed = parseSSHAData(text)
-        setSSHAData(parsed)
+
+        // Load SSHA data
+        const sshaResponse = await fetch('/SSHA-2025-data.csv')
+        if (!sshaResponse.ok) throw new Error('Failed to load SSHA data')
+        const sshaText = await sshaResponse.text()
+        const sshaParsed = parseSSHAData(sshaText)
+        setSSHAData(sshaParsed)
+
+        // Load MODIS data
+        const modisResponse = await fetch('/processed-data/modis-shark-model.json')
+        if (!modisResponse.ok) throw new Error('Failed to load MODIS data')
+        const modisParsed = await modisResponse.json()
+        setModisData(modisParsed)
+
       } catch (err) {
         // Centralized error handling with optional logging
         if (import.meta.env.DEV) {
@@ -49,84 +59,60 @@ export default function MLForecasting() {
     loadData()
   }, [])
 
-  // Process data with current depth (optimized)
+  // Process MODIS data with current depth (optimized)
   const forecastData = useMemo(() => {
-    if (!sshaData || sshaData.length === 0) return null
+    if (!modisData || !modisData.depths) return null
 
     try {
-      // Stratified sampling to ensure representative data
-      const sampleSize = Math.min(500, sshaData.length)
+      // Get data for the current depth level
+      const depthKey = depth.toString()
+      const depthData = modisData.depths[depthKey]
+
+      if (!depthData || !depthData.data) return null
+
+      // Filter out invalid data points
+      const validData = depthData.data.filter(point =>
+        point &&
+        typeof point.lat === 'number' &&
+        typeof point.lon === 'number' &&
+        typeof point.intensity === 'number' &&
+        typeof point.probability === 'number' &&
+        point.intensity > 0 &&
+        point.probability > 0 &&
+        !isNaN(point.lat) &&
+        !isNaN(point.lon) &&
+        !isNaN(point.intensity)
+      )
+
+      // Sample data for performance (limit to 2000 points for visualization)
+      const sampleSize = Math.min(2000, validData.length)
+      const step = Math.floor(validData.length / sampleSize)
+
       const sampled = []
-
-      // Sort data by latitude to enable stratified sampling
-      const sortedData = [...sshaData].sort((a, b) => a.lat - b.lat)
-
-      // Divide into latitude bands
-      const bands = 5
-      const bandSize = Math.floor(sortedData.length / bands)
-
-      for (let band = 0; band < bands; band++) {
-        const start = band * bandSize
-        const end = (band + 1) * bandSize
-        const bandData = sortedData.slice(start, end)
-
-        // Sample proportionally from each band
-        const bandSampleSize = Math.floor(sampleSize / bands)
-        const step = Math.max(1, Math.floor(bandData.length / bandSampleSize))
-
-        for (let i = 0; i < bandData.length; i += step) {
-          sampled.push(bandData[i])
-          if (sampled.length >= sampleSize) break
-        }
+      for (let i = 0; i < validData.length; i += step) {
+        sampled.push(validData[i])
+        if (sampled.length >= sampleSize) break
       }
 
-      // Normalize SSHA
-      const sshaValues = sampled.map((d) => d.value)
-      const { normalized } = normalizeSSHA(sshaValues)
+      // Add depth information and return processed data
+      return sampled.map(point => ({
+        lat: point.lat,
+        lon: point.lon,
+        sst: point.sst || 24, // Default if not available
+        chlorophyll: point.chlorophyll || 0.5, // Default if not available
+        ssha: 50, // Default normalized SSHA since MODIS data already includes processing
+        probability: point.probability,
+        intensity: point.intensity,
+        depth: parseInt(depthKey),
+      }))
 
-      // Pre-allocate result array
-      const processed = new Array(sampled.length)
-
-      // Generate synthetic SST and Chlorophyll for demonstration
-      for (let i = 0; i < sampled.length; i++) {
-        const point = sampled[i]
-
-        // Synthetic SST (18-30°C based on latitude)
-        const sst = 26 - Math.abs(point.lat) * 0.15 + (Math.random() - 0.5) * 2
-
-        // Synthetic Chlorophyll (0.01-5 mg/m³, higher near coasts)
-        const chlorophyll = 0.1 + Math.random() * 2
-
-        const probability = sharkGaussianModel({
-          sst,
-          ssha: normalized[i],
-          chlorophyll,
-          lat: point.lat,
-          depth,
-        })
-
-        const intensity = Math.exp(2.0 * probability + (Math.random() - 0.5) * 0.1)
-
-        processed[i] = {
-          lat: point.lat,
-          lon: point.lon,
-          sst,
-          chlorophyll,
-          ssha: normalized[i],
-          probability,
-          intensity,
-          depth,
-        }
-      }
-
-      return processed
     } catch (error) {
       if (import.meta.env.DEV) {
-        console.error('Error processing forecast data:', error)
+        console.error('Error processing MODIS forecast data:', error)
       }
       return null
     }
-  }, [sshaData, depth])
+  }, [modisData, depth])
 
   const stats = useMemo(() => {
     if (!forecastData) return null
