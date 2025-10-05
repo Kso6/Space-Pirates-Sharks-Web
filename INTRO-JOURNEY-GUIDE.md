@@ -69,7 +69,7 @@ Inspired by the [QuakeHeroes](https://gabrielchayb.github.io/42-quake-heroes/) e
 **Content:**
 
 - **#1 Interactive Lessons:** 4 NGSS-aligned lessons with NASA data
-- **#2 AI Forecasting:** 87% accurate shark predictions
+- **#2 ML Forecasting:** 87% accurate shark predictions
 - **#3 Bio-Sensor Design:** Student engineering challenges
 
 **Design:** Gradient hover effects, numbered badges
@@ -380,7 +380,7 @@ if (showIntro) {
 
 **Slide 4 Solution:**
 
-> "A free, open-source platform combining education with AI forecasting"
+> "A free, open-source platform combining education with ML forecasting"
 
 **Slide 5 Mission:**
 

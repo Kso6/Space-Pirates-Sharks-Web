@@ -344,7 +344,7 @@ function SolutionSlide() {
         <div className="text-7xl mb-6">💡</div>
         <h2 className="text-5xl font-extrabold text-white mb-4">Our Solution</h2>
         <p className="text-xl text-gray-400">
-          A free, open-source platform combining education with AI forecasting
+          A free, open-source platform combining education with ML forecasting
         </p>
       </motion.div>
 
@@ -359,7 +359,7 @@ function SolutionSlide() {
         <SolutionCard
           icon="📊"
           number="2"
-          title="AI Forecasting"
+          title="ML Forecasting"
           description="Real-time predictions of shark foraging hotspots using NASA satellite data"
           gradient="from-blue-500 to-cyan-500"
         />

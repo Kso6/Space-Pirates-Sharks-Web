@@ -127,7 +127,7 @@ Quick visual reference for each slide in the intro journey.
 │                  💡                              │
 │             Our Solution                         │
 │    A free, open-source platform combining        │
-│       education with AI forecasting              │
+│       education with ML forecasting              │
 │                                                  │
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐        │
 │  │🎓   [1] │  │📊   [2] │  │🔬   [3] │        │

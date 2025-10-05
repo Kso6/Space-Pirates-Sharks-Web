@@ -8,12 +8,14 @@
 ## 🎯 Where to Start
 
 ### If you're a **Judge/Marker** (15 minutes):
+
 1. Read [Marking Criteria Alignment](../MARKING-CRITERIA-ALIGNMENT.md) - See how we score 5/5
 2. Review [Demo Guide](./DEMO-GUIDE.md) - Understand our presentation
 3. Check [Project Overview](./PROJECT-OVERVIEW.md) - Executive summary
 4. Browse [Impact Summary](./IMPACT.md) - Real-world outcomes
 
 ### If you're **Technical** (30 minutes):
+
 1. Start with [Quick Start](../QUICKSTART.md) - Run the project locally
 2. Read [Mathematical Model](./MATHEMATICAL-MODEL.md) - SFI algorithm & validation
 3. Review [NASA Data Integration](./NASA-DATA-INTEGRATION.md) - Satellite data processing
@@ -21,6 +23,7 @@
 5. Explore the live demo at [sharks-from-space.netlify.app](https://sharks-from-space.netlify.app)
 
 ### If you're **Interested in Education** (20 minutes):
+
 1. Read [Education Impact](../EDUCATION-IMPACT.md) - Strategy & curriculum
 2. Check [Lesson Plans](./LESSON-PLANS.md) - NGSS-aligned materials
 3. Browse the Education page on the live site
@@ -100,36 +103,36 @@
 
 ### 🏆 Marking & Evaluation
 
-| Document | Purpose | Key Takeaways |
-|----------|---------|---------------|
-| [**Marking Criteria Alignment**](../MARKING-CRITERIA-ALIGNMENT.md) | Demonstrate 5/5 scoring | Impact, Creativity, Validity, Relevance, Presentation |
-| [**Demo Guide**](./DEMO-GUIDE.md) | Presentation preparation | Flow, talking points, Q&A responses |
-| [**Project Overview**](./PROJECT-OVERVIEW.md) | Executive summary | Achievements, status, innovations |
-| [**Impact Summary**](./IMPACT.md) | Real-world outcomes | 100M sharks, 1000 lives, 10K students |
+| Document                                                           | Purpose                  | Key Takeaways                                         |
+| ------------------------------------------------------------------ | ------------------------ | ----------------------------------------------------- |
+| [**Marking Criteria Alignment**](../MARKING-CRITERIA-ALIGNMENT.md) | Demonstrate 5/5 scoring  | Impact, Creativity, Validity, Relevance, Presentation |
+| [**Demo Guide**](./DEMO-GUIDE.md)                                  | Presentation preparation | Flow, talking points, Q&A responses                   |
+| [**Project Overview**](./PROJECT-OVERVIEW.md)                      | Executive summary        | Achievements, status, innovations                     |
+| [**Impact Summary**](./IMPACT.md)                                  | Real-world outcomes      | 100M sharks, 1000 lives, 10K students                 |
 
 ### 🔬 Scientific & Technical
 
-| Document | Purpose | Key Metrics |
-|----------|---------|-------------|
-| [**Mathematical Model**](./MATHEMATICAL-MODEL.md) | SFI algorithm | 87% accuracy, R²=0.83, AUC=0.87 |
-| [**NASA Data Integration**](./NASA-DATA-INTEGRATION.md) | Satellite data pipeline | SWOT, MODIS, PACE, 50+ GB daily |
-| [**Bio-Sensor Design**](./TAG-SENSOR.md) | Hardware specifications | 6-12 month deployment, pH + NH₄⁺ sensors |
-| [**Data Processing**](./DATA-PROCESSING.md) | ETL & visualization | Real-time processing, 3D visualization |
+| Document                                                | Purpose                 | Key Metrics                              |
+| ------------------------------------------------------- | ----------------------- | ---------------------------------------- |
+| [**Mathematical Model**](./MATHEMATICAL-MODEL.md)       | SFI algorithm           | 87% accuracy, R²=0.83, AUC=0.87          |
+| [**NASA Data Integration**](./NASA-DATA-INTEGRATION.md) | Satellite data pipeline | SWOT, MODIS, PACE, 50+ GB daily          |
+| [**Bio-Sensor Design**](./TAG-SENSOR.md)                | Hardware specifications | 6-12 month deployment, pH + NH₄⁺ sensors |
+| [**Data Processing**](./DATA-PROCESSING.md)             | ETL & visualization     | Real-time processing, 3D visualization   |
 
 ### 🎓 Educational Materials
 
-| Document | Purpose | Reach |
-|----------|---------|-------|
-| [**Education Impact**](../EDUCATION-IMPACT.md) | Strategy & curriculum | 10,000+ students Year 1 |
-| [**Lesson Plans**](./LESSON-PLANS.md) | Teaching materials | 4 lessons, NGSS-aligned, free |
+| Document                                       | Purpose               | Reach                         |
+| ---------------------------------------------- | --------------------- | ----------------------------- |
+| [**Education Impact**](../EDUCATION-IMPACT.md) | Strategy & curriculum | 10,000+ students Year 1       |
+| [**Lesson Plans**](./LESSON-PLANS.md)          | Teaching materials    | 4 lessons, NGSS-aligned, free |
 
 ### 🚀 Development & Deployment
 
-| Document | Purpose | Time Required |
-|----------|---------|---------------|
-| [**Quick Start**](../QUICKSTART.md) | Local development | 5 minutes |
-| [**Deployment Guide**](../DEPLOYMENT.md) | Production deployment | 15 minutes |
-| [**Bug Fix Report**](../BUG-FIX-REPORT.md) | Quality assurance | Reference |
+| Document                                   | Purpose               | Time Required |
+| ------------------------------------------ | --------------------- | ------------- |
+| [**Quick Start**](../QUICKSTART.md)        | Local development     | 5 minutes     |
+| [**Deployment Guide**](../DEPLOYMENT.md)   | Production deployment | 15 minutes    |
+| [**Bug Fix Report**](../BUG-FIX-REPORT.md) | Quality assurance     | Reference     |
 
 ---
 
@@ -188,6 +191,7 @@ DONE - You understand educational impact
 ## 🚀 Quick Facts
 
 ### What We Built
+
 - **3 Integrated Pipelines**: Mathematical Model + NASA Data Visualization + Bio-Sensor
 - **87% Prediction Accuracy**: Validated with real shark tracking data
 - **3 NASA Missions**: SWOT + MODIS + PACE real-time integration
@@ -195,6 +199,7 @@ DONE - You understand educational impact
 - **10,000+ Students**: Educational reach Year 1
 
 ### Why It's Innovative
+
 - ✅ **World First**: 4D spatiotemporal shark foraging model
 - ✅ **Novel Hardware**: Non-invasive gastric bio-sensor (6-12 months)
 - ✅ **Unprecedented Integration**: Multi-mission NASA data fusion
@@ -202,6 +207,7 @@ DONE - You understand educational impact
 - ✅ **Global Scale**: Applicable to any ocean, any species
 
 ### Impact Metrics
+
 - 🌊 **100M+ sharks** - Potential annual lives saved
 - 🏖️ **1,000+ humans** - Conflict reduction through prediction
 - 🌍 **1M+ km²** - Ocean habitat protected
@@ -213,6 +219,7 @@ DONE - You understand educational impact
 ## 📞 Quick Links
 
 ### Live Demonstration
+
 - 🌐 [**Live Site**](https://sharks-from-space.netlify.app)
 - 🛰️ [**NASA Data Integration**](https://sharks-from-space.netlify.app/visualization)
 - 📐 [**Mathematical Model**](https://sharks-from-space.netlify.app/model)
@@ -220,6 +227,7 @@ DONE - You understand educational impact
 - 🎓 [**Education**](https://sharks-from-space.netlify.app/education)
 
 ### External Resources
+
 - 🚀 [NASA SWOT Mission](https://swot.jpl.nasa.gov/)
 - 🌊 [NASA MODIS Ocean Color](https://oceancolor.gsfc.nasa.gov/)
 - 🦠 [NASA PACE Mission](https://pace.gsfc.nasa.gov/)
@@ -253,16 +261,16 @@ A: Visit [Live Demo](https://sharks-from-space.netlify.app) or follow [DEMO-GUID
 
 ## 📝 Document Status
 
-| Document | Status | Last Updated | Completeness |
-|----------|--------|--------------|--------------|
-| README.md | ✅ Complete | Oct 2025 | 100% |
-| MARKING-CRITERIA-ALIGNMENT.md | ✅ Complete | Oct 2025 | 100% |
-| MATHEMATICAL-MODEL.md | ✅ Complete | Oct 2025 | 100% |
-| NASA-DATA-INTEGRATION.md | ✅ Complete | Oct 2025 | 100% |
-| TAG-SENSOR.md | ✅ Complete | Oct 2025 | 100% |
-| EDUCATION-IMPACT.md | ✅ Complete | Oct 2025 | 100% |
-| QUICKSTART.md | ✅ Complete | Oct 2025 | 100% |
-| DEMO-GUIDE.md | ✅ Complete | Oct 2025 | 100% |
+| Document                      | Status      | Last Updated | Completeness |
+| ----------------------------- | ----------- | ------------ | ------------ |
+| README.md                     | ✅ Complete | Oct 2025     | 100%         |
+| MARKING-CRITERIA-ALIGNMENT.md | ✅ Complete | Oct 2025     | 100%         |
+| MATHEMATICAL-MODEL.md         | ✅ Complete | Oct 2025     | 100%         |
+| NASA-DATA-INTEGRATION.md      | ✅ Complete | Oct 2025     | 100%         |
+| TAG-SENSOR.md                 | ✅ Complete | Oct 2025     | 100%         |
+| EDUCATION-IMPACT.md           | ✅ Complete | Oct 2025     | 100%         |
+| QUICKSTART.md                 | ✅ Complete | Oct 2025     | 100%         |
+| DEMO-GUIDE.md                 | ✅ Complete | Oct 2025     | 100%         |
 
 ---
 

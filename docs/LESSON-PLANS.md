@@ -16,6 +16,7 @@
 ### Learning Objectives
 
 By completing this curriculum, students will:
+
 - ✅ Understand how NASA satellites monitor ocean ecosystems
 - ✅ Build a mathematical model for predicting shark behavior
 - ✅ Analyze real satellite data using spreadsheets
@@ -25,14 +26,14 @@ By completing this curriculum, students will:
 
 ### Standards Alignment (NGSS)
 
-| Standard | Description | Covered In |
-|----------|-------------|------------|
-| **HS-LS2-6** | Ecosystems: Interactions, Energy, Dynamics | Lesson 1, 3 |
-| **HS-LS2-7** | Design, evaluate solutions for biodiversity loss | Lesson 4 |
-| **HS-ESS2-5** | Plan solutions to reduce human impacts on Earth | Lesson 1, 4 |
-| **HS-ESS3-1** | Evidence of Earth system interactions | Lesson 1, 2 |
-| **HS-ETS1-2** | Design solutions to complex problems | Lesson 4 |
-| **HS-ETS1-3** | Evaluate competing design solutions | Lesson 4 |
+| Standard      | Description                                      | Covered In  |
+| ------------- | ------------------------------------------------ | ----------- |
+| **HS-LS2-6**  | Ecosystems: Interactions, Energy, Dynamics       | Lesson 1, 3 |
+| **HS-LS2-7**  | Design, evaluate solutions for biodiversity loss | Lesson 4    |
+| **HS-ESS2-5** | Plan solutions to reduce human impacts on Earth  | Lesson 1, 4 |
+| **HS-ESS3-1** | Evidence of Earth system interactions            | Lesson 1, 2 |
+| **HS-ETS1-2** | Design solutions to complex problems             | Lesson 4    |
+| **HS-ETS1-3** | Evaluate competing design solutions              | Lesson 4    |
 
 ### Interdisciplinary Connections
 
@@ -51,12 +52,14 @@ By completing this curriculum, students will:
 ### Duration: 45-60 minutes
 
 ### Learning Objectives
+
 - Explain how satellites observe ocean ecosystems from space
 - Identify key NASA missions (SWOT, MODIS, PACE)
 - Interpret satellite data products (SSHA, chlorophyll-a, SST)
 - Connect ocean productivity to shark behavior
 
 ### Materials Needed
+
 - Computer/tablet with internet (or printed materials)
 - Access to Sharks from Space website
 - Worksheet 1 (provided)
@@ -65,27 +68,32 @@ By completing this curriculum, students will:
 ### Lesson Outline
 
 #### Part 1: Hook (5 min)
+
 **Question:** "How can we study sharks without being in the water?"
 
 **Activity:** Show NASA satellite image of ocean color (MODIS). Ask:
+
 - What do the colors represent?
 - How can this help us understand where sharks might be?
 
 #### Part 2: Introduction to NASA Missions (15 min)
 
 **NASA SWOT (Surface Water and Ocean Topography):**
+
 - Launched: 2022
 - Measures: Sea surface height (accuracy ±2 cm)
 - Why it matters: Detects eddies that concentrate prey
 - Show: Animation of eddy formation
 
 **NASA MODIS (Moderate Resolution Imaging Spectroradiometer):**
+
 - Launched: 2000 (20+ years of data!)
 - Measures: Chlorophyll-a concentration (ocean color)
 - Why it matters: Maps where phytoplankton (shark food's food) lives
 - Show: Time-lapse of phytoplankton bloom
 
 **NASA PACE (Plankton, Aerosol, Cloud, ocean Ecosystem):**
+
 - Launched: January 2024 (newest!)
 - Measures: Phytoplankton species identification
 - Why it matters: Validates ecosystem health
@@ -96,6 +104,7 @@ By completing this curriculum, students will:
 **Activity: Analyze Real Satellite Data**
 
 Using Sharks from Space platform:
+
 1. Navigate to Data Visualization page
 2. Select SWOT dataset
 3. Identify areas of high sea surface height anomaly (eddies)
@@ -104,6 +113,7 @@ Using Sharks from Space platform:
 6. Compare: Do eddies coincide with high productivity?
 
 **Worksheet Questions:**
+
 1. Where are the strongest eddies located? (Latitude/longitude)
 2. What is the chlorophyll-a concentration in those areas?
 3. Predict: Would sharks be more likely here or in low-productivity zones?
@@ -122,12 +132,14 @@ Using Sharks from Space platform:
 ### Duration: 60 minutes
 
 ### Learning Objectives
+
 - Understand mathematical modeling in ecology
 - Calculate the Shark Foraging Index (SFI) using real data
 - Interpret weighted components (prey, temperature, eddies)
 - Validate model predictions with real shark tracking data
 
 ### Materials Needed
+
 - Spreadsheet software (Excel, Google Sheets) or calculator
 - Real satellite data (provided in CSV format)
 - Worksheet 2 with SFI formula
@@ -142,11 +154,13 @@ Using Sharks from Space platform:
 **Concept:** Mathematical models simplify complex reality into equations
 
 **The SFI Formula:**
+
 ```
 SFI(x,y,z,t) = 0.45 × Prey + 0.30 × Temperature + 0.25 × Eddies
 ```
 
 **Why these weights?**
+
 - Prey (45%): Most important - sharks hunt where food is
 - Temperature (30%): Sharks prefer certain temperatures (22-24°C)
 - Eddies (25%): Eddies concentrate prey, creating hotspots
@@ -154,16 +168,19 @@ SFI(x,y,z,t) = 0.45 × Prey + 0.30 × Temperature + 0.25 × Eddies
 #### Part 2: Component Deep Dive (15 min)
 
 **Component 1: Prey Availability**
+
 - Formula: `Prey = Chlorophyll × exp(-depth/100) × TrophicLevel`
 - Explanation: Phytoplankton → zooplankton → small fish → sharks
 - Data source: NASA MODIS chlorophyll-a
 
 **Component 2: Temperature Suitability**
+
 - Formula: `Temp = exp(-(T - 23)² / (2 × 5²))`
 - Explanation: Gaussian curve peaks at optimal temperature (23°C)
 - Data source: Meteomatics SST
 
 **Component 3: Eddy Energy**
+
 - Formula: `Eddy = |SSHA| × exp(-depth²/1000)`
 - Explanation: Higher SSHA = stronger eddy = more prey concentration
 - Data source: NASA SWOT SSHA
@@ -175,30 +192,35 @@ SFI(x,y,z,t) = 0.45 × Prey + 0.30 × Temperature + 0.25 × Eddies
 **Scenario:** Great White Shark off coast of California
 
 **Given Data:**
+
 - Chlorophyll-a: 2.5 mg/m³
 - Sea Surface Temperature: 18°C
 - SSHA: +0.15 m
 - Depth: 50 m
 
 **Step 1: Calculate Prey Component**
+
 ```
 Prey = 2.5 × exp(-50/100) × 0.8
 Prey = 2.5 × 0.606 × 0.8 = 1.212
 ```
 
 **Step 2: Calculate Temperature Component**
+
 ```
 Temp = exp(-(18-23)² / (2×5²))
 Temp = exp(-25/50) = exp(-0.5) = 0.606
 ```
 
 **Step 3: Calculate Eddy Component**
+
 ```
 Eddy = 0.15 × exp(-50²/1000)
 Eddy = 0.15 × exp(-2.5) = 0.15 × 0.082 = 0.012
 ```
 
 **Step 4: Calculate Final SFI**
+
 ```
 SFI = 0.45×1.212 + 0.30×0.606 + 0.25×0.012
 SFI = 0.545 + 0.182 + 0.003 = 0.730
@@ -211,10 +233,12 @@ SFI = 0.545 + 0.182 + 0.003 = 0.730
 **Activity: Compare Predictions to Reality**
 
 Show map with:
+
 - SFI predictions (colored heat map)
 - Real shark GPS locations (dots)
 
 **Questions:**
+
 1. Do shark locations match high SFI zones?
 2. Calculate accuracy: % of sharks in SFI > 0.6 zones
 3. Why aren't all sharks in predicted zones? (Discuss model limitations)
@@ -228,12 +252,14 @@ Show map with:
 ### Duration: 45-60 minutes
 
 ### Learning Objectives
+
 - Diagram marine food web from phytoplankton to apex predators
 - Explain trophic transfer efficiency (~10% rule)
 - Analyze impact of removing sharks from ecosystems
 - Apply conservation principles to real scenarios
 
 ### Materials Needed
+
 - Whiteboard or poster paper
 - Markers/colored pencils
 - Food web diagram handout
@@ -246,6 +272,7 @@ Show map with:
 **Activity: Collaborative Food Web Diagram**
 
 Start with sun, build up:
+
 1. **Producers:** Phytoplankton (use NASA satellite data!)
 2. **Primary Consumers:** Zooplankton
 3. **Secondary Consumers:** Small fish (sardines, anchovies)
@@ -255,6 +282,7 @@ Start with sun, build up:
 Add connections showing energy flow.
 
 **Key Concept:** Trophic transfer
+
 - Only ~10% of energy transfers up each level
 - Need 1000 kg phytoplankton → 100 kg zooplankton → 10 kg fish → 1 kg shark
 - This is why we model chlorophyll in SFI!
@@ -262,19 +290,21 @@ Add connections showing energy flow.
 #### Part 2: The Importance of Apex Predators (15 min)
 
 **Video:** Yellowstone wolves case study (5 min)
+
 - Wolves removed → elk overpopulation → vegetation destroyed → rivers changed
 - Wolves reintroduced → ecosystem recovery
 
 **Discussion:** How do sharks play the same role in oceans?
 
 **Trophic Cascade Example:**
+
 ```
-Sharks removed → 
-  Medium predators increase (grouper) → 
-    Small fish decrease (sardines) → 
-      Zooplankton increase → 
-        Phytoplankton decrease → 
-          Ocean productivity drops → 
+Sharks removed →
+  Medium predators increase (grouper) →
+    Small fish decrease (sardines) →
+      Zooplankton increase →
+        Phytoplankton decrease →
+          Ocean productivity drops →
             CORAL REEFS DIE
 ```
 
@@ -285,12 +315,14 @@ Sharks removed →
 **Scenario:** Bahamas shark sanctuary (2011)
 
 **Before sharks protected:**
+
 - Shark populations declining 90%
 - Reef fish declining 50%
 - Tourism declining
 - Local fishing declining (fewer fish)
 
 **After sharks protected:**
+
 - Shark populations recovering (+30% in 5 years)
 - Reef fish recovering
 - Shark diving tourism: +$800M annually
@@ -313,6 +345,7 @@ D) Do nothing
 **Activity:** Groups debate pros/cons of each option. Present solutions.
 
 **Correct Answer Discussion:** Option C
+
 - Evidence-based decision making
 - Protects humans AND sharks
 - Uses NASA data to save lives
@@ -327,12 +360,14 @@ D) Do nothing
 ### Duration: 60 minutes
 
 ### Learning Objectives
+
 - Apply engineering design process to solve real problem
 - Understand sensor technology (pH, chemical sensors)
 - Prototype a bio-sensor design (sketch or build)
 - Evaluate trade-offs in design decisions
 
 ### Materials Needed
+
 - Engineering design handout
 - Sketch paper and pencils
 - Optional: Arduino kit, pH sensors (for advanced building)
@@ -346,6 +381,7 @@ D) Do nothing
 **Challenge:** Design a sensor that can detect when a shark is feeding, WITHOUT harming the shark.
 
 **Constraints:**
+
 - Must fit inside shark stomach (no surgery!)
 - Must last 6-12 months
 - Must detect feeding events
@@ -357,6 +393,7 @@ D) Do nothing
 #### Part 2: Sensing Principles (15 min)
 
 **Option 1: pH Sensor**
+
 - Normal shark stomach pH: ~1.5 (very acidic!)
 - During feeding: pH rises to ~3.0 (still acidic but less)
 - Technology: ISFET (Ion-Sensitive Field-Effect Transistor)
@@ -364,6 +401,7 @@ D) Do nothing
 - Challenge: Harsh environment (acidic!)
 
 **Option 2: NH₄⁺ (Ammonium) Sensor**
+
 - Protein digestion releases NH₄⁺
 - Different prey = different NH₄⁺ levels
   - Fish: High NH₄⁺ (lots of protein)
@@ -374,6 +412,7 @@ D) Do nothing
 - Challenge: Slower response than pH
 
 **Our Solution:** Use BOTH sensors!
+
 - pH detects WHEN shark eats
 - NH₄⁺ detects WHAT shark ate
 
@@ -382,6 +421,7 @@ D) Do nothing
 #### Part 3: Engineering Design Process (25 min)
 
 **Step 1: Research (5 min)**
+
 - Review existing shark tags (external, fin-mounted)
 - Why those don't work: Can fall off, limit swimming, surgery required
 - Gastric approach: Swallowed like pill, stays in stomach, exits naturally
@@ -389,6 +429,7 @@ D) Do nothing
 **Step 2: Brainstorm (10 min)**
 
 **Guiding Questions:**
+
 - How big should capsule be? (Too big = won't swallow, too small = won't fit sensors)
 - What shape? (Round = rolls around, oblong = gastro-retentive)
 - What material? (Must be biocompatible, survive stomach acid)
@@ -400,6 +441,7 @@ D) Do nothing
 **Step 3: Select Best Design (5 min)**
 
 **Evaluation Criteria:**
+
 - Feasibility (can we actually build it?)
 - Cost (marine research budgets are tight)
 - Effectiveness (will it work reliably?)
@@ -418,6 +460,7 @@ D) Do nothing
 **Show:** Our actual bio-sensor design from Sharks from Space
 
 **Specifications:**
+
 - Size: 35mm × 15mm (large pill size)
 - Weight: 12 grams
 - Battery: Li-SOCl₂ (6-12 month life)
@@ -428,6 +471,7 @@ D) Do nothing
 **Discussion:** How does our design compare to student designs?
 
 **Assessment:** Students write 1-page design report:
+
 1. Problem statement
 2. Design solution (sketch + description)
 3. Trade-offs explained
@@ -439,6 +483,7 @@ D) Do nothing
 ## 📊 Assessment & Grading
 
 ### Formative Assessment (During Lessons)
+
 - Exit tickets (quick checks for understanding)
 - Worksheet completion
 - Class participation in discussions
@@ -447,18 +492,21 @@ D) Do nothing
 ### Summative Assessment (End of Unit)
 
 **Option 1: SFI Prediction Project**
+
 - Students download real NASA data for a region
 - Calculate SFI for 10 locations
 - Create map showing predictions
 - Write report comparing predictions to actual shark sightings
 
 **Option 2: Conservation Policy Proposal**
+
 - Students choose a real location with shark-human conflicts
 - Propose evidence-based solution using SFI
 - Include budget, timeline, expected outcomes
 - Present to "city council" (class)
 
 **Option 3: Bio-Sensor Prototype & Pitch**
+
 - Build/design improved bio-sensor
 - Create pitch presentation (like Shark Tank)
 - Explain science, engineering, impact
@@ -466,13 +514,13 @@ D) Do nothing
 
 ### Rubric (100 points)
 
-| Criteria | Excellent (90-100) | Good (80-89) | Needs Work (<80) |
-|----------|-------------------|--------------|------------------|
-| **Scientific Accuracy** | All concepts correct, uses proper terminology | Minor errors, mostly correct | Major misunderstandings |
-| **Data Analysis** | Correctly interprets NASA data, accurate calculations | Minor calculation errors | Significant errors |
-| **Critical Thinking** | Insightful connections, evaluates trade-offs | Some analysis present | Surface-level thinking |
-| **Communication** | Clear, organized, visually effective | Mostly clear, some confusion | Disorganized, unclear |
-| **Creativity** | Original ideas, innovative solutions | Standard approach, competent | Minimal effort, copied |
+| Criteria                | Excellent (90-100)                                    | Good (80-89)                 | Needs Work (<80)        |
+| ----------------------- | ----------------------------------------------------- | ---------------------------- | ----------------------- |
+| **Scientific Accuracy** | All concepts correct, uses proper terminology         | Minor errors, mostly correct | Major misunderstandings |
+| **Data Analysis**       | Correctly interprets NASA data, accurate calculations | Minor calculation errors     | Significant errors      |
+| **Critical Thinking**   | Insightful connections, evaluates trade-offs          | Some analysis present        | Surface-level thinking  |
+| **Communication**       | Clear, organized, visually effective                  | Mostly clear, some confusion | Disorganized, unclear   |
+| **Creativity**          | Original ideas, innovative solutions                  | Standard approach, competent | Minimal effort, copied  |
 
 ---
 
@@ -481,6 +529,7 @@ D) Do nothing
 ### For Advanced Students
 
 **Coding Challenge:** Implement SFI algorithm in Python
+
 ```python
 def calculate_sfi(chlorophyll, temperature, ssha, depth):
     prey = chlorophyll * np.exp(-depth/100) * 0.8
@@ -491,11 +540,13 @@ def calculate_sfi(chlorophyll, temperature, ssha, depth):
 ```
 
 **Machine Learning:** Train classifier to predict shark presence
+
 - Features: SFI, bathymetry, time of day, season
 - Labels: Shark present (1) or absent (0)
 - Model: Logistic regression or random forest
 
 **Research Paper:** Write peer-review style paper
+
 - Abstract, Introduction, Methods, Results, Discussion
 - Include real data analysis
 - Submit to student science journals
@@ -503,16 +554,19 @@ def calculate_sfi(chlorophyll, temperature, ssha, depth):
 ### For Struggling Students
 
 **Simplified Version:**
+
 - Pre-calculated SFI values provided
 - Focus on interpretation over calculation
 - Visual/hands-on emphasis over math
 
 **Scaffolded Worksheets:**
+
 - Fill-in-the-blank equations
 - Multiple choice for concept checks
 - Word banks for terminology
 
 **Partner Work:**
+
 - Pair with advanced student
 - Divide tasks by strength (one calculates, one interprets)
 
@@ -521,6 +575,7 @@ def calculate_sfi(chlorophyll, temperature, ssha, depth):
 ## 🌍 Teacher Resources
 
 ### Available Free:
+
 - ✅ Lesson plan PDFs (this document)
 - ✅ Student worksheets (printable)
 - ✅ Answer keys
@@ -530,12 +585,14 @@ def calculate_sfi(chlorophyll, temperature, ssha, depth):
 - ✅ Video links (curated YouTube playlists)
 
 ### Professional Development:
+
 - Webinar recordings (45 min each lesson)
 - Teacher discussion forum
 - Office hours (monthly Q&A sessions)
 - Curriculum implementation guide
 
 ### Download All Materials:
+
 Visit [sharks-from-space.netlify.app/education](https://sharks-from-space.netlify.app/education)
 
 ---
@@ -543,11 +600,13 @@ Visit [sharks-from-space.netlify.app/education](https://sharks-from-space.netlif
 ## 📞 Support & Community
 
 ### Questions?
+
 - Email: education@sharksfromspace.org (coming soon)
 - Forum: GitHub Discussions
 - Twitter: @SharksFromSpace
 
 ### Share Your Success!
+
 - Student projects → tag #SharksFromSpace
 - Classroom photos → tag #TeachWithNASA
 - Featured on our website!

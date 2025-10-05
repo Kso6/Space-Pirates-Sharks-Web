@@ -53,6 +53,9 @@ export default function TagSensor() {
           <p className="text-xl text-gray-400">
             Revolutionary Bio-Sensor for Real-Time Feeding Detection
           </p>
+          <div className="mt-4 inline-block px-4 py-2 bg-amber-600/20 border border-amber-500/30 rounded-lg">
+            <p className="text-sm text-amber-300">⚠️ Conceptual Design - Hypothetical Project</p>
+          </div>
         </motion.div>
 
         {/* Navigation Tabs */}
@@ -95,10 +98,73 @@ function ArchitectureSection() {
           <div className="relative">
             <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-3xl p-8 h-96 flex items-center justify-center border-4 border-blue-500/30">
               <div className="text-center space-y-4">
-                <div className="text-6xl">💊</div>
-                <div className="text-white font-bold text-xl">Gastric Capsule</div>
+                {/* CAD-style representation of gastric tag */}
+                <svg
+                  className="w-48 h-48 mx-auto"
+                  viewBox="0 0 200 200"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Outer capsule shell */}
+                  <ellipse cx="100" cy="100" rx="80" ry="35" fill="#3b82f6" opacity="0.2" />
+                  <ellipse cx="100" cy="100" rx="80" ry="35" stroke="#60a5fa" strokeWidth="2" />
+
+                  {/* Cross-section view */}
+                  <rect
+                    x="30"
+                    y="85"
+                    width="140"
+                    height="30"
+                    rx="15"
+                    fill="#1e293b"
+                    stroke="#60a5fa"
+                    strokeWidth="2"
+                  />
+
+                  {/* Internal components */}
+                  <circle cx="50" cy="100" r="8" fill="#ef4444" opacity="0.8" />
+                  <text x="50" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
+                    Battery
+                  </text>
+
+                  <rect x="68" y="93" width="24" height="14" rx="2" fill="#10b981" opacity="0.8" />
+                  <text x="80" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
+                    Sensors
+                  </text>
+
+                  <rect x="102" y="93" width="28" height="14" rx="2" fill="#8b5cf6" opacity="0.8" />
+                  <text x="116" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
+                    MCU
+                  </text>
+
+                  <circle cx="150" cy="100" r="8" fill="#f59e0b" opacity="0.8" />
+                  <text x="150" y="125" fontSize="8" fill="#94a3b8" textAnchor="middle">
+                    Antenna
+                  </text>
+
+                  {/* ePTFE membrane indicator */}
+                  <line
+                    x1="30"
+                    y1="85"
+                    x2="30"
+                    y2="115"
+                    stroke="#06b6d4"
+                    strokeWidth="3"
+                    opacity="0.6"
+                  />
+                  <line
+                    x1="170"
+                    y1="85"
+                    x2="170"
+                    y2="115"
+                    stroke="#06b6d4"
+                    strokeWidth="3"
+                    opacity="0.6"
+                  />
+                </svg>
+                <div className="text-white font-bold text-xl">Internal Gastric Capsule</div>
                 <div className="text-gray-400 text-sm">Dimensions: 25mm × 10mm</div>
-                <div className="text-gray-400 text-sm">Weight: ~8 grams</div>
+                <div className="text-gray-400 text-sm">Weight: ~5 grams</div>
                 <div className="text-green-400 text-sm">Gastro-retentive Design</div>
               </div>
             </div>
@@ -154,18 +220,165 @@ function ArchitectureSection() {
         </div>
       </div>
 
+      {/* External Dorsal Fin Tag */}
+      <div className="bg-slate-800/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-8">
+        <h2 className="text-2xl font-bold text-white mb-6">External Dorsal Fin Tag</h2>
+
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* External Tag Diagram */}
+          <div className="relative">
+            <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-8 h-96 flex items-center justify-center border-4 border-cyan-500/30">
+              <div className="text-center space-y-4">
+                {/* SVG representation of dorsal tag */}
+                <svg
+                  className="w-48 h-48 mx-auto"
+                  viewBox="0 0 200 200"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Main body */}
+                  <rect x="60" y="40" width="80" height="120" rx="8" fill="#0e7490" opacity="0.8" />
+                  <rect
+                    x="60"
+                    y="40"
+                    width="80"
+                    height="120"
+                    rx="8"
+                    stroke="#06b6d4"
+                    strokeWidth="2"
+                  />
+
+                  {/* Antenna */}
+                  <line x1="100" y1="40" x2="100" y2="15" stroke="#fbbf24" strokeWidth="3" />
+                  <circle cx="100" cy="15" r="6" fill="#fbbf24" />
+                  <text x="100" y="5" fontSize="8" fill="#94a3b8" textAnchor="middle">
+                    Satellite
+                  </text>
+
+                  {/* Solar panel */}
+                  <rect x="70" y="50" width="60" height="20" rx="2" fill="#3b82f6" opacity="0.6" />
+                  <line x1="75" y1="50" x2="75" y2="70" stroke="#60a5fa" strokeWidth="1" />
+                  <line x1="85" y1="50" x2="85" y2="70" stroke="#60a5fa" strokeWidth="1" />
+                  <line x1="95" y1="50" x2="95" y2="70" stroke="#60a5fa" strokeWidth="1" />
+                  <line x1="105" y1="50" x2="105" y2="70" stroke="#60a5fa" strokeWidth="1" />
+                  <line x1="115" y1="50" x2="115" y2="70" stroke="#60a5fa" strokeWidth="1" />
+                  <line x1="125" y1="50" x2="125" y2="70" stroke="#60a5fa" strokeWidth="1" />
+                  <text x="100" y="85" fontSize="8" fill="#94a3b8" textAnchor="middle">
+                    Solar
+                  </text>
+
+                  {/* Inductive coil */}
+                  <circle cx="100" cy="110" r="20" fill="none" stroke="#f59e0b" strokeWidth="2" />
+                  <circle cx="100" cy="110" r="15" fill="none" stroke="#f59e0b" strokeWidth="2" />
+                  <circle cx="100" cy="110" r="10" fill="none" stroke="#f59e0b" strokeWidth="2" />
+                  <text x="100" y="145" fontSize="8" fill="#94a3b8" textAnchor="middle">
+                    Inductive RX
+                  </text>
+
+                  {/* Attachment points */}
+                  <rect x="55" y="95" width="10" height="30" rx="2" fill="#64748b" />
+                  <rect x="135" y="95" width="10" height="30" rx="2" fill="#64748b" />
+                </svg>
+                <div className="text-white font-bold text-xl">External Dorsal Tag</div>
+                <div className="text-gray-400 text-sm">Dimensions: 80mm × 40mm × 15mm</div>
+                <div className="text-gray-400 text-sm">Weight: ~45 grams (in air)</div>
+                <div className="text-cyan-400 text-sm">Non-invasive Attachment</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Component Stack */}
+          <div className="space-y-4">
+            <ComponentLayer
+              title="Satellite Transceiver"
+              description="Argos/Iridium uplink for feeding event data transmission"
+              color="from-yellow-500 to-orange-500"
+              icon="🛰️"
+            />
+            <ComponentLayer
+              title="Solar Panel"
+              description="Polycrystalline cells for battery recharging"
+              color="from-blue-500 to-cyan-500"
+              icon="☀️"
+            />
+            <ComponentLayer
+              title="Inductive Receiver"
+              description="125 kHz coil receives data from gastric capsule"
+              color="from-orange-500 to-red-500"
+              icon="📡"
+            />
+            <ComponentLayer
+              title="GPS/Depth Sensor"
+              description="Location tracking and dive behavior monitoring"
+              color="from-purple-500 to-pink-500"
+              icon="📍"
+            />
+            <ComponentLayer
+              title="Rechargeable Battery"
+              description="Li-ion battery (1500 mAh) with solar charging"
+              color="from-green-500 to-emerald-500"
+              icon="🔋"
+            />
+            <ComponentLayer
+              title="Attachment System"
+              description="Stainless steel bolts through dorsal fin"
+              color="from-slate-500 to-gray-500"
+              icon="🔩"
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Key Specifications */}
-      <div className="grid md:grid-cols-4 gap-6">
-        <SpecCard
-          title="Battery Life"
-          value="6-12"
-          unit="months"
-          icon="🔋"
-          color="text-green-400"
-        />
-        <SpecCard title="Sample Rate" value="0.2-1" unit="Hz" icon="⏱️" color="text-blue-400" />
-        <SpecCard title="Weight" value="8" unit="grams" icon="⚖️" color="text-purple-400" />
-        <SpecCard title="Range" value="15" unit="cm" icon="📶" color="text-cyan-400" />
+      <div className="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 className="text-xl font-semibold text-white mb-4">Internal Gastric Capsule Specs</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <SpecCard
+              title="Battery Life"
+              value="6-12"
+              unit="months"
+              icon="🔋"
+              color="text-green-400"
+            />
+            <SpecCard
+              title="Sample Rate"
+              value="30"
+              unit="minutes"
+              icon="⏱️"
+              color="text-blue-400"
+            />
+            <SpecCard title="Weight" value="5" unit="grams" icon="⚖️" color="text-purple-400" />
+            <SpecCard title="Range" value="50" unit="cm" icon="📶" color="text-cyan-400" />
+          </div>
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold text-white mb-4">External Dorsal Tag Specs</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <SpecCard
+              title="Battery Life"
+              value="12-24"
+              unit="months"
+              icon="🔋"
+              color="text-green-400"
+            />
+            <SpecCard
+              title="Uplink Rate"
+              value="Surface"
+              unit="events"
+              icon="🛰️"
+              color="text-yellow-400"
+            />
+            <SpecCard title="Weight" value="45" unit="grams" icon="⚖️" color="text-purple-400" />
+            <SpecCard
+              title="Depth Rating"
+              value="2000"
+              unit="meters"
+              icon="🌊"
+              color="text-blue-400"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Material Safety */}
@@ -176,19 +389,19 @@ function ArchitectureSection() {
             icon="✓"
             title="Biocompatible"
             description="Medical-grade Delrin, Parylene-C coating, no sharp edges"
-            status="Certified"
+            status="Conceptual Design"
           />
           <SafetyFeature
             icon="✓"
             title="Acid Resistant"
             description="ePTFE membrane withstands pH 1-2 stomach environment"
-            status="Tested"
+            status="Proposed"
           />
           <SafetyFeature
             icon="✓"
             title="Gastro-Retentive"
             description="Designed to remain in stomach, natural exit after mission"
-            status="Validated"
+            status="Theoretical"
           />
         </div>
       </div>
@@ -242,50 +455,102 @@ function SensingSection({ feedingData }) {
         </div>
 
         {/* Feeding Event Simulation */}
-        <div className="bg-slate-700/50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Simulated Feeding Event</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={feedingData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+        <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur rounded-xl p-6 border border-blue-500/20">
+          <h3 className="text-lg font-semibold text-white mb-2">
+            Simulated Feeding Event Response
+          </h3>
+          <p className="text-sm text-gray-400 mb-6">
+            Real-time pH and NH₄⁺ concentration changes during prey ingestion
+          </p>
+          <ResponsiveContainer width="100%" height={320}>
+            <LineChart data={feedingData} margin={{ top: 5, right: 30, left: 0, bottom: 20 }}>
+              <defs>
+                <linearGradient id="pHGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="nh4Gradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
               <XAxis
                 dataKey="time"
                 stroke="#94a3b8"
+                tick={{ fill: '#94a3b8', fontSize: 12 }}
                 label={{
                   value: 'Time (minutes)',
                   position: 'insideBottom',
-                  offset: -5,
+                  offset: -10,
                   fill: '#94a3b8',
+                  fontSize: 13,
                 }}
               />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
-                labelStyle={{ color: '#e2e8f0' }}
+              <YAxis
+                stroke="#94a3b8"
+                tick={{ fill: '#94a3b8', fontSize: 12 }}
+                label={{
+                  value: 'Concentration',
+                  angle: -90,
+                  position: 'insideLeft',
+                  fill: '#94a3b8',
+                  fontSize: 13,
+                }}
               />
-              <Legend />
-              <Line type="monotone" dataKey="pH" stroke="#ef4444" strokeWidth={2} name="pH Level" />
-              <Line
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#0f172a',
+                  border: '1px solid #3b82f6',
+                  borderRadius: '8px',
+                  padding: '8px 12px',
+                }}
+                labelStyle={{ color: '#e2e8f0', fontWeight: 'bold', marginBottom: '4px' }}
+                itemStyle={{ padding: '2px 0' }}
+              />
+              <Legend wrapperStyle={{ paddingTop: '10px' }} iconType="line" />
+              <Area
+                type="monotone"
+                dataKey="pH"
+                stroke="#ef4444"
+                fill="url(#pHGradient)"
+                strokeWidth={3}
+                name="pH Level"
+                dot={false}
+              />
+              <Area
                 type="monotone"
                 dataKey="nh4"
                 stroke="#10b981"
-                strokeWidth={2}
-                name="NH₄⁺ Concentration"
+                fill="url(#nh4Gradient)"
+                strokeWidth={3}
+                name="NH₄⁺ (mM)"
+                dot={false}
               />
             </LineChart>
           </ResponsiveContainer>
 
-          <div className="mt-4 flex justify-around text-sm">
-            <div className="text-center">
-              <div className="text-gray-400">Feeding Detected</div>
-              <div className="text-red-400 font-bold">t = 10 min</div>
+          <div className="mt-6 grid grid-cols-3 gap-4">
+            <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 rounded-lg p-4 text-center">
+              <div className="text-xs text-red-300 uppercase tracking-wide mb-1">
+                Feeding Detected
+              </div>
+              <div className="text-red-400 font-bold text-lg">t = 10 min</div>
+              <div className="text-xs text-gray-400 mt-1">ΔpH ≥ 0.4 threshold</div>
             </div>
-            <div className="text-center">
-              <div className="text-gray-400">Peak Response</div>
-              <div className="text-green-400 font-bold">t = 18 min</div>
+            <div className="bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-lg p-4 text-center">
+              <div className="text-xs text-green-300 uppercase tracking-wide mb-1">
+                Peak Response
+              </div>
+              <div className="text-green-400 font-bold text-lg">t = 18 min</div>
+              <div className="text-xs text-gray-400 mt-1">Maximum NH₄⁺ signal</div>
             </div>
-            <div className="text-center">
-              <div className="text-gray-400">Return to Baseline</div>
-              <div className="text-blue-400 font-bold">t = 35 min</div>
+            <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border border-cyan-500/20 rounded-lg p-4 text-center">
+              <div className="text-xs text-cyan-300 uppercase tracking-wide mb-1">
+                Return to Baseline
+              </div>
+              <div className="text-cyan-400 font-bold text-lg">t = 35 min</div>
+              <div className="text-xs text-gray-400 mt-1">Digestion stabilized</div>
             </div>
           </div>
         </div>
@@ -368,30 +633,63 @@ function DataSection() {
         <h2 className="text-2xl font-bold text-white mb-6">Data Flow Architecture</h2>
 
         <div className="flex items-center justify-between mb-8">
-          {['Gastric Capsule', 'Inductive Link', 'Dorsal Tag', 'Satellite', 'Cloud Platform'].map(
-            (step, idx) => (
-              <div key={step} className="flex items-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center text-3xl mb-2">
-                    {idx === 0 && '💊'}
-                    {idx === 1 && '📡'}
-                    {idx === 2 && '🏷️'}
-                    {idx === 3 && '🛰️'}
-                    {idx === 4 && '☁️'}
-                  </div>
-                  <div className="text-white text-sm font-medium">{step}</div>
+          {[
+            { name: 'Gastric Capsule', icon: 'capsule' },
+            { name: 'Inductive Link', icon: 'wave' },
+            { name: 'Dorsal Tag', icon: 'tag' },
+            { name: 'Satellite', icon: 'satellite' },
+            { name: 'Cloud Platform', icon: 'cloud' },
+          ].map((step, idx) => (
+            <div key={step.name} className="flex items-center">
+              <div className="text-center">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center mb-2 relative overflow-hidden">
+                  {step.icon === 'capsule' && (
+                    <div className="w-16 h-6 bg-blue-400 rounded-full border-2 border-blue-200"></div>
+                  )}
+                  {step.icon === 'wave' && (
+                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M2 12 Q 6 8, 10 12 T 18 12 T 26 12"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                      />
+                      <path
+                        d="M2 16 Q 6 12, 10 16 T 18 16 T 26 16"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                      />
+                    </svg>
+                  )}
+                  {step.icon === 'tag' && (
+                    <div className="w-10 h-14 bg-cyan-400 rounded border-2 border-cyan-200"></div>
+                  )}
+                  {step.icon === 'satellite' && (
+                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none">
+                      <rect x="8" y="10" width="8" height="4" fill="currentColor" />
+                      <line x1="6" y1="12" x2="8" y2="12" stroke="currentColor" strokeWidth="2" />
+                      <line x1="16" y1="12" x2="18" y2="12" stroke="currentColor" strokeWidth="2" />
+                    </svg>
+                  )}
+                  {step.icon === 'cloud' && (
+                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19 14.5A5.5 5.5 0 0013.5 20H6a4 4 0 01-.85-7.93A5 5 0 0114.5 6a5.5 5.5 0 014.5 8.5z" />
+                    </svg>
+                  )}
                 </div>
-                {idx < 4 && <div className="text-blue-400 text-2xl mx-4">→</div>}
+                <div className="text-white text-sm font-medium">{step.name}</div>
               </div>
-            )
-          )}
+              {idx < 4 && <div className="text-blue-400 text-2xl mx-4">→</div>}
+            </div>
+          ))}
         </div>
 
         <div className="grid md:grid-cols-5 gap-4">
           <DataFlowStep
             step="1"
             title="Sensing"
-            description="pH & NH₄⁺ sampled at 0.2-1 Hz"
+            description="pH & NH₄⁺ sampled every 30 min"
             latency="< 1s"
           />
           <DataFlowStep
@@ -464,21 +762,21 @@ function DataSection() {
           <div className="bg-slate-700/50 rounded-lg p-6">
             <h3 className="text-lg font-bold text-white mb-4">Baseline Mode</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>• pH sampling: 0.2 Hz (every 5s)</li>
-              <li>• NH₄⁺ sampling: 0.02 Hz (every 5 min)</li>
-              <li>• MCU sleep between readings</li>
-              <li>• Power consumption: ~2-5 µA</li>
+              <li>• pH sampling: Every 30 min</li>
+              <li>• NH₄⁺ sampling: Every 30 min</li>
+              <li>• MCU deep sleep between readings</li>
+              <li>• Power consumption: ~2-5 µA (avg)</li>
             </ul>
           </div>
 
           <div className="bg-gradient-to-br from-blue-600/20 to-cyan-600/20 rounded-lg p-6 border-2 border-blue-500">
-            <h3 className="text-lg font-bold text-white mb-4">Feeding Event Mode</h3>
+            <h3 className="text-lg font-bold text-white mb-4">Feeding Event Mode (Hypothetical)</h3>
             <ul className="space-y-2 text-gray-300">
               <li>• Trigger: ΔpH ≥ 0.4 or pH &gt; 2.5</li>
-              <li>• pH sampling: 1 Hz (high-rate)</li>
-              <li>• NH₄⁺ sampling: 0.2 Hz</li>
+              <li>• pH sampling: Every 1 min (high-rate)</li>
+              <li>• NH₄⁺ sampling: Every 5 min</li>
               <li>• Duration: 30-45 minutes</li>
-              <li>• Power consumption: ~40 µA</li>
+              <li>• Power consumption: ~40 µA (avg)</li>
               <li>• Data transmission via inductive link</li>
             </ul>
           </div>
@@ -499,113 +797,183 @@ function PowerSection() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-      {/* Power Budget */}
+      {/* Hero Stats */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="bg-gradient-to-br from-green-500/20 to-emerald-600/10 border border-green-500/30 rounded-2xl p-8 text-center">
+          <div className="text-5xl font-bold text-green-400 mb-2">6-12</div>
+          <div className="text-xl text-white font-semibold mb-1">Months</div>
+          <div className="text-sm text-gray-400">Operational Lifespan</div>
+        </div>
+        <div className="bg-gradient-to-br from-blue-500/20 to-cyan-600/10 border border-blue-500/30 rounded-2xl p-8 text-center">
+          <div className="text-5xl font-bold text-blue-400 mb-2">{avgPower.toFixed(1)}</div>
+          <div className="text-xl text-white font-semibold mb-1">µW</div>
+          <div className="text-sm text-gray-400">Average Power Draw</div>
+        </div>
+        <div className="bg-gradient-to-br from-purple-500/20 to-pink-600/10 border border-purple-500/30 rounded-2xl p-8 text-center">
+          <div className="text-5xl font-bold text-purple-400 mb-2">95%</div>
+          <div className="text-xl text-white font-semibold mb-1">Sleep</div>
+          <div className="text-sm text-gray-400">Ultra-Low Power Mode</div>
+        </div>
+      </div>
+
+      {/* Power Architecture */}
       <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Power Budget Analysis</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-white">Power Architecture</h2>
+          <div className="px-4 py-2 bg-green-600/20 text-green-400 rounded-full text-sm font-semibold">
+            Ultra-Efficient Design
+          </div>
+        </div>
 
-        <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={powerBudget}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="mode" stroke="#94a3b8" />
-            <YAxis
-              stroke="#94a3b8"
-              label={{
-                value: 'Average Power (µW)',
-                angle: -90,
-                position: 'insideLeft',
-                fill: '#94a3b8',
-              }}
-            />
-            <Tooltip
-              contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
-              labelStyle={{ color: '#e2e8f0' }}
-              formatter={(value, name) => [value, name === 'power' ? 'Power (µW)' : name]}
-            />
-            <Area
-              type="monotone"
-              dataKey="power"
-              stroke="#3b82f6"
-              fill="#3b82f6"
-              fillOpacity={0.6}
-              name="Power"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-
-        <div className="mt-6 bg-slate-700/50 rounded-lg p-6">
-          <div className="grid md:grid-cols-3 gap-6 mb-4">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-400">{avgPower.toFixed(1)} µW</div>
-              <div className="text-sm text-gray-400">Average Power</div>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Internal Gastric Capsule */}
+          <div className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-xl p-6 border border-blue-500/20">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-2xl">
+                💊
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Internal Capsule</h3>
+                <p className="text-xs text-gray-400">Primary power system</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-400">1200 mAh</div>
-              <div className="text-sm text-gray-400">Battery Capacity</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-cyan-400">18+ months</div>
-              <div className="text-sm text-gray-400">Theoretical Life</div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Battery Type</span>
+                <span className="text-sm text-white font-medium">Li-SOCl₂</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Capacity</span>
+                <span className="text-sm text-white font-medium">1200 mAh @ 3.6V</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Form Factor</span>
+                <span className="text-sm text-white font-medium">1/2 AA bobbin</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Self-Discharge</span>
+                <span className="text-sm text-green-400 font-medium">&lt; 1% / year</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm text-gray-400">Operating Temp</span>
+                <span className="text-sm text-white font-medium">-60°C to +85°C</span>
+              </div>
             </div>
           </div>
 
-          <div className="border-t border-slate-600 pt-4">
-            <div className="flex justify-between text-sm text-gray-300">
-              <span>Field Reality (with margin):</span>
-              <span className="text-green-400 font-bold">6-12 months</span>
+          {/* External Dorsal Tag */}
+          <div className="bg-gradient-to-br from-cyan-700/50 to-slate-800/50 rounded-xl p-6 border border-cyan-500/20">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-12 h-12 bg-cyan-600 rounded-lg flex items-center justify-center text-2xl">
+                🏷️
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">External Tag</h3>
+                <p className="text-xs text-gray-400">Solar-rechargeable system</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Battery Type</span>
+                <span className="text-sm text-white font-medium">Li-ion</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Capacity</span>
+                <span className="text-sm text-white font-medium">1500 mAh @ 3.7V</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Solar Panel</span>
+                <span className="text-sm text-white font-medium">Polycrystalline</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
+                <span className="text-sm text-gray-400">Charging</span>
+                <span className="text-sm text-green-400 font-medium">Solar + backup</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm text-gray-400">Lifespan</span>
+                <span className="text-sm text-white font-medium">12-24 months</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Battery Specifications */}
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-4">Primary Battery</h3>
-          <div className="space-y-3">
-            <SpecRow label="Chemistry" value="Li-SOCl₂ (Lithium Thionyl Chloride)" />
-            <SpecRow label="Form Factor" value="1/2 AA bobbin cell" />
-            <SpecRow label="Capacity" value="1200 mAh @ 3.6V" />
-            <SpecRow label="Energy Density" value="High (700 Wh/L)" />
-            <SpecRow label="Self-Discharge" value="< 1% per year" />
-            <SpecRow label="Operating Temp" value="-60°C to +85°C" />
-          </div>
-        </div>
-
-        <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-4">Supercapacitor</h3>
-          <div className="space-y-3">
-            <SpecRow label="Type" value="Hybrid capacitor" />
-            <SpecRow label="Capacitance" value="47-100 mF" />
-            <SpecRow label="Purpose" value="Handle TX current bursts" />
-            <SpecRow label="Charge Time" value="< 1 second" />
-            <SpecRow label="Lifecycle" value="> 100,000 cycles" />
-            <SpecRow label="ESR" value="< 50 mΩ" />
-          </div>
-        </div>
-      </div>
-
-      {/* Power Management Features */}
+      {/* Power Management Strategy */}
       <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Power Management Features</h2>
+        <h2 className="text-2xl font-bold text-white mb-6">Intelligent Power Management</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          <PowerFeature
-            icon="💤"
-            title="Deep Sleep"
-            description="STM32L0 ultra-low-power mode between samples"
-            savings="95% duty cycle"
-          />
-          <PowerFeature
-            icon="⚡"
-            title="Burst Transmission"
-            description="Inductive TX only during events, supercap buffered"
-            savings="< 1% duty cycle"
-          />
-          <PowerFeature
-            icon="🎯"
-            title="Adaptive Sampling"
-            description="High-rate only during feeding, baseline otherwise"
-            savings="~80% power vs continuous"
-          />
+          <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-6 border-l-4 border-blue-500">
+            <div className="text-4xl mb-4">💤</div>
+            <h3 className="text-lg font-bold text-white mb-2">Deep Sleep Mode</h3>
+            <p className="text-sm text-gray-400 mb-4">
+              STM32L0 microcontroller enters ultra-low-power state between samples
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">Duty Cycle</span>
+              <span className="text-sm font-bold text-blue-400">95%</span>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-6 border-l-4 border-purple-500">
+            <div className="text-4xl mb-4">🎯</div>
+            <h3 className="text-lg font-bold text-white mb-2">Adaptive Sampling</h3>
+            <p className="text-sm text-gray-400 mb-4">
+              High-frequency sensing only during feeding events, baseline mode otherwise
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">Power Savings</span>
+              <span className="text-sm font-bold text-purple-400">~80%</span>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-6 border-l-4 border-green-500">
+            <div className="text-4xl mb-4">⚡</div>
+            <h3 className="text-lg font-bold text-white mb-2">Burst Transmission</h3>
+            <p className="text-sm text-gray-400 mb-4">
+              Supercapacitor buffers inductive transmission, minimizing battery stress
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">TX Duty</span>
+              <span className="text-sm font-bold text-green-400">&lt; 1%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Power Budget Breakdown */}
+      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
+        <h2 className="text-2xl font-bold text-white mb-6">Power Budget Breakdown</h2>
+
+        <div className="space-y-4 mb-6">
+          {powerBudget.map((item, idx) => (
+            <div key={idx} className="bg-slate-700/30 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-white font-semibold">{item.mode}</span>
+                <span className="text-blue-400 font-bold">{item.power.toFixed(2)} µW</span>
+              </div>
+              <div className="flex items-center space-x-4 text-xs text-gray-400">
+                <span>Current: {item.current} µA</span>
+                <span>•</span>
+                <span>Duty: {item.duty}%</span>
+              </div>
+              <div className="mt-2 bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 h-full rounded-full"
+                  style={{ width: `${item.duty}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-gradient-to-r from-green-600/20 to-emerald-600/10 border border-green-500/30 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-400">Total Average Power Consumption</div>
+              <div className="text-xs text-gray-500 mt-1">Across all operation modes</div>
+            </div>
+            <div className="text-3xl font-bold text-green-400">{avgPower.toFixed(2)} µW</div>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -615,51 +983,252 @@ function PowerSection() {
 function DeploymentSection() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-      {/* Deployment Process */}
-      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Deployment Protocol</h2>
+      {/* Visual Deployment Overview */}
+      <div className="bg-gradient-to-br from-blue-900/30 via-slate-800/50 to-cyan-900/30 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
+        <h2 className="text-3xl font-bold text-white mb-8 text-center">Deployment Protocol</h2>
 
-        <div className="space-y-6">
+        {/* Visual Flow */}
+        <div className="mb-8">
+          <svg
+            className="w-full h-32"
+            viewBox="0 0 1200 120"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Flow line */}
+            <path d="M 60 60 L 1140 60" stroke="#3b82f6" strokeWidth="2" strokeDasharray="5,5" />
+
+            {/* Step circles */}
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <g key={i} transform={`translate(${60 + i * 216}, 60)`}>
+                <circle r="30" fill="#1e293b" stroke="#3b82f6" strokeWidth="3" />
+                <circle r="25" fill="#3b82f6" opacity="0.2" />
+                <text y="8" textAnchor="middle" fill="#60a5fa" fontSize="24" fontWeight="bold">
+                  {i + 1}
+                </text>
+              </g>
+            ))}
+          </svg>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
               step: 1,
               title: 'Capture & Preparation',
               description:
                 'Shark captured using safe handling protocols. Gastric capsule activated and calibrated.',
+              icon: '🎣',
+              color: 'from-blue-500 to-cyan-500',
             },
             {
               step: 2,
               title: 'Capsule Insertion',
               description:
                 'Capsule inserted into stomach via esophagus. Non-invasive procedure, no anesthesia required.',
+              icon: '💊',
+              color: 'from-purple-500 to-pink-500',
             },
             {
               step: 3,
               title: 'Dorsal Tag Attachment',
               description:
                 'External dorsal tag attached with inductive receiver coil and satellite uplink.',
+              icon: '🏷️',
+              color: 'from-cyan-500 to-blue-500',
             },
             {
               step: 4,
               title: 'Release & Monitoring',
               description:
                 'Shark released. System begins baseline monitoring and waits for feeding events.',
+              icon: '🌊',
+              color: 'from-green-500 to-emerald-500',
             },
             {
               step: 5,
               title: 'Data Collection',
               description:
                 'Feeding events transmitted to dorsal tag, uplinked to satellite on surfacing.',
+              icon: '📡',
+              color: 'from-orange-500 to-red-500',
             },
             {
               step: 6,
               title: 'Natural Exit',
               description:
                 'Capsule designed for gastro-retention during mission, natural exit after 6-12 months.',
+              icon: '♻️',
+              color: 'from-teal-500 to-green-500',
             },
           ].map((item) => (
-            <DeploymentStep key={item.step} {...item} />
+            <div
+              key={item.step}
+              className="bg-slate-800/50 backdrop-blur rounded-xl p-6 border border-slate-700/50 hover:border-blue-500/50 transition-all"
+            >
+              <div className="flex items-start space-x-4">
+                <div
+                  className={`w-16 h-16 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-3xl flex-shrink-0`}
+                >
+                  {item.icon}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                      {item.step}
+                    </div>
+                    <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                  </div>
+                  <p className="text-sm text-gray-400 leading-relaxed">{item.description}</p>
+                </div>
+              </div>
+            </div>
           ))}
+        </div>
+      </div>
+
+      {/* Deployment Illustration */}
+      <div className="bg-slate-800/50 backdrop-blur-lg border border-blue-500/20 rounded-xl p-8">
+        <h2 className="text-2xl font-bold text-white mb-6">System Architecture Diagram</h2>
+
+        <div className="bg-gradient-to-br from-blue-950 to-slate-900 rounded-xl p-8">
+          <svg
+            className="w-full"
+            viewBox="0 0 800 500"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Ocean background */}
+            <rect width="800" height="500" fill="url(#oceanGradient)" />
+            <defs>
+              <linearGradient id="oceanGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#0c4a6e" />
+                <stop offset="100%" stopColor="#0e1729" />
+              </linearGradient>
+            </defs>
+
+            {/* Water surface */}
+            <line
+              x1="0"
+              y1="100"
+              x2="800"
+              y2="100"
+              stroke="#06b6d4"
+              strokeWidth="2"
+              strokeDasharray="5,5"
+            />
+            <text x="10" y="90" fill="#06b6d4" fontSize="12">
+              Surface
+            </text>
+
+            {/* Satellite */}
+            <g transform="translate(650, 40)">
+              <rect x="-20" y="-10" width="40" height="20" fill="#fbbf24" />
+              <line x1="-30" y1="0" x2="-20" y2="0" stroke="#fbbf24" strokeWidth="2" />
+              <line x1="20" y1="0" x2="30" y2="0" stroke="#fbbf24" strokeWidth="2" />
+              <text x="0" y="-20" fill="#fbbf24" fontSize="12" textAnchor="middle">
+                Satellite
+              </text>
+            </g>
+
+            {/* Signal to satellite */}
+            <path
+              d="M 400 120 Q 500 80 650 50"
+              stroke="#fbbf24"
+              strokeWidth="2"
+              strokeDasharray="3,3"
+            />
+
+            {/* Shark outline */}
+            <g transform="translate(400, 300)">
+              {/* Body */}
+              <ellipse cx="0" cy="0" rx="120" ry="40" fill="#334155" opacity="0.8" />
+
+              {/* Tail */}
+              <path d="M -120 0 L -160 -20 L -150 0 L -160 20 Z" fill="#334155" opacity="0.8" />
+
+              {/* Dorsal fin */}
+              <path d="M -20 -40 L 0 -80 L 20 -40 Z" fill="#334155" opacity="0.8" />
+
+              {/* External tag on dorsal fin */}
+              <rect
+                x="-15"
+                y="-75"
+                width="30"
+                height="20"
+                rx="3"
+                fill="#06b6d4"
+                stroke="#60a5fa"
+                strokeWidth="2"
+              />
+              <text x="0" y="-85" fill="#06b6d4" fontSize="11" textAnchor="middle">
+                Dorsal Tag
+              </text>
+              <circle cx="0" cy="-65" r="3" fill="#fbbf24" />
+
+              {/* Internal capsule */}
+              <ellipse
+                cx="30"
+                cy="5"
+                rx="15"
+                ry="6"
+                fill="#ef4444"
+                stroke="#f87171"
+                strokeWidth="2"
+              />
+              <text x="30" y="25" fill="#ef4444" fontSize="11" textAnchor="middle">
+                Gastric Capsule
+              </text>
+
+              {/* Inductive link */}
+              <path
+                d="M 0 -40 Q 15 -20 30 5"
+                stroke="#10b981"
+                strokeWidth="2"
+                strokeDasharray="2,2"
+              />
+              <text x="20" y="-15" fill="#10b981" fontSize="10">
+                125kHz
+              </text>
+            </g>
+
+            {/* Ocean floor */}
+            <path
+              d="M 0 480 Q 200 460 400 470 Q 600 480 800 465 L 800 500 L 0 500 Z"
+              fill="#1e293b"
+              opacity="0.6"
+            />
+
+            {/* Labels */}
+            <g transform="translate(100, 200)">
+              <rect
+                x="0"
+                y="0"
+                width="180"
+                height="110"
+                rx="8"
+                fill="#0f172a"
+                stroke="#3b82f6"
+                strokeWidth="2"
+                opacity="0.9"
+              />
+              <text x="10" y="25" fill="#3b82f6" fontSize="14" fontWeight="bold">
+                Data Flow:
+              </text>
+              <text x="10" y="45" fill="#94a3b8" fontSize="11">
+                1. Feeding detected
+              </text>
+              <text x="10" y="62" fill="#94a3b8" fontSize="11">
+                2. Inductive TX to tag
+              </text>
+              <text x="10" y="79" fill="#94a3b8" fontSize="11">
+                3. Surface for uplink
+              </text>
+              <text x="10" y="96" fill="#94a3b8" fontSize="11">
+                4. Satellite relay
+              </text>
+            </g>
+          </svg>
         </div>
       </div>
 
@@ -762,11 +1331,11 @@ function SafetyFeature({ icon, title, description, status }) {
   return (
     <div className="bg-slate-700/50 rounded-lg p-6">
       <div className="flex items-start space-x-3">
-        <div className="text-3xl text-green-400">{icon}</div>
+        <div className="text-3xl text-amber-400">{icon}</div>
         <div className="flex-1">
           <div className="text-white font-bold mb-1">{title}</div>
           <div className="text-gray-400 text-sm mb-2">{description}</div>
-          <div className="inline-block bg-green-600/20 text-green-400 text-xs px-2 py-1 rounded">
+          <div className="inline-block bg-amber-600/20 text-amber-400 text-xs px-2 py-1 rounded">
             {status}
           </div>
         </div>

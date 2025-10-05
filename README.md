@@ -13,12 +13,14 @@
 ## 🚀 Quick Navigation
 
 **For Markers & Judges:**
+
 - [📋 Complete Documentation Guide](#-documentation) - Start here for organized navigation
 - [🏆 Marking Criteria Alignment](./MARKING-CRITERIA-ALIGNMENT.md) - How we achieve 5/5 in all categories
 - [🎯 Demo Day Guide](./docs/DEMO-GUIDE.md) - Presentation flow and talking points
 - [🚀 Quick Start](./QUICKSTART.md) - Run the project in 5 minutes
 
 **For Technical Review:**
+
 - [📐 Mathematical Model](./docs/MATHEMATICAL-MODEL.md) - SFI algorithm and validation
 - [🛰️ NASA Data Integration](./docs/NASA-DATA-INTEGRATION.md) - Real-time satellite data processing
 - [🔬 Bio-Sensor Technology](./docs/TAG-SENSOR.md) - Revolutionary gastric capsule design
@@ -62,44 +64,44 @@
 
 ### 🎯 For Markers & Judges (Start Here!)
 
-| Document | Description | Time to Read |
-|----------|-------------|--------------|
-| [**📋 Documentation Guide**](./docs/DOCUMENTATION.md) | Complete navigation map | 2 min |
-| [**🏆 Marking Criteria**](./MARKING-CRITERIA-ALIGNMENT.md) | How we score 5/5 in all categories | 10 min |
-| [**📊 Project Overview**](./docs/PROJECT-OVERVIEW.md) | Executive summary & achievements | 5 min |
-| [**🎯 Demo Guide**](./docs/DEMO-GUIDE.md) | Presentation flow & talking points | 8 min |
+| Document                                                   | Description                        | Time to Read |
+| ---------------------------------------------------------- | ---------------------------------- | ------------ |
+| [**📋 Documentation Guide**](./docs/DOCUMENTATION.md)      | Complete navigation map            | 2 min        |
+| [**🏆 Marking Criteria**](./MARKING-CRITERIA-ALIGNMENT.md) | How we score 5/5 in all categories | 10 min       |
+| [**📊 Project Overview**](./docs/PROJECT-OVERVIEW.md)      | Executive summary & achievements   | 5 min        |
+| [**🎯 Demo Guide**](./docs/DEMO-GUIDE.md)                  | Presentation flow & talking points | 8 min        |
 
 ### 🚀 Getting Started
 
-| Document | Description |
-|----------|-------------|
-| [**Quick Start**](./QUICKSTART.md) | Run project in 5 minutes |
+| Document                                | Description                        |
+| --------------------------------------- | ---------------------------------- |
+| [**Quick Start**](./QUICKSTART.md)      | Run project in 5 minutes           |
 | [**Deployment Guide**](./DEPLOYMENT.md) | Production deployment instructions |
-| [**Contributing**](./CONTRIBUTING.md) | Contribution guidelines |
+| [**Contributing**](./CONTRIBUTING.md)   | Contribution guidelines            |
 
 ### 🔬 Technical Documentation
 
-| Document | Description |
-|----------|-------------|
-| [**Mathematical Model**](./docs/MATHEMATICAL-MODEL.md) | SFI algorithm, validation (87% accuracy) |
-| [**NASA Data Integration**](./docs/NASA-DATA-INTEGRATION.md) | SWOT, MODIS, PACE real-time processing |
-| [**Bio-Sensor Design**](./docs/TAG-SENSOR.md) | Gastric capsule hardware & chemistry |
-| [**Data Processing Pipeline**](./docs/DATA-PROCESSING.md) | ETL workflow & visualization |
+| Document                                                     | Description                              |
+| ------------------------------------------------------------ | ---------------------------------------- |
+| [**Mathematical Model**](./docs/MATHEMATICAL-MODEL.md)       | SFI algorithm, validation (87% accuracy) |
+| [**NASA Data Integration**](./docs/NASA-DATA-INTEGRATION.md) | SWOT, MODIS, PACE real-time processing   |
+| [**Bio-Sensor Design**](./docs/TAG-SENSOR.md)                | Gastric capsule hardware & chemistry     |
+| [**Data Processing Pipeline**](./docs/DATA-PROCESSING.md)    | ETL workflow & visualization             |
 
 ### 🎓 Educational Impact
 
-| Document | Description |
-|----------|-------------|
-| [**Education Strategy**](./EDUCATION-IMPACT.md) | Curriculum, reach (10K+ students) |
-| [**Lesson Plans**](./docs/LESSON-PLANS.md) | NGSS-aligned educational materials |
+| Document                                        | Description                        |
+| ----------------------------------------------- | ---------------------------------- |
+| [**Education Strategy**](./EDUCATION-IMPACT.md) | Curriculum, reach (10K+ students)  |
+| [**Lesson Plans**](./docs/LESSON-PLANS.md)      | NGSS-aligned educational materials |
 
 ### 🌍 Impact & Results
 
-| Document | Description |
-|----------|-------------|
-| [**Impact Summary**](./docs/IMPACT.md) | Conservation, safety, education outcomes |
-| [**Before & After**](./BEFORE-AFTER.md) | Development progress showcase |
-| [**Bug Fixes & Enhancements**](./BUG-FIX-REPORT.md) | Quality assurance & improvements |
+| Document                                            | Description                              |
+| --------------------------------------------------- | ---------------------------------------- |
+| [**Impact Summary**](./docs/IMPACT.md)              | Conservation, safety, education outcomes |
+| [**Before & After**](./BEFORE-AFTER.md)             | Development progress showcase            |
+| [**Bug Fixes & Enhancements**](./BUG-FIX-REPORT.md) | Quality assurance & improvements         |
 
 ---
 
