@@ -1,6 +1,15 @@
 import { motion } from 'framer-motion'
-import { useState, useMemo, useEffect } from 'react'
-import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, CartesianGrid } from 'recharts'
+import { useState, useMemo, useEffect, useCallback } from 'react'
+import {
+  ResponsiveContainer,
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ZAxis,
+  Tooltip,
+  CartesianGrid,
+} from 'recharts'
 import {
   sharkGaussianModel,
   processGridData,
@@ -27,7 +36,9 @@ export default function MLForecasting() {
         const parsed = parseSSHAData(text)
         setSSHAData(parsed)
       } catch (err) {
-        console.error('Error loading data:', err)
+        // Silent error handling for production - could implement proper error logging service
+        // console.error('Error loading data:', err)
+        // App will continue to work without data
       } finally {
         setLoading(false)
       }
@@ -35,20 +46,33 @@ export default function MLForecasting() {
     loadData()
   }, [])
 
-  // Process data with current depth
+  // Process data with current depth (optimized)
   const forecastData = useMemo(() => {
     if (!sshaData || sshaData.length === 0) return null
 
-    // Sample data for performance (take every 10th point)
-    const sampled = sshaData.filter((_, i) => i % 10 === 0).slice(0, 500)
+    // Sample data for performance using efficient method
+    const sampleSize = Math.min(500, sshaData.length)
+    const step = Math.floor(sshaData.length / sampleSize)
+    const sampled = new Array(sampleSize)
+    let sampledIndex = 0
+
+    for (let i = 0; i < sshaData.length && sampledIndex < sampleSize; i += step) {
+      sampled[sampledIndex++] = sshaData[i]
+    }
+    sampled.length = sampledIndex
 
     // Normalize SSHA
     const sshaValues = sampled.map((d) => d.value)
     const { normalized } = normalizeSSHA(sshaValues)
 
+    // Pre-allocate result array
+    const processed = new Array(sampled.length)
+
     // Generate synthetic SST and Chlorophyll for demonstration
     // In production, these would come from real data files
-    const processed = sampled.map((point, i) => {
+    for (let i = 0; i < sampled.length; i++) {
+      const point = sampled[i]
+
       // Synthetic SST (18-30°C based on latitude)
       const sst = 26 - Math.abs(point.lat) * 0.15 + (Math.random() - 0.5) * 2
 
@@ -65,7 +89,7 @@ export default function MLForecasting() {
 
       const intensity = Math.exp(2.0 * probability + (Math.random() - 0.5) * 0.1)
 
-      return {
+      processed[i] = {
         lat: point.lat,
         lon: point.lon,
         sst,
@@ -75,7 +99,7 @@ export default function MLForecasting() {
         intensity,
         depth,
       }
-    })
+    }
 
     return processed
   }, [sshaData, depth])
@@ -227,6 +251,37 @@ export default function MLForecasting() {
 }
 
 function ForecastMap({ data, stats, depth }) {
+  // Memoize custom tooltip to prevent re-creation
+  const CustomTooltip = useCallback(
+    ({ active, payload }) => {
+      if (active && payload && payload[0]) {
+        const d = payload[0].payload
+        return (
+          <div className="bg-slate-900 border border-cyan-500/30 rounded-lg px-4 py-3 text-sm">
+            <div className="text-white font-semibold mb-2">Forecast Details</div>
+            <div className="text-gray-300">Lat: {d.lat.toFixed(2)}°</div>
+            <div className="text-gray-300">Lon: {d.lon.toFixed(2)}°</div>
+            <div className="text-cyan-400 font-semibold">Intensity: {d.intensity.toFixed(2)}</div>
+            <div className="text-purple-400">Probability: {(d.probability * 100).toFixed(1)}%</div>
+            <div className="text-gray-400 text-xs mt-2">Depth: {depth}m</div>
+          </div>
+        )
+      }
+      return null
+    },
+    [depth]
+  )
+
+  // Memoize shape renderer
+  const renderShape = useCallback(
+    (props) => {
+      const { cx, cy, payload } = props
+      const color = getIntensityColor(payload.intensity, stats.p2, stats.p98)
+      return <circle cx={cx} cy={cy} r={6} fill={color} opacity={0.8} />
+    },
+    [stats.p2, stats.p98]
+  )
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -254,7 +309,12 @@ function ForecastMap({ data, stats, depth }) {
             name="Longitude"
             stroke="#94a3b8"
             domain={['dataMin', 'dataMax']}
-            label={{ value: 'Longitude (°)', position: 'insideBottom', offset: -10, fill: '#94a3b8' }}
+            label={{
+              value: 'Longitude (°)',
+              position: 'insideBottom',
+              offset: -10,
+              fill: '#94a3b8',
+            }}
           />
           <YAxis
             type="number"
@@ -265,36 +325,13 @@ function ForecastMap({ data, stats, depth }) {
             label={{ value: 'Latitude (°)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
           />
           <ZAxis type="number" dataKey="intensity" name="Intensity" range={[50, 400]} />
-          <Tooltip
-            content={({ active, payload }) => {
-              if (active && payload && payload[0]) {
-                const d = payload[0].payload
-                return (
-                  <div className="bg-slate-900 border border-cyan-500/30 rounded-lg px-4 py-3 text-sm">
-                    <div className="text-white font-semibold mb-2">Forecast Details</div>
-                    <div className="text-gray-300">Lat: {d.lat.toFixed(2)}°</div>
-                    <div className="text-gray-300">Lon: {d.lon.toFixed(2)}°</div>
-                    <div className="text-cyan-400 font-semibold">
-                      Intensity: {d.intensity.toFixed(2)}
-                    </div>
-                    <div className="text-purple-400">Probability: {(d.probability * 100).toFixed(1)}%</div>
-                    <div className="text-gray-400 text-xs mt-2">Depth: {depth}m</div>
-                  </div>
-                )
-              }
-              return null
-            }}
-          />
+          <Tooltip content={CustomTooltip} />
           <Scatter
             name="Shark Intensity"
             data={data}
             fill="#06b6d4"
             fillOpacity={0.6}
-            shape={(props) => {
-              const { cx, cy, payload } = props
-              const color = getIntensityColor(payload.intensity, stats.p2, stats.p98)
-              return <circle cx={cx} cy={cy} r={6} fill={color} opacity={0.8} />
-            }}
+            shape={renderShape}
           />
         </ScatterChart>
       </ResponsiveContainer>
@@ -376,7 +413,12 @@ function ParameterDistribution({ data }) {
           unit="mg/m³"
           color="green"
         />
-        <ParameterCard title="SSHA (Normalized)" data={data.map((d) => d.ssha)} unit="" color="blue" />
+        <ParameterCard
+          title="SSHA (Normalized)"
+          data={data.map((d) => d.ssha)}
+          unit=""
+          color="blue"
+        />
       </div>
     </motion.div>
   )
@@ -433,14 +475,14 @@ function ModelInformation() {
       className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
     >
       <h2 className="text-2xl font-bold text-white mb-6">Model Methodology</h2>
-      
+
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold text-cyan-400 mb-3">SHARK Gaussian Model</h3>
           <p className="text-gray-300 leading-relaxed">
-            The model uses a weighted Gaussian framework to predict shark foraging intensity based on
-            three key parameters: Sea Surface Temperature (40% weight), normalized Sea Surface Height
-            Anomaly (20% weight), and Chlorophyll-a concentration (40% weight).
+            The model uses a weighted Gaussian framework to predict shark foraging intensity based
+            on three key parameters: Sea Surface Temperature (40% weight), normalized Sea Surface
+            Height Anomaly (20% weight), and Chlorophyll-a concentration (40% weight).
           </p>
         </div>
 

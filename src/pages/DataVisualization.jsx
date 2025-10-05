@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import {
   ScatterChart,
   Scatter,
@@ -26,85 +26,112 @@ import {
 } from '../utils/dataProcessing'
 
 export default function DataVisualization() {
-  const [activeDataset, setActiveDataset] = useState('swot')
-  const [timeRange, setTimeRange] = useState('week')
+  const [activeDataset, setActiveDataset] = useState('noaa-ssha')
+  const [seaDepth, setSeaDepth] = useState(100)
   const [selectedRegion, setSelectedRegion] = useState('gulf-stream')
   const [error, setError] = useState(null)
   const [sshaData, setSSHAData] = useState(null)
+  const [modisData, setModisData] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  // Load SSHA data on mount
-  useEffect(
-    () => {
-      let isMounted = true
-      // Use a controller to be able to abort the fetch if component unmounts
-      const abortController = new AbortController()
+  // Region configurations with colors (memoized)
+  const regions = useMemo(
+    () => ({
+      'gulf-stream': { name: 'Gulf Stream', color: '#3b82f6', emoji: '🌊' },
+      sargasso: { name: 'Sargasso Sea', color: '#10b981', emoji: '🌿' },
+      california: { name: 'California Current', color: '#f59e0b', emoji: '☀️' },
+      australia: { name: 'Eastern Australia', color: '#8b5cf6', emoji: '🦘' },
+    }),
+    []
+  )
 
-      const loadSSHAData = async () => {
-        try {
-          setLoading(true)
-          const response = await fetch('/SSHA-2025-data.csv', {
-            signal: abortController.signal,
-          })
-          if (!response.ok) {
-            throw new Error(`Failed to load SSHA data: ${response.status} ${response.statusText}`)
-          }
+  // Memoized event handlers
+  const handleDatasetChange = useCallback((e) => {
+    setActiveDataset(e.target.value)
+  }, [])
 
-          // Set timeout for fetch operation
-          const textPromise = response.text()
-          let timeoutId
-          const timeoutPromise = new Promise((_, reject) => {
-            timeoutId = setTimeout(() => reject(new Error('Data fetch timeout')), 10000)
-          })
+  const handleDepthChange = useCallback((e) => {
+    setSeaDepth(parseInt(e.target.value))
+  }, [])
 
-          const text = await Promise.race([textPromise, timeoutPromise])
-          // Clear the timeout to prevent memory leaks
-          if (timeoutId) clearTimeout(timeoutId)
+  const handleRegionChange = useCallback((e) => {
+    setSelectedRegion(e.target.value)
+  }, [])
 
-          // Validate that we have actual data content
-          if (!text || text.trim().length === 0) {
-            throw new Error('SSHA data file is empty')
-          }
+  // Load SSHA data on mount (optimized with single loading state)
+  useEffect(() => {
+    let isMounted = true
+    const abortController = new AbortController()
+    let loadingCount = 0
 
-          const parsed = parseSSHAData(text)
+    const loadSSHAData = async () => {
+      try {
+        loadingCount++
+        setLoading(true)
 
-          // Validate parsed data
-          // Silent handling for production - could implement proper logging service here
-          // if (!parsed || parsed.length === 0) {
-          //   console.warn('No valid SSHA data points found, using synthetic data')
-          // } else {
-          //   console.log(`Loaded ${parsed.length} SSHA data points`)
-          // }
+        const response = await fetch('/SSHA-2025-data.csv', {
+          signal: abortController.signal,
+        })
+        if (!response.ok) {
+          throw new Error(`Failed to load SSHA data: ${response.status} ${response.statusText}`)
+        }
 
-          // Only update state if component is still mounted
-          if (isMounted) {
-            setSSHAData(parsed)
-          }
-        } catch (err) {
-          // Silent error handling for production - could implement proper error logging service
-          // console.error('Error loading SSHA data:', err)
-          // Don't set error state - app will use synthetic data
-          // This ensures the app still works without real data
-        } finally {
-          if (isMounted) {
-            setLoading(false)
-          }
+        const text = await response.text()
+
+        if (!text || text.trim().length === 0) {
+          throw new Error('SSHA data file is empty')
+        }
+
+        const parsed = parseSSHAData(text)
+
+        if (isMounted) {
+          setSSHAData(parsed)
+        }
+      } catch (err) {
+        // Silent error handling for production
+      } finally {
+        loadingCount--
+        if (isMounted && loadingCount === 0) {
+          setLoading(false)
         }
       }
+    }
 
-      loadSSHAData()
+    const loadModisData = async () => {
+      try {
+        loadingCount++
+        setLoading(true)
 
-      // Cleanup function to prevent state updates after unmount
-      return () => {
-        isMounted = false
-        // Abort any in-progress fetch requests
-        abortController.abort()
+        const response = await fetch('/processed-data/modis-shark-model.json', {
+          signal: abortController.signal,
+        })
+        if (!response.ok) {
+          throw new Error(`Failed to load MODIS data: ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        if (isMounted) {
+          setModisData(data)
+        }
+      } catch (err) {
+        // Silent error handling - app will use synthetic data if MODIS unavailable
+      } finally {
+        loadingCount--
+        if (isMounted && loadingCount === 0) {
+          setLoading(false)
+        }
       }
-    },
-    [
-      /* No dependencies needed as this should only run on mount */
-    ]
-  )
+    }
+
+    // Load both datasets in parallel for better performance
+    Promise.all([loadSSHAData(), loadModisData()])
+
+    return () => {
+      isMounted = false
+      abortController.abort()
+    }
+  }, [])
 
   // Error boundary for component
   if (error) {
@@ -170,66 +197,105 @@ export default function DataVisualization() {
           className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 mb-12"
         >
           <div className="grid md:grid-cols-3 gap-6">
+            {/* Data Source Dropdown */}
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-3">
                 🛰️ Data Source
               </label>
               <select
                 value={activeDataset}
-                onChange={(e) => setActiveDataset(e.target.value)}
-                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                onChange={handleDatasetChange}
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer hover:bg-slate-900/70"
                 aria-label="Select data source"
               >
-                <option value="swot">NASA SWOT (SSH Anomaly)</option>
-                <option value="modis">NASA MODIS (Chlorophyll-a)</option>
-                <option value="pace">NASA PACE (Phytoplankton)</option>
-                <option value="meteomatics">Meteomatics (SST)</option>
+                <option value="modis-chlorophyll">MODIS Chlorophyll-a Concentration</option>
+                <option value="noaa-ssha">NOAA SSHA</option>
+                <option value="nasa-sst">NASA SST</option>
               </select>
             </div>
 
+            {/* Sea Depth Dropdown */}
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-3">
-                ⏱️ Time Range
-              </label>
+              <label className="block text-sm font-semibold text-gray-300 mb-3">🌊 Sea Depth</label>
               <select
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
-                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                aria-label="Select time range"
+                value={seaDepth}
+                onChange={handleDepthChange}
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all cursor-pointer hover:bg-slate-900/70"
+                aria-label="Select sea depth"
               >
-                <option value="day">Last 24 Hours</option>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="season">Seasonal</option>
+                <option value="50">50 M</option>
+                <option value="100">100 M</option>
+                <option value="200">200 M</option>
+                <option value="250">250 M</option>
+                <option value="300">300 M</option>
               </select>
             </div>
 
+            {/* Color-Coded Region Dropdown */}
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-3">🌍 Region</label>
-              <select
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                aria-label="Select region"
-              >
-                <option value="gulf-stream">Gulf Stream</option>
-                <option value="sargasso">Sargasso Sea</option>
-                <option value="california">California Current</option>
-                <option value="australia">Eastern Australia</option>
-              </select>
+              <div className="relative">
+                <select
+                  value={selectedRegion}
+                  onChange={handleRegionChange}
+                  className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all cursor-pointer hover:bg-slate-900/70 appearance-none"
+                  aria-label="Select region"
+                  style={{
+                    borderLeftColor: regions[selectedRegion].color,
+                    borderLeftWidth: '4px',
+                  }}
+                >
+                  {Object.entries(regions).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value.emoji} {value.name}
+                    </option>
+                  ))}
+                </select>
+                <div
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-3 h-3 rounded-full pointer-events-none"
+                  style={{ backgroundColor: regions[selectedRegion].color }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Depth Indicator Bar */}
+          <div className="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-xl">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-cyan-400">Analysis Depth</span>
+              <span className="text-lg font-bold text-white">{seaDepth}m</span>
+            </div>
+            <div className="relative h-2 bg-slate-700 rounded-full overflow-hidden">
+              <motion.div
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                initial={{ width: '0%' }}
+                animate={{ width: `${(seaDepth / 300) * 100}%` }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+              />
+            </div>
+            <div className="flex justify-between mt-1 text-xs text-gray-400">
+              <span>50m (Shallow)</span>
+              <span>300m (Deep)</span>
             </div>
           </div>
         </motion.div>
 
         {/* Main Visualization Grid */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          <ForagingHotspotMap region={selectedRegion} sshaData={sshaData} />
+          <ForagingHotspotMap
+            region={selectedRegion}
+            sshaData={sshaData}
+            modisData={modisData}
+            seaDepth={seaDepth}
+            dataset={activeDataset}
+          />
           <SatelliteDataOverlay
             dataset={activeDataset}
             sshaData={sshaData}
+            modisData={modisData}
             loading={loading}
             selectedRegion={selectedRegion}
-            timeRange={timeRange}
+            seaDepth={seaDepth}
           />
         </div>
 
@@ -243,36 +309,59 @@ export default function DataVisualization() {
   )
 }
 
-function ForagingHotspotMap({ region = 'gulf-stream', sshaData = null }) {
-  // Generate foraging probability data from SSHA data if available, otherwise use synthetic
+function ForagingHotspotMap({
+  region = 'gulf-stream',
+  sshaData = null,
+  modisData = null,
+  seaDepth = 100,
+  dataset = 'noaa-ssha',
+}) {
+  // Generate foraging probability data from MODIS or SSHA data if available
   const hotspotData = useMemo(() => {
     try {
+      // Use MODIS data if available and selected
+      if (dataset === 'modis-chlorophyll' && modisData && modisData.depths) {
+        const depthKey = String(seaDepth)
+        if (modisData.depths[depthKey]) {
+          const depthData = modisData.depths[depthKey].data
+
+          // Sample points for the map (limit to 50 for performance)
+          const sampledData = depthData.slice(0, 50)
+
+          return sampledData.map((point) => ({
+            lat: point.lat,
+            lon: point.lon,
+            value: point.intensity,
+            probability: point.probability,
+            sfi: point.intensity / 2, // Normalize intensity to SFI range
+            depth: seaDepth,
+            chlorophyll: point.chlorophyll,
+            sst: point.sst,
+          }))
+        }
+      }
+
       // If we have real SSHA data, use it
       if (sshaData && sshaData.length > 0) {
-        // Filter data for the selected region
         const regionalData = getRegionalData(sshaData, region)
 
-        // Check if we have data for the region
         if (regionalData.length === 0) {
           throw new Error(`No data available for region: ${region}`)
         }
 
-        // Sample the data to avoid too many points
         const sampledData = sampleData(regionalData, 50)
 
-        // Convert SSHA data to foraging hotspots
         return sampledData.map((point) => ({
           lat: point.lat,
           lon: point.lon,
           value: point.value,
           probability: sshaToHotspotProbability(point.value),
           sfi: calculateSFI(point.value),
-          depth: Math.floor(Math.random() * 500), // Random depth as we don't have real depth data
+          depth: Math.floor(Math.random() * 500),
         }))
       } else {
         // Generate synthetic data if no real data available
         const data = []
-        // Use region bounds to generate realistic data for the selected region
         const regionBounds = {
           'gulf-stream': { latMin: 25, latMax: 40, lonMin: -80, lonMax: -60 },
           sargasso: { latMin: 20, latMax: 35, lonMin: -70, lonMax: -40 },
@@ -293,8 +382,6 @@ function ForagingHotspotMap({ region = 'gulf-stream', sshaData = null }) {
       }
     } catch (error) {
       // Silent error handling for production
-      // console.error('Error generating foraging data:', error)
-      // Always return some data to prevent UI crashes
       return Array(15)
         .fill(0)
         .map((_, i) => ({
@@ -305,7 +392,7 @@ function ForagingHotspotMap({ region = 'gulf-stream', sshaData = null }) {
           depth: 200,
         }))
     }
-  }, [region, sshaData])
+  }, [region, sshaData, modisData, seaDepth, dataset])
 
   // Memoize ocean texture positions to prevent regeneration
   const oceanTexture = useMemo(() => {
@@ -461,79 +548,93 @@ function ForagingHotspotMap({ region = 'gulf-stream', sshaData = null }) {
 }
 
 function SatelliteDataOverlay({
-  dataset = 'swot',
+  dataset = 'noaa-ssha',
   sshaData = null,
+  modisData = null,
   loading = false,
   selectedRegion = 'gulf-stream',
-  timeRange = 'week',
+  seaDepth = 100,
 }) {
   const getDatasetInfo = () => {
     switch (dataset) {
-      case 'swot':
+      case 'modis-chlorophyll':
         return {
-          title: 'SWOT Sea Surface Height',
-          unit: 'cm',
-          description: 'Surface Water and Ocean Topography mission data (2025)',
-          color: 'from-blue-600 to-cyan-500',
-          range: '±50 cm',
-        }
-      case 'modis':
-        return {
-          title: 'MODIS Chlorophyll-a',
+          title: 'MODIS Chlorophyll-a Concentration',
           unit: 'mg/m³',
-          description: 'Ocean color indicating phytoplankton concentration',
+          description: 'Ocean color data from NASA MODIS (2002-2025)',
           color: 'from-green-600 to-emerald-500',
           range: '0.01-10 mg/m³',
+          badge: 'MODIS',
         }
-      case 'pace':
+      case 'noaa-ssha':
         return {
-          title: 'PACE Phytoplankton',
-          unit: 'communities',
-          description: 'Phytoplankton diversity and abundance',
-          color: 'from-teal-600 to-cyan-500',
-          range: '5-12 types',
+          title: 'NOAA Sea Surface Height Anomaly',
+          unit: 'cm',
+          description: 'SWOT mission data showing ocean dynamics (2025)',
+          color: 'from-blue-600 to-cyan-500',
+          range: '±50 cm',
+          badge: 'NOAA',
         }
-      case 'meteomatics':
+      case 'nasa-sst':
         return {
-          title: 'Sea Surface Temperature',
+          title: 'NASA Sea Surface Temperature',
           unit: '°C',
-          description: 'High-resolution temperature data',
+          description: 'High-resolution thermal imaging data',
           color: 'from-red-600 to-orange-500',
           range: '10-30°C',
+          badge: 'NASA',
         }
       default:
-        return {}
+        return {
+          title: 'Select Data Source',
+          unit: '',
+          description: 'Please select a data source',
+          color: 'from-gray-600 to-gray-500',
+          range: 'N/A',
+          badge: 'N/A',
+        }
     }
   }
 
   const info = getDatasetInfo()
 
-  // Process SSHA data for time series if available
+  // Process data based on selected dataset and depth
   const satelliteData = useMemo(() => {
-    if (dataset === 'swot' && sshaData && sshaData.length > 0) {
+    if (dataset === 'noaa-ssha' && sshaData && sshaData.length > 0) {
       // Use real SSHA data
-      // Filter by time range if applicable
-      let filteredData = sshaData
-
-      // In a real implementation, we would filter data based on timeRange
-      // For now, we're just using the binDataForTimeSeries function
-      const timeSeries = binDataForTimeSeries(filteredData, 24)
+      const timeSeries = binDataForTimeSeries(sshaData, 24)
       return timeSeries
+    } else if (dataset === 'modis-chlorophyll') {
+      // Generate chlorophyll data adjusted for depth
+      // Deeper depths have lower chlorophyll concentration
+      const depthFactor = Math.max(0.2, 1 - (seaDepth / 300) * 0.7)
+      return Array.from({ length: 24 }, (_, i) => ({
+        hour: i,
+        value: (0.5 + Math.sin(i / 4) * 0.3 + Math.random() * 0.2) * depthFactor,
+        anomaly: (Math.sin(i / 5) * 0.15 + Math.random() * 0.1 - 0.05) * depthFactor,
+      }))
+    } else if (dataset === 'nasa-sst') {
+      // Generate SST data adjusted for depth
+      // Deeper depths have cooler temperatures
+      const depthAdjustment = (seaDepth / 300) * 8 // Up to 8°C cooler at 300m
+      return Array.from({ length: 24 }, (_, i) => ({
+        hour: i,
+        value: 24 - depthAdjustment + Math.sin(i / 3) * 2 + Math.random() * 1.5,
+        anomaly: Math.sin(i / 4) * 1.5 + Math.random() - 0.5,
+      }))
     } else {
-      // Generate synthetic data for other datasets
-      const dataLength = 24 // Default to 24 data points
-
-      return Array.from({ length: dataLength }, (_, i) => ({
+      // Default synthetic data
+      return Array.from({ length: 24 }, (_, i) => ({
         hour: i,
         value: 15 + Math.sin(i / 3) * 5 + Math.random() * 3,
         anomaly: Math.sin(i / 4) * 2 + Math.random() - 0.5,
       }))
     }
-  }, [dataset, sshaData, timeRange])
+  }, [dataset, sshaData, seaDepth])
 
   // Calculate statistics from real data
   const stats = useMemo(() => {
-    if (dataset === 'swot' && sshaData && sshaData.length > 0) {
+    if (dataset === 'noaa-ssha' && sshaData && sshaData.length > 0) {
       // For more accurate statistics, filter by region first
       const regionalData = getRegionalData(sshaData, selectedRegion)
       return calculateStats(regionalData.length > 0 ? regionalData : sshaData)
@@ -541,23 +642,52 @@ function SatelliteDataOverlay({
     return null
   }, [dataset, sshaData, selectedRegion])
 
-  // Display current value
+  // Display current value with depth adjustment
   const currentValue = useMemo(() => {
-    if (dataset === 'swot' && stats) {
+    if (dataset === 'noaa-ssha' && stats) {
       return stats.mean.toFixed(1)
+    } else if (dataset === 'modis-chlorophyll') {
+      // Use real MODIS data if available
+      if (modisData && modisData.depths) {
+        const depthKey = String(seaDepth)
+        if (modisData.depths[depthKey] && modisData.depths[depthKey].stats) {
+          return modisData.depths[depthKey].stats.mean_chlorophyll.toFixed(2)
+        }
+      }
+      // Fallback to synthetic
+      const depthFactor = Math.max(0.2, 1 - (seaDepth / 300) * 0.7)
+      return (0.85 * depthFactor).toFixed(2)
+    } else if (dataset === 'nasa-sst') {
+      const depthAdjustment = (seaDepth / 300) * 8
+      return (24 - depthAdjustment + Math.random() * 2).toFixed(1)
     }
     return (15 + Math.random() * 10).toFixed(1)
-  }, [dataset, stats])
+  }, [dataset, stats, seaDepth, modisData])
 
   return (
     <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all">
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">{info.title}</h2>
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-2xl font-bold text-white">{info.title}</h2>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${info.color} text-white`}
+              >
+                {info.badge}
+              </span>
+            </div>
             <p className="text-sm text-gray-400">{info.description}</p>
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-xs text-cyan-400 font-semibold">Depth: {seaDepth}m</span>
+              <span className="text-xs text-gray-500">•</span>
+              <span className="text-xs text-purple-400 font-semibold">
+                {selectedRegion.replace('-', ' ').toUpperCase()}
+              </span>
+            </div>
           </div>
-          {dataset === 'swot' && sshaData && (
+          {((dataset === 'noaa-ssha' && sshaData) ||
+            (dataset === 'modis-chlorophyll' && modisData)) && (
             <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-full">
               <div className="w-2 h-2 bg-green-400 rounded-full"></div>
               <span className="text-xs text-green-400 font-semibold">Real Data</span>
@@ -621,7 +751,15 @@ function SatelliteDataOverlay({
             stroke="#94a3b8"
             label={{ value: 'Hour', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
           />
-          <YAxis stroke="#94a3b8" />
+          <YAxis
+            stroke="#94a3b8"
+            label={{
+              value: info.unit,
+              angle: -90,
+              position: 'insideLeft',
+              fill: '#94a3b8',
+            }}
+          />
           <Tooltip
             contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
             labelStyle={{ color: '#e2e8f0' }}
@@ -635,16 +773,18 @@ function SatelliteDataOverlay({
         <div>
           <span className="text-gray-400">Last Updated:</span>
           <span className="text-white ml-2 font-mono">
-            {dataset === 'swot' && sshaData ? '2025-01-02' : new Date().toISOString().split('T')[0]}
+            {dataset === 'noaa-ssha' && sshaData
+              ? '2025-01-02'
+              : new Date().toISOString().split('T')[0]}
           </span>
         </div>
         <div>
           <span className="text-gray-400">Coverage:</span>
           <span className="text-green-400 ml-2">
-            {dataset === 'swot' && stats ? `${stats.count.toLocaleString()} pts` : '98.5%'}
+            {dataset === 'noaa-ssha' && stats ? `${stats.count.toLocaleString()} pts` : '98.5%'}
           </span>
         </div>
-        {dataset === 'swot' && stats && (
+        {dataset === 'noaa-ssha' && stats && (
           <>
             <div>
               <span className="text-gray-400">Range:</span>
@@ -660,6 +800,14 @@ function SatelliteDataOverlay({
             </div>
           </>
         )}
+        <div>
+          <span className="text-gray-400">Sea Depth:</span>
+          <span className="text-cyan-400 ml-2 font-mono font-bold">{seaDepth}m</span>
+        </div>
+        <div>
+          <span className="text-gray-400">Data Points:</span>
+          <span className="text-blue-400 ml-2 font-mono">{satelliteData.length}</span>
+        </div>
       </div>
     </div>
   )
@@ -682,6 +830,16 @@ function Ocean3DProfile() {
       sfi: Math.max(0, Math.min(1, Math.random() * 0.6 + 0.3)),
     }))
   }, [])
+
+  // Memoize tooltip formatters to prevent re-creation on every render
+  const tooltipFormatter = useCallback((value, name) => {
+    if (name === 'SFI Score' || name === 'Temperature') {
+      return value.toFixed(3)
+    }
+    return value
+  }, [])
+
+  const tooltipFormatterSimple = useCallback((value) => value.toFixed(3), [])
 
   return (
     <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8 hover:border-white/20 transition-all">
@@ -738,12 +896,7 @@ function Ocean3DProfile() {
                 cursor={{ strokeDasharray: '3 3' }}
                 contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
                 labelStyle={{ color: '#e2e8f0' }}
-                formatter={(value, name) => {
-                  if (name === 'SFI Score' || name === 'Temperature') {
-                    return value.toFixed(3)
-                  }
-                  return value
-                }}
+                formatter={tooltipFormatter}
               />
               <Legend />
               <Scatter name="SFI Score" data={depthProfile} fill="#8884d8" />
@@ -785,7 +938,7 @@ function Ocean3DProfile() {
               <Tooltip
                 contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
                 labelStyle={{ color: '#e2e8f0' }}
-                formatter={(value) => value.toFixed(3)}
+                formatter={tooltipFormatterSimple}
               />
               <Legend />
               <Line
