@@ -814,21 +814,34 @@ function SatelliteDataOverlay({
 }
 
 function Ocean3DProfile() {
+  const [error, setError] = useState(null)
+
   const depthProfile = useMemo(() => {
-    return Array.from({ length: 20 }, (_, i) => ({
-      depth: i * 50,
-      // Normalized temperature (0-1 scale)
-      temperature: Math.max(0, Math.min(1, (25 - i * 50 * 0.03 + Math.random() * 0.5) / 30)),
-      // Normalized chlorophyll (0-1 scale)
-      chlorophyll: Math.max(0, Math.min(1, Math.exp(-i / 3) * (0.5 + Math.random() * 0.2))),
-      // Normalized eddy intensity (0-1 scale)
-      eddyIntensity: Math.max(
-        0,
-        Math.min(1, Math.exp(-Math.pow((i * 50 - 200) / 100, 2)) * (0.8 + Math.random() * 0.4))
-      ),
-      // Normalized SFI score (0-1 scale)
-      sfi: Math.max(0, Math.min(1, Math.random() * 0.6 + 0.3)),
-    }))
+    try {
+      const profile = Array.from({ length: 20 }, (_, i) => ({
+        depth: i * 50,
+        // Normalized temperature (0-1 scale)
+        temperature: Math.max(0, Math.min(1, (25 - i * 50 * 0.03 + Math.random() * 0.5) / 30)),
+        // Normalized chlorophyll (0-1 scale)
+        chlorophyll: Math.max(0, Math.min(1, Math.exp(-i / 3) * (0.5 + Math.random() * 0.2))),
+        // Normalized eddy intensity (0-1 scale)
+        eddyIntensity: Math.max(
+          0,
+          Math.min(1, Math.exp(-Math.pow((i * 50 - 200) / 100, 2)) * (0.8 + Math.random() * 0.4))
+        ),
+        // Normalized SFI score (0-1 scale)
+        sfi: Math.max(0, Math.min(1, Math.random() * 0.6 + 0.3)),
+      }))
+
+      if (profile.length === 0) {
+        throw new Error('Unable to generate depth profile')
+      }
+
+      return profile
+    } catch (err) {
+      setError(err)
+      return []
+    }
   }, [])
 
   // Memoize tooltip formatters to prevent re-creation on every render
@@ -840,6 +853,32 @@ function Ocean3DProfile() {
   }, [])
 
   const tooltipFormatterSimple = useCallback((value) => value.toFixed(3), [])
+
+  // Error boundary for charts
+  if (error) {
+    return (
+      <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8 text-center">
+        <div className="text-red-500 mb-4">
+          <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2">Chart Rendering Error</h3>
+        <p className="text-gray-400 mb-4">Unable to generate depth profile visualization.</p>
+        <button
+          onClick={() => setError(null)}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8 hover:border-white/20 transition-all">
