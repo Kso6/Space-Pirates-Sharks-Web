@@ -3,15 +3,16 @@ import { useState } from 'react'
 
 export default function AdvancedReaders() {
   const [expandedSection, setExpandedSection] = useState(null)
+  const [activeTab, setActiveTab] = useState('overview')
 
   return (
     <div className="min-h-screen px-4 py-28">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full mb-6">
             <span className="text-red-400 text-sm font-semibold">
@@ -19,15 +20,79 @@ export default function AdvancedReaders() {
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">Advanced Readers</h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
+              Advanced Readers
+            </span>
+          </h1>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
             Deep dive into the mathematical foundations, model development, and technical
             implementation of the SHARK framework
           </p>
+
+          {/* Highly Advanced Readers CTA */}
+          <motion.a
+            href="https://www.overleaf.com/read/mwgdxcgtmrdc#0b0f77"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-2xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all"
+          >
+            <span className="text-2xl">📐</span>
+            <div className="text-left">
+              <div className="text-sm opacity-90">For Highly Advanced Readers</div>
+              <div className="text-lg">View Full Technical Report on Overleaf</div>
+            </div>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </motion.a>
         </motion.div>
 
-        {/* Overview */}
-        <Section title="Overview" delay={0.1}>
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          {[
+            { id: 'overview', label: 'Overview', icon: '📋' },
+            { id: 'math', label: 'Mathematics', icon: '∑' },
+            { id: 'implementation', label: 'Implementation', icon: '⚙️' },
+            { id: 'validation', label: 'Validation', icon: '✓' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+                activeTab === tab.id
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/30'
+                  : 'bg-slate-800/50 text-gray-300 hover:bg-slate-800 border border-white/10'
+              }`}
+            >
+              <span className="mr-2">{tab.icon}</span>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        <div className="relative">
+          {/* Overview Tab */}
+          {activeTab === 'overview' && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Section title="Overview" delay={0}>
           <p className="text-gray-300 leading-relaxed mb-4">
             This report documents the development of a mathematical model to showcase a map of
             possible shark foraging environments. This approach is unique in that it doesn't
@@ -58,9 +123,17 @@ export default function AdvancedReaders() {
             </li>
           </ul>
         </Section>
+            </motion.div>
+          )}
 
-        {/* Mathematical Model */}
-        <Section title="Mathematical Model Development" delay={0.2}>
+          {/* Mathematics Tab */}
+          {activeTab === 'math' && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Section title="Mathematical Model Development" delay={0}>
           <div className="bg-slate-900/50 rounded-xl p-6 mb-6">
             <h3 className="text-xl font-bold text-cyan-400 mb-4">Shark Foraging Index (SFI)</h3>
             <div className="bg-slate-950 rounded-lg p-4 font-mono text-sm text-green-400 mb-4 overflow-x-auto">
@@ -227,9 +300,17 @@ export default function AdvancedReaders() {
             </table>
           </div>
         </Section>
+            </motion.div>
+          )}
 
-        {/* Model Implementation */}
-        <Section title="SHARK Model Implementation" delay={0.6}>
+          {/* Implementation Tab */}
+          {activeTab === 'implementation' && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Section title="SHARK Model Implementation" delay={0}>
           <p className="text-gray-300 leading-relaxed mb-6">
             The{' '}
             <strong className="text-cyan-400">
@@ -298,9 +379,17 @@ export default function AdvancedReaders() {
             />
           </div>
         </Section>
+            </motion.div>
+          )}
 
-        {/* Model Validation */}
-        <Section title="Model Validation and Future Development" delay={0.7}>
+          {/* Validation Tab */}
+          {activeTab === 'validation' && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Section title="Model Validation and Future Development" delay={0}>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-slate-900/50 rounded-xl p-6">
               <h3 className="text-lg font-bold text-cyan-400 mb-4">Validation Metrics</h3>
@@ -362,11 +451,29 @@ export default function AdvancedReaders() {
           </p>
         </Section>
 
-        {/* References */}
+              <Section title="Conclusion" delay={0.1}>
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  The <strong className="text-cyan-400">Shark Foraging Index (SFI)</strong> integrates
+                  multiple oceanographic drivers to produce a spatiotemporal representation of foraging
+                  likelihood. This work represents an initial step toward autonomous ecological
+                  prediction, where satellite data streams feed into adaptive models to infer animal
+                  behaviour.
+                </p>
+                <p className="text-gray-300 leading-relaxed">
+                  This forms the basis of a scalable, global predictor of shark foraging dynamics —
+                  connecting physical ocean processes to biological activity through mathematical
+                  structure and real-world data.
+                </p>
+              </Section>
+            </motion.div>
+          )}
+        </div>
+
+        {/* References - Always Visible */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 0.3 }}
           className="mt-12 bg-gradient-to-r from-gray-500/10 to-slate-500/10 border border-gray-500/30 rounded-xl p-8"
         >
           <h2 className="text-2xl font-bold text-white mb-4">References & Data Sources</h2>
@@ -380,6 +487,47 @@ export default function AdvancedReaders() {
             <li>• NOAA Sea Surface Height Anomaly (SWOT Mission)</li>
             <li>• Coral Reef Watch Bleaching Alert Area (SST Proxy)</li>
           </ul>
+        </motion.div>
+
+        {/* Highly Advanced Readers Section - Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-12 bg-gradient-to-br from-purple-600/20 via-pink-600/20 to-red-600/20 border-2 border-purple-500/40 rounded-3xl p-10 text-center"
+        >
+          <div className="text-6xl mb-4">📐</div>
+          <h2 className="text-3xl font-extrabold text-white mb-4">
+            For Highly Advanced Readers
+          </h2>
+          <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+            Access the complete technical report with full LaTeX formatting, detailed derivations,
+            figures, and appendices on Overleaf. Includes comprehensive mathematical proofs and
+            implementation details.
+          </p>
+          <motion.a
+            href="https://www.overleaf.com/read/mwgdxcgtmrdc#0b0f77"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg rounded-2xl shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all"
+          >
+            <span>View Full Technical Report on Overleaf</span>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </motion.a>
         </motion.div>
       </div>
     </div>
