@@ -24,6 +24,14 @@ import {
   sshaToHotspotProbability,
   calculateSFI,
 } from '../utils/dataProcessing'
+import {
+  calculateTemperatureAtDepth,
+  calculateChlorophyllAtDepth,
+  calculateEddyIntensity,
+  estimateThermoclineDepth,
+  isValidModisPoint,
+  isValidSSHAPoint,
+} from '../utils/oceanography'
 
 export default function DataVisualization() {
   const [activeDataset, setActiveDataset] = useState('noaa-ssha')
@@ -357,40 +365,15 @@ function ForagingHotspotMap({
           value: point.value,
           probability: sshaToHotspotProbability(point.value),
           sfi: calculateSFI(point.value),
-          depth: Math.floor(Math.random() * 500),
+          depth: estimateThermoclineDepth(point.value, point.lat),
         }))
       } else {
-        // Generate synthetic data if no real data available
-        const data = []
-        const regionBounds = {
-          'gulf-stream': { latMin: 25, latMax: 40, lonMin: -80, lonMax: -60 },
-          sargasso: { latMin: 20, latMax: 35, lonMin: -70, lonMax: -40 },
-          california: { latMin: 32, latMax: 42, lonMin: -125, lonMax: -120 },
-          australia: { latMin: -40, latMax: -25, lonMin: 145, lonMax: 155 },
-        }[region] || { latMin: 25, latMax: 40, lonMin: -80, lonMax: -60 }
-
-        for (let i = 0; i < 50; i++) {
-          data.push({
-            lat: regionBounds.latMin + Math.random() * (regionBounds.latMax - regionBounds.latMin),
-            lon: regionBounds.lonMin + Math.random() * (regionBounds.lonMax - regionBounds.lonMin),
-            probability: Math.random() * 0.8 + 0.2,
-            sfi: Math.random() * 1.5 + 0.5,
-            depth: Math.floor(Math.random() * 500),
-          })
-        }
-        return data
+        // No real data available - return empty array
+        return []
       }
     } catch (error) {
-      // Silent error handling for production
-      return Array(15)
-        .fill(0)
-        .map((_, i) => ({
-          lat: 30 + Math.random() * 10,
-          lon: -70 + Math.random() * 10,
-          probability: Math.random() * 0.5 + 0.2,
-          sfi: 0.8,
-          depth: 200,
-        }))
+      // Silent error handling for production - return empty array
+      return []
     }
   }, [region, sshaData, modisData, seaDepth, dataset])
 
@@ -437,8 +420,22 @@ function ForagingHotspotMap({
           ))}
         </div>
 
+        {/* No Data Message */}
+        {(!hotspotData || hotspotData.length === 0) && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="bg-slate-900/90 backdrop-blur-sm border border-yellow-500/30 rounded-xl p-6 text-center max-w-md">
+              <div className="text-4xl mb-3">⚠️</div>
+              <h3 className="text-xl font-bold text-white mb-2">No Data Available</h3>
+              <p className="text-gray-300 text-sm">
+                Real NASA satellite data is currently loading or unavailable for this region.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Hotspot markers */}
         {hotspotData &&
+          hotspotData.length > 0 &&
           hotspotData.slice(0, 15).map((point, idx) => (
             <div
               key={idx}
@@ -604,31 +601,9 @@ function SatelliteDataOverlay({
       // Use real SSHA data
       const timeSeries = binDataForTimeSeries(sshaData, 24)
       return timeSeries
-    } else if (dataset === 'modis-chlorophyll') {
-      // Generate chlorophyll data adjusted for depth
-      // Deeper depths have lower chlorophyll concentration
-      const depthFactor = Math.max(0.2, 1 - (seaDepth / 300) * 0.7)
-      return Array.from({ length: 24 }, (_, i) => ({
-        hour: i,
-        value: (0.5 + Math.sin(i / 4) * 0.3 + Math.random() * 0.2) * depthFactor,
-        anomaly: (Math.sin(i / 5) * 0.15 + Math.random() * 0.1 - 0.05) * depthFactor,
-      }))
-    } else if (dataset === 'nasa-sst') {
-      // Generate SST data adjusted for depth
-      // Deeper depths have cooler temperatures
-      const depthAdjustment = (seaDepth / 300) * 8 // Up to 8°C cooler at 300m
-      return Array.from({ length: 24 }, (_, i) => ({
-        hour: i,
-        value: 24 - depthAdjustment + Math.sin(i / 3) * 2 + Math.random() * 1.5,
-        anomaly: Math.sin(i / 4) * 1.5 + Math.random() - 0.5,
-      }))
     } else {
-      // Default synthetic data
-      return Array.from({ length: 24 }, (_, i) => ({
-        hour: i,
-        value: 15 + Math.sin(i / 3) * 5 + Math.random() * 3,
-        anomaly: Math.sin(i / 4) * 2 + Math.random() - 0.5,
-      }))
+      // No real data available - return empty array
+      return []
     }
   }, [dataset, sshaData, seaDepth])
 
@@ -654,14 +629,13 @@ function SatelliteDataOverlay({
           return modisData.depths[depthKey].stats.mean_chlorophyll.toFixed(2)
         }
       }
-      // Fallback to synthetic
-      const depthFactor = Math.max(0.2, 1 - (seaDepth / 300) * 0.7)
-      return (0.85 * depthFactor).toFixed(2)
+      // No real data available
+      return 'N/A'
     } else if (dataset === 'nasa-sst') {
-      const depthAdjustment = (seaDepth / 300) * 8
-      return (24 - depthAdjustment + Math.random() * 2).toFixed(1)
+      // No real SST data available
+      return 'N/A'
     }
-    return (15 + Math.random() * 10).toFixed(1)
+    return 'N/A'
   }, [dataset, stats, seaDepth, modisData])
 
   return (
@@ -743,31 +717,42 @@ function SatelliteDataOverlay({
       </div>
 
       {/* Time series chart */}
-      <ResponsiveContainer width="100%" height={200}>
-        <ComposedChart data={satelliteData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-          <XAxis
-            dataKey="hour"
-            stroke="#94a3b8"
-            label={{ value: 'Hour', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
-          />
-          <YAxis
-            stroke="#94a3b8"
-            label={{
-              value: info.unit,
-              angle: -90,
-              position: 'insideLeft',
-              fill: '#94a3b8',
-            }}
-          />
-          <Tooltip
-            contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
-            labelStyle={{ color: '#e2e8f0' }}
-          />
-          <Area type="monotone" dataKey="value" fill="#3b82f6" stroke="#3b82f6" fillOpacity={0.3} />
-          <Line type="monotone" dataKey="anomaly" stroke="#ef4444" strokeWidth={2} name="Anomaly" />
-        </ComposedChart>
-      </ResponsiveContainer>
+      {satelliteData && satelliteData.length > 0 ? (
+        <ResponsiveContainer width="100%" height={200}>
+          <ComposedChart data={satelliteData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+            <XAxis
+              dataKey="hour"
+              stroke="#94a3b8"
+              label={{ value: 'Hour', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
+            />
+            <YAxis
+              stroke="#94a3b8"
+              label={{
+                value: info.unit,
+                angle: -90,
+                position: 'insideLeft',
+                fill: '#94a3b8',
+              }}
+            />
+            <Tooltip
+              contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
+              labelStyle={{ color: '#e2e8f0' }}
+            />
+            <Area type="monotone" dataKey="value" fill="#3b82f6" stroke="#3b82f6" fillOpacity={0.3} />
+            <Line type="monotone" dataKey="anomaly" stroke="#ef4444" strokeWidth={2} name="Anomaly" />
+          </ComposedChart>
+        </ResponsiveContainer>
+      ) : (
+        <div className="h-[200px] flex items-center justify-center bg-slate-900/50 rounded-lg">
+          <div className="text-center">
+            <p className="text-gray-400 text-lg mb-2">No Time Series Data Available</p>
+            <p className="text-gray-500 text-sm">
+              Real NASA satellite data is not available for this dataset
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
         <div>
@@ -815,20 +800,41 @@ function SatelliteDataOverlay({
 
 function Ocean3DProfile() {
   const depthProfile = useMemo(() => {
-    return Array.from({ length: 20 }, (_, i) => ({
-      depth: i * 50,
-      // Normalized temperature (0-1 scale)
-      temperature: Math.max(0, Math.min(1, (25 - i * 50 * 0.03 + Math.random() * 0.5) / 30)),
-      // Normalized chlorophyll (0-1 scale)
-      chlorophyll: Math.max(0, Math.min(1, Math.exp(-i / 3) * (0.5 + Math.random() * 0.2))),
-      // Normalized eddy intensity (0-1 scale)
-      eddyIntensity: Math.max(
+    // Use real oceanographic models for depth profiles
+    const surfaceTemp = 24 // Base temperature in °C
+    const surfaceChl = 0.5 // Base chlorophyll in mg/m³
+    const avgLat = 30 // Average latitude for calculations
+    
+    return Array.from({ length: 20 }, (_, i) => {
+      const depth = i * 50
+      
+      // Calculate real temperature at depth
+      const temp = calculateTemperatureAtDepth(surfaceTemp, depth, avgLat)
+      const normalizedTemp = Math.max(0, Math.min(1, temp / 30))
+      
+      // Calculate real chlorophyll at depth
+      const chl = calculateChlorophyllAtDepth(surfaceChl, depth)
+      const normalizedChl = Math.max(0, Math.min(1, chl / 0.65)) // Normalize to max expected
+      
+      // Eddy intensity peaks at thermocline depth (~200m)
+      const eddyIntensity = Math.max(
         0,
-        Math.min(1, Math.exp(-Math.pow((i * 50 - 200) / 100, 2)) * (0.8 + Math.random() * 0.4))
-      ),
-      // Normalized SFI score (0-1 scale)
-      sfi: Math.max(0, Math.min(1, Math.random() * 0.6 + 0.3)),
-    }))
+        Math.min(1, Math.exp(-Math.pow((depth - 200) / 100, 2)))
+      )
+      
+      // Calculate SFI based on optimal conditions
+      // Peak SFI at thermocline where prey concentrates
+      const depthFactor = Math.exp(-Math.pow((depth - 150) / 100, 2))
+      const sfi = Math.max(0, Math.min(1, depthFactor * normalizedChl * 0.8))
+      
+      return {
+        depth,
+        temperature: normalizedTemp,
+        chlorophyll: normalizedChl,
+        eddyIntensity,
+        sfi,
+      }
+    })
   }, [])
 
   // Memoize tooltip formatters to prevent re-creation on every render
