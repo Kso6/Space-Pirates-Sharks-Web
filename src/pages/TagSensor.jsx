@@ -1335,8 +1335,8 @@ function ThreeDModelViewer() {
           enablePan={true}
           enableZoom={true}
           enableRotate={true}
-          minDistance={0.5}
-          maxDistance={25}
+          minDistance={0.1}
+          maxDistance={30}
           autoRotate={true}
           autoRotateSpeed={0.5}
         />
