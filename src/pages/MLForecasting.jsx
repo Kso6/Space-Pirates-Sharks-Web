@@ -37,7 +37,7 @@ export default function MLForecasting() {
         setSSHAData(parsed)
       } catch (err) {
         // Silent error handling for production - could implement proper error logging service
-        // console.error('Error loading data:', err)
+        console.error('Error loading data:', err)
         // App will continue to work without data
       } finally {
         setLoading(false)

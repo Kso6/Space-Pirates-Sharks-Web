@@ -1258,7 +1258,6 @@ function DeploymentSection() {
   )
 }
 
-
 // Helper Components
 function ComponentLayer({ title, description, color, icon }) {
   return (
