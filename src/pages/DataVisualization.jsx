@@ -37,37 +37,38 @@ import {
 // This ensures hotspots are spread across the entire map for better visualization
 function generateDistributedHotspots(data, bounds, targetCount) {
   if (!data || data.length === 0) return []
-  
+
   // Calculate statistics from real data
   const avgValue = data.reduce((sum, p) => sum + Math.abs(p.value), 0) / data.length
-  const maxValue = Math.max(...data.map(p => Math.abs(p.value)))
-  const minValue = Math.min(...data.map(p => Math.abs(p.value)))
-  
+  const maxValue = Math.max(...data.map((p) => Math.abs(p.value)))
+  const minValue = Math.min(...data.map((p) => Math.abs(p.value)))
+
   // Generate evenly distributed points across the entire region
   const result = []
   const gridSize = Math.ceil(Math.sqrt(targetCount))
   const latStep = (bounds.latMax - bounds.latMin) / (gridSize + 1)
   const lonStep = (bounds.lonMax - bounds.lonMin) / (gridSize + 1)
-  
+
   for (let i = 1; i <= gridSize && result.length < targetCount; i++) {
     for (let j = 1; j <= gridSize && result.length < targetCount; j++) {
       // Calculate position with slight randomization for natural look
-      const lat = bounds.latMin + (i * latStep) + (Math.random() - 0.5) * latStep * 0.3
-      const lon = bounds.lonMin + (j * lonStep) + (Math.random() - 0.5) * lonStep * 0.3
-      
+      const lat = bounds.latMin + i * latStep + (Math.random() - 0.5) * latStep * 0.3
+      const lon = bounds.lonMin + j * lonStep + (Math.random() - 0.5) * lonStep * 0.3
+
       // Use real data statistics to generate realistic values
       // Vary the values based on position for visual interest
       const positionFactor = (i + j) / (gridSize * 2)
-      const value = minValue + (maxValue - minValue) * positionFactor + (Math.random() - 0.5) * avgValue * 0.5
-      
+      const value =
+        minValue + (maxValue - minValue) * positionFactor + (Math.random() - 0.5) * avgValue * 0.5
+
       result.push({
         lat: Math.max(bounds.latMin, Math.min(bounds.latMax, lat)),
         lon: Math.max(bounds.lonMin, Math.min(bounds.lonMax, lon)),
-        value: value
+        value: value,
       })
     }
   }
-  
+
   return result
 }
 
