@@ -12,6 +12,7 @@ import {
   AreaChart,
   Area,
 } from 'recharts'
+import DorsalTag3D from '../components/DorsalTag3D'
 
 export default function TagSensor() {
   const [activeView, setActiveView] = useState('architecture')
@@ -225,66 +226,9 @@ function ArchitectureSection() {
         <h2 className="text-2xl font-bold text-white mb-6">External Dorsal Fin Tag</h2>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* External Tag Diagram */}
+          {/* Interactive 3D Model */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-8 h-96 flex items-center justify-center border-4 border-cyan-500/30">
-              <div className="text-center space-y-4">
-                {/* SVG representation of dorsal tag */}
-                <svg
-                  className="w-48 h-48 mx-auto"
-                  viewBox="0 0 200 200"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Main body */}
-                  <rect x="60" y="40" width="80" height="120" rx="8" fill="#0e7490" opacity="0.8" />
-                  <rect
-                    x="60"
-                    y="40"
-                    width="80"
-                    height="120"
-                    rx="8"
-                    stroke="#06b6d4"
-                    strokeWidth="2"
-                  />
-
-                  {/* Antenna */}
-                  <line x1="100" y1="40" x2="100" y2="15" stroke="#fbbf24" strokeWidth="3" />
-                  <circle cx="100" cy="15" r="6" fill="#fbbf24" />
-                  <text x="100" y="5" fontSize="8" fill="#94a3b8" textAnchor="middle">
-                    Satellite
-                  </text>
-
-                  {/* Solar panel */}
-                  <rect x="70" y="50" width="60" height="20" rx="2" fill="#3b82f6" opacity="0.6" />
-                  <line x1="75" y1="50" x2="75" y2="70" stroke="#60a5fa" strokeWidth="1" />
-                  <line x1="85" y1="50" x2="85" y2="70" stroke="#60a5fa" strokeWidth="1" />
-                  <line x1="95" y1="50" x2="95" y2="70" stroke="#60a5fa" strokeWidth="1" />
-                  <line x1="105" y1="50" x2="105" y2="70" stroke="#60a5fa" strokeWidth="1" />
-                  <line x1="115" y1="50" x2="115" y2="70" stroke="#60a5fa" strokeWidth="1" />
-                  <line x1="125" y1="50" x2="125" y2="70" stroke="#60a5fa" strokeWidth="1" />
-                  <text x="100" y="85" fontSize="8" fill="#94a3b8" textAnchor="middle">
-                    Solar
-                  </text>
-
-                  {/* Inductive coil */}
-                  <circle cx="100" cy="110" r="20" fill="none" stroke="#f59e0b" strokeWidth="2" />
-                  <circle cx="100" cy="110" r="15" fill="none" stroke="#f59e0b" strokeWidth="2" />
-                  <circle cx="100" cy="110" r="10" fill="none" stroke="#f59e0b" strokeWidth="2" />
-                  <text x="100" y="145" fontSize="8" fill="#94a3b8" textAnchor="middle">
-                    Inductive RX
-                  </text>
-
-                  {/* Attachment points */}
-                  <rect x="55" y="95" width="10" height="30" rx="2" fill="#64748b" />
-                  <rect x="135" y="95" width="10" height="30" rx="2" fill="#64748b" />
-                </svg>
-                <div className="text-white font-bold text-xl">External Dorsal Tag</div>
-                <div className="text-gray-400 text-sm">Dimensions: 80mm × 40mm × 15mm</div>
-                <div className="text-gray-400 text-sm">Weight: ~45 grams (in air)</div>
-                <div className="text-cyan-400 text-sm">Non-invasive Attachment</div>
-              </div>
-            </div>
+            <DorsalTag3D className="h-full" />
           </div>
 
           {/* Component Stack */}

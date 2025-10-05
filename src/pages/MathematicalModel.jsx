@@ -403,22 +403,30 @@ function ValidationShowcase() {
   // Helper function to get the correct border class based on color
   const getBorderClass = (color) => {
     switch (color) {
-      case 'green': return 'border-green-500/20';
-      case 'blue': return 'border-blue-500/20';
-      case 'purple': return 'border-purple-500/20';
-      default: return 'border-white/10';
+      case 'green':
+        return 'border-green-500/20'
+      case 'blue':
+        return 'border-blue-500/20'
+      case 'purple':
+        return 'border-purple-500/20'
+      default:
+        return 'border-white/10'
     }
-  };
+  }
 
   // Helper function to get the correct gradient class based on color
   const getGradientClass = (color) => {
     switch (color) {
-      case 'green': return 'from-green-400 to-green-600';
-      case 'blue': return 'from-blue-400 to-blue-600';
-      case 'purple': return 'from-purple-400 to-purple-600';
-      default: return 'from-blue-400 to-blue-600';
+      case 'green':
+        return 'from-green-400 to-green-600'
+      case 'blue':
+        return 'from-blue-400 to-blue-600'
+      case 'purple':
+        return 'from-purple-400 to-purple-600'
+      default:
+        return 'from-blue-400 to-blue-600'
     }
-  };
+  }
 
   return (
     <div className="grid md:grid-cols-3 gap-6">
@@ -427,10 +435,14 @@ function ValidationShowcase() {
           key={metric.label}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className={`bg-slate-800/30 backdrop-blur-xl border ${getBorderClass(metric.color)} rounded-2xl p-8 text-center`}
+          className={`bg-slate-800/30 backdrop-blur-xl border ${getBorderClass(
+            metric.color
+          )} rounded-2xl p-8 text-center`}
         >
           <div
-            className={`text-5xl font-bold bg-gradient-to-r ${getGradientClass(metric.color)} bg-clip-text text-transparent mb-3`}
+            className={`text-5xl font-bold bg-gradient-to-r ${getGradientClass(
+              metric.color
+            )} bg-clip-text text-transparent mb-3`}
           >
             {metric.value}
           </div>
