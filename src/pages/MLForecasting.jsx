@@ -20,34 +20,24 @@ import {
 import { parseSSHAData, calculateStats } from '../utils/dataProcessing'
 
 export default function MLForecasting() {
-  const [depth, setDepth] = useState(80)
-  const [sshaData, setSSHAData] = useState(null)
+  const [depth, setDepth] = useState(50)
   const [modisData, setModisData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [selectedMetric, setSelectedMetric] = useState('intensity')
 
-  // Load SSHA and MODIS data on mount
+  // Load MODIS processed data on mount
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true)
-
-        // Load SSHA data
-        const sshaResponse = await fetch('/SSHA-2025-data.csv')
-        if (!sshaResponse.ok) throw new Error('Failed to load SSHA data')
-        const sshaText = await sshaResponse.text()
-        const sshaParsed = parseSSHAData(sshaText)
-        setSSHAData(sshaParsed)
-
-        // Load MODIS data
-        const modisResponse = await fetch('/processed-data/modis-shark-model.json')
-        if (!modisResponse.ok) throw new Error('Failed to load MODIS data')
-        const modisParsed = await modisResponse.json()
-        setModisData(modisParsed)
+        const response = await fetch('/processed-data/modis-shark-model.json')
+        if (!response.ok) throw new Error('Failed to load MODIS data')
+        const data = await response.json()
+        setModisData(data)
       } catch (err) {
         // Centralized error handling with optional logging
         if (import.meta.env.DEV) {
-          console.error('Error loading ML forecast data:', err)
+          console.error('Error loading MODIS data:', err)
         }
         // Optionally send to error tracking service in production
         // errorTrackingService.capture(err)
@@ -58,60 +48,53 @@ export default function MLForecasting() {
     loadData()
   }, [])
 
-  // Process MODIS data with current depth (optimized)
+  // Process data with current depth (optimized)
   const forecastData = useMemo(() => {
     if (!modisData || !modisData.depths) return null
 
     try {
-      // Get data for the current depth level
-      const depthKey = depth.toString()
-      const depthData = modisData.depths[depthKey]
-
-      if (!depthData || !depthData.data) return null
-
-      // Filter out invalid data points
-      const validData = depthData.data.filter(
-        (point) =>
-          point &&
-          typeof point.lat === 'number' &&
-          typeof point.lon === 'number' &&
-          typeof point.intensity === 'number' &&
-          typeof point.probability === 'number' &&
-          point.intensity > 0 &&
-          point.probability > 0 &&
-          !isNaN(point.lat) &&
-          !isNaN(point.lon) &&
-          !isNaN(point.intensity) &&
-          point.chlorophyll > -1000 &&
-          point.chlorophyll < 1000 && // Filter out NoData chlorophyll values (reasonable range)
-          point.sst > 0 &&
-          point.sst < 50 // Filter out invalid SST values (reasonable range)
+      // Find the closest depth level in the data
+      const availableDepths = Object.keys(modisData.depths).map(Number)
+      const closestDepth = availableDepths.reduce((prev, curr) =>
+        Math.abs(curr - depth) < Math.abs(prev - depth) ? curr : prev
       )
 
-      // Sample data for performance (limit to 2000 points for visualization)
-      const sampleSize = Math.min(2000, validData.length)
-      const step = Math.floor(validData.length / sampleSize)
+      // Get data for the closest depth
+      const depthData = modisData.depths[closestDepth.toString()]
 
-      const sampled = []
-      for (let i = 0; i < validData.length; i += step) {
-        sampled.push(validData[i])
-        if (sampled.length >= sampleSize) break
+      if (!depthData || !depthData.data || depthData.data.length === 0) {
+        return null
       }
 
-      // Add depth information and return processed data
-      return sampled.map((point) => ({
+      // Filter out invalid data points (e.g., chlorophyll = -32767 indicates no data)
+      const validData = depthData.data.filter(
+        (point) =>
+          point.chlorophyll > 0 &&
+          point.sst > 0 &&
+          point.sst < 35 &&
+          !isNaN(point.intensity) &&
+          !isNaN(point.probability)
+      )
+
+      // Sample data for performance (take every nth point if too many)
+      const maxPoints = 1000
+      const samplingRate = Math.ceil(validData.length / maxPoints)
+      const sampledData = validData.filter((_, index) => index % samplingRate === 0)
+
+      // Return processed data with proper structure
+      return sampledData.map((point) => ({
         lat: point.lat,
         lon: point.lon,
         sst: point.sst,
         chlorophyll: point.chlorophyll,
-        ssha: 50, // Default normalized SSHA since MODIS data already includes processing
+        ssha: 0, // SSHA already incorporated in the model
         probability: point.probability,
         intensity: point.intensity,
-        depth: parseInt(depthKey),
+        depth: closestDepth,
       }))
     } catch (error) {
       if (import.meta.env.DEV) {
-        console.error('Error processing MODIS forecast data:', error)
+        console.error('Error processing MODIS data:', error)
       }
       return null
     }
@@ -132,9 +115,18 @@ export default function MLForecasting() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full mb-6">
-            <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-            <span className="text-purple-400 text-sm font-semibold">ML-Powered Forecasting</span>
+          <div className="flex flex-col items-center gap-3 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full">
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+              <span className="text-purple-400 text-sm font-semibold">ML-Powered Forecasting</span>
+            </div>
+            {modisData?.metadata && (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
+                <span className="text-cyan-400 text-xs font-medium">
+                  📡 Data: {modisData.metadata.source_file}
+                </span>
+              </div>
+            )}
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
@@ -148,9 +140,11 @@ export default function MLForecasting() {
           <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-6 max-w-4xl mx-auto">
             <p className="text-gray-300 text-base leading-relaxed">
               <span className="text-purple-400 font-bold">ML Model Integration:</span> Combines{' '}
-              <span className="text-cyan-400 font-semibold">MODIS Chlorophyll-a</span>,{' '}
-              <span className="text-orange-400 font-semibold">SST Proxy</span>, and{' '}
-              <span className="text-blue-400 font-semibold">SSHA data</span> through a
+              <span className="text-cyan-400 font-semibold">real MODIS Chlorophyll-a data</span>,{' '}
+              <span className="text-orange-400 font-semibold">
+                SST Proxy from coral bleaching alerts
+              </span>
+              , and <span className="text-blue-400 font-semibold">SSHA measurements</span> through a
               depth-adjusted Gaussian framework with Arctic suppression for accurate shark
               distribution prediction.
             </p>
@@ -250,7 +244,7 @@ export default function MLForecasting() {
           {/* Quick Preset Buttons */}
           <div className="grid grid-cols-3 gap-4">
             {[
-              { value: 80, label: 'Shallow', icon: '🏖️', desc: 'Warm waters' },
+              { value: 50, label: 'Shallow', icon: '🏖️', desc: 'Warm waters' },
               { value: 150, label: 'Mid-depth', icon: '🌊', desc: 'Thermocline' },
               { value: 250, label: 'Deep', icon: '🌑', desc: 'Cold depths' },
             ].map((preset) => (
@@ -303,19 +297,16 @@ export default function MLForecasting() {
               <p className="text-gray-400">Loading forecast data...</p>
             </div>
           </div>
-        ) : forecastData && forecastData.length > 0 ? (
+        ) : forecastData ? (
           <>
+            <DataSourceInfo modisData={modisData} />
             <ForecastMap data={forecastData} stats={stats} depth={depth} />
-            <ModelMetrics data={forecastData} stats={stats} depth={depth} />
+            <ModelMetrics data={forecastData} stats={stats} depth={depth} modisData={modisData} />
             <ParameterDistribution data={forecastData} />
           </>
         ) : (
           <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 text-center">
-            <p className="text-gray-400">
-              {modisData
-                ? 'No valid data points found for the selected depth. Try adjusting the depth slider.'
-                : 'No data available. Please ensure MODIS data files are loaded.'}
-            </p>
+            <p className="text-gray-400">No data available. Please ensure data files are loaded.</p>
           </div>
         )}
 
@@ -323,6 +314,64 @@ export default function MLForecasting() {
         <ModelInformation />
       </div>
     </div>
+  )
+}
+
+function DataSourceInfo({ modisData }) {
+  if (!modisData?.metadata) return null
+
+  const { metadata } = modisData
+  const availableDepths = Object.keys(modisData.depths || {})
+    .map(Number)
+    .sort((a, b) => a - b)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+      className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-2xl p-6 mb-8"
+    >
+      <div className="flex items-start gap-4">
+        <div className="text-4xl">📊</div>
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-green-400 mb-4">Real NASA MODIS Data</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-slate-900/30 rounded-lg p-4">
+              <div className="text-sm text-gray-400 mb-1">Data Source</div>
+              <div className="text-white font-semibold text-sm">{metadata.source_file}</div>
+            </div>
+            <div className="bg-slate-900/30 rounded-lg p-4">
+              <div className="text-sm text-gray-400 mb-1">Processing Date</div>
+              <div className="text-white font-semibold text-sm">
+                {new Date(metadata.processing_date).toLocaleDateString()}
+              </div>
+            </div>
+            <div className="bg-slate-900/30 rounded-lg p-4">
+              <div className="text-sm text-gray-400 mb-1">Available Depths</div>
+              <div className="text-white font-semibold text-sm">{availableDepths.join(', ')}m</div>
+            </div>
+          </div>
+          <div className="mt-4 bg-slate-900/30 rounded-lg p-4">
+            <div className="text-sm text-gray-400 mb-2">Coverage Area</div>
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              <div>
+                <span className="text-gray-500">Latitude:</span>{' '}
+                <span className="text-cyan-400 font-mono">
+                  {metadata.bounds.lat_min.toFixed(2)}° to {metadata.bounds.lat_max.toFixed(2)}°
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-500">Longitude:</span>{' '}
+                <span className="text-cyan-400 font-mono">
+                  {metadata.bounds.lon_min.toFixed(2)}° to {metadata.bounds.lon_max.toFixed(2)}°
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   )
 }
 
@@ -665,9 +714,18 @@ function RegionMarker({ name, left, top, intensity, color, count }) {
   )
 }
 
-function ModelMetrics({ data, stats, depth }) {
+function ModelMetrics({ data, stats, depth, modisData }) {
   const highIntensity = data.filter((d) => d.intensity > stats.mean * 1.5).length
   const avgProbability = (data.reduce((sum, d) => sum + d.probability, 0) / data.length) * 100
+
+  // Get real statistics from MODIS data for current depth
+  const closestDepth = modisData?.depths
+    ? Object.keys(modisData.depths)
+        .map(Number)
+        .reduce((prev, curr) => (Math.abs(curr - depth) < Math.abs(prev - depth) ? curr : prev))
+    : depth
+
+  const depthStats = modisData?.depths?.[closestDepth.toString()]?.stats
 
   return (
     <motion.div
@@ -677,20 +735,30 @@ function ModelMetrics({ data, stats, depth }) {
       className="grid md:grid-cols-4 gap-6 mb-8"
     >
       <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-        <div className="text-4xl font-bold text-cyan-400 mb-2">{stats.mean.toFixed(2)}</div>
+        <div className="text-4xl font-bold text-cyan-400 mb-2">
+          {depthStats ? depthStats.mean_intensity.toFixed(2) : stats.mean.toFixed(2)}
+        </div>
         <div className="text-gray-400 text-sm">Mean Intensity (λ)</div>
+        <div className="text-xs text-gray-500 mt-1">From MODIS data</div>
       </div>
       <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-        <div className="text-4xl font-bold text-purple-400 mb-2">{avgProbability.toFixed(1)}%</div>
+        <div className="text-4xl font-bold text-purple-400 mb-2">
+          {depthStats ? (depthStats.mean_probability * 100).toFixed(1) : avgProbability.toFixed(1)}%
+        </div>
         <div className="text-gray-400 text-sm">Avg Probability</div>
+        <div className="text-xs text-gray-500 mt-1">From MODIS data</div>
       </div>
       <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
         <div className="text-4xl font-bold text-orange-400 mb-2">{highIntensity}</div>
         <div className="text-gray-400 text-sm">High Intensity Zones</div>
+        <div className="text-xs text-gray-500 mt-1">Filtered data points</div>
       </div>
       <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-        <div className="text-4xl font-bold text-green-400 mb-2">{depth}m</div>
+        <div className="text-4xl font-bold text-green-400 mb-2">{closestDepth}m</div>
         <div className="text-gray-400 text-sm">Analysis Depth</div>
+        <div className="text-xs text-gray-500 mt-1">
+          {depthStats ? `${depthStats.count.toLocaleString()} points` : 'Active'}
+        </div>
       </div>
     </motion.div>
   )
@@ -731,10 +799,7 @@ function ParameterDistribution({ data }) {
 
 function ParameterCard({ title, data, unit, color }) {
   const stats = useMemo(() => {
-    const validData = data.filter((v) => !isNaN(v) && v !== null && v !== -32767)
-    if (validData.length === 0) {
-      return { min: 0, max: 0, mean: 0 }
-    }
+    const validData = data.filter((v) => !isNaN(v) && v !== null)
     const min = Math.min(...validData)
     const max = Math.max(...validData)
     const mean = validData.reduce((sum, v) => sum + v, 0) / validData.length
@@ -961,9 +1026,9 @@ function ModelInformation() {
               >
                 <div className="w-2 h-2 rounded-full bg-yellow-400 mt-2"></div>
                 <p className="text-gray-300">
-                  Currently using{' '}
-                  <strong className="text-orange-300">synthetic SST and Chlorophyll data</strong>{' '}
-                  for demonstration. Full implementation requires complete MODIS datasets.
+                  Using <strong className="text-green-300">real MODIS Chlorophyll-a data</strong>{' '}
+                  from NASA satellite observations. SST is derived from coral bleaching alert areas,
+                  and SSHA from altimetry measurements.
                 </p>
               </motion.div>
               <motion.div
