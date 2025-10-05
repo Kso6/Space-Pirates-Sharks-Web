@@ -170,15 +170,8 @@ export default function Education() {
               topics={['NASA SWOT Mission', 'Sea Surface Height', 'Ocean Currents', 'Eddies']}
               description="Learn how satellites in space can detect underwater features that sharks use for hunting."
               isActive={activeLesson === 1}
-              onClick={(num) => {
-                if (activeLesson === 1) {
-                  setActiveLesson(null)
-                } else if (typeof num === 'number') {
-                  handleStartLesson(num)
-                } else {
-                  setActiveLesson(1)
-                }
-              }}
+              onClick={() => setActiveLesson(activeLesson === 1 ? null : 1)}
+              onStartLesson={handleStartLesson}
             />
 
             <LessonCard
@@ -189,15 +182,8 @@ export default function Education() {
               topics={['Mathematical Models', 'Data Analysis', 'Predictions', '3D Mapping']}
               description="Discover how we combine satellite data to predict where sharks will hunt next."
               isActive={activeLesson === 2}
-              onClick={(num) => {
-                if (activeLesson === 2) {
-                  setActiveLesson(null)
-                } else if (typeof num === 'number') {
-                  handleStartLesson(num)
-                } else {
-                  setActiveLesson(2)
-                }
-              }}
+              onClick={() => setActiveLesson(activeLesson === 2 ? null : 2)}
+              onStartLesson={handleStartLesson}
             />
 
             <LessonCard
@@ -208,15 +194,8 @@ export default function Education() {
               topics={['Phytoplankton', 'Food Chains', 'Chlorophyll', 'Prey Detection']}
               description="Explore how tiny organisms at the ocean's surface feed the entire food web up to sharks."
               isActive={activeLesson === 3}
-              onClick={(num) => {
-                if (activeLesson === 3) {
-                  setActiveLesson(null)
-                } else if (typeof num === 'number') {
-                  handleStartLesson(num)
-                } else {
-                  setActiveLesson(3)
-                }
-              }}
+              onClick={() => setActiveLesson(activeLesson === 3 ? null : 3)}
+              onStartLesson={handleStartLesson}
             />
 
             <LessonCard
@@ -227,15 +206,8 @@ export default function Education() {
               topics={['Engineering', 'pH Sensors', 'Data Transmission', 'Innovation']}
               description="Design a gastric tag that tells us what sharks are eating in real-time."
               isActive={activeLesson === 4}
-              onClick={(num) => {
-                if (activeLesson === 4) {
-                  setActiveLesson(null)
-                } else if (typeof num === 'number') {
-                  handleStartLesson(num)
-                } else {
-                  setActiveLesson(4)
-                }
-              }}
+              onClick={() => setActiveLesson(activeLesson === 4 ? null : 4)}
+              onStartLesson={handleStartLesson}
             />
           </div>
         </motion.div>
