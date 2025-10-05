@@ -236,13 +236,13 @@ function ArchitectureSection() {
             <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-6 h-full flex items-center justify-center border-4 border-cyan-500/30">
               <div className="text-center space-y-4 w-full">
                 <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
-                  <img 
-                    src="/External Dorsal Fin.png" 
-                    alt="External Dorsal Fin Tag" 
+                  <img
+                    src="/External Dorsal Fin.png"
+                    alt="External Dorsal Fin Tag"
                     className="w-full h-auto object-cover"
                     style={{
                       filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
-                      borderRadius: '16px'
+                      borderRadius: '16px',
                     }}
                   />
                   <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded">
@@ -823,36 +823,106 @@ function PowerSection() {
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Internal Gastric Capsule */}
-          <div className="bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-xl p-6 border border-blue-500/20">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-2xl">
-                💊
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Internal Capsule</h3>
-                <p className="text-xs text-gray-400">Primary power system</p>
+          <div className="bg-slate-800/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white">Internal Gastric Capsule</h2>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-cyan-400 text-xs font-semibold">Cutting-Edge Design</span>
               </div>
             </div>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
-                <span className="text-sm text-gray-400">Battery Type</span>
-                <span className="text-sm text-white font-medium">Li-SOCl₂</span>
+
+            <div className="grid lg:grid-cols-2 gap-8">
+              {/* Product Image Section */}
+              <div className="relative">
+                <div className="bg-gradient-to-br from-cyan-700 to-slate-800 rounded-3xl p-6 h-full flex items-center justify-center border-4 border-cyan-500/30">
+                  <div className="text-center space-y-4 w-full">
+                    <div className="relative w-full bg-slate-900/50 rounded-lg overflow-hidden border-2 border-cyan-400/30">
+                      <img 
+                        src="/Internal Gastric Tag.png" 
+                        alt="Internal Gastric Capsule" 
+                        className="w-full h-auto object-cover"
+                        style={{
+                          filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
+                          borderRadius: '16px'
+                        }}
+                      />
+                      <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded">
+                        Product Visualization
+                      </div>
+                    </div>
+                    <div className="text-white font-bold text-xl">Internal Gastric Capsule</div>
+                    <div className="text-gray-400 text-sm space-y-1">
+                      <p>Dimensions: 25mm × 10mm</p>
+                      <p>Weight: ~5 grams</p>
+                      <p className="text-green-400 font-semibold">Gastro-retentive Design</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
-                <span className="text-sm text-gray-400">Capacity</span>
-                <span className="text-sm text-white font-medium">1200 mAh @ 3.6V</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
-                <span className="text-sm text-gray-400">Form Factor</span>
-                <span className="text-sm text-white font-medium">1/2 AA bobbin</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-slate-600/50">
-                <span className="text-sm text-gray-400">Self-Discharge</span>
-                <span className="text-sm text-green-400 font-medium">&lt; 1% / year</span>
-              </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-sm text-gray-400">Operating Temp</span>
-                <span className="text-sm text-white font-medium">-60°C to +85°C</span>
+
+              {/* Detailed Specifications */}
+              <div className="space-y-4">
+                <div className="bg-slate-700/50 rounded-xl p-6 border border-cyan-500/20">
+                  <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                    <span className="mr-3 text-2xl">🔬</span>
+                    Sensor Array
+                  </h3>
+                  <p className="text-gray-300 text-sm mb-3">
+                    Advanced multi-sensor configuration for comprehensive feeding event detection
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="text-xs text-gray-400 mb-1">pH Sensor</div>
+                      <div className="text-sm text-white font-medium">ISFET</div>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="text-xs text-gray-400 mb-1">NH₄⁺ Sensor</div>
+                      <div className="text-sm text-white font-medium">ISE Electrode</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-700/50 rounded-xl p-6 border border-cyan-500/20">
+                  <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                    <span className="mr-3 text-2xl">🔋</span>
+                    Power System
+                  </h3>
+                  <p className="text-gray-300 text-sm mb-3">
+                    Ultra-compact lithium battery with extended deployment capability
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="text-xs text-gray-400 mb-1">Battery Type</div>
+                      <div className="text-sm text-white font-medium">Li-SOCl₂</div>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="text-xs text-gray-400 mb-1">Deployment</div>
+                      <div className="text-sm text-green-400 font-medium">6-12 months</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-700/50 rounded-xl p-6 border border-cyan-500/20">
+                  <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                    <span className="mr-3 text-2xl">📡</span>
+                    Communication
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-400">Link Type</span>
+                      <span className="text-sm text-white font-medium">125 kHz Inductive</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-400">Range</span>
+                      <span className="text-sm text-white font-medium">~10 cm</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-400">Data Rate</span>
+                      <span className="text-sm text-cyan-400 font-medium">Low Power</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
