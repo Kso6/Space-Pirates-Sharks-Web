@@ -1116,22 +1116,22 @@ function GlobalPredictionMaps() {
 
   const depthMaps = {
     50: {
-      image: '/Shark foraging prediction visualisation at 50 metres.png',
+      image: '/Shark%20foraging%20prediction%20visualisation%20at%2050%20metres.png',
       title: '50 Meters Depth',
       description: 'Surface layer predictions showing coastal hotspots and upwelling zones',
     },
     100: {
-      image: '/Shark foraging prediction visualisation at 100 metres.png',
+      image: '/Shark%20foraging%20prediction%20visualisation%20at%20100%20metres.png',
       title: '100 Meters Depth',
       description: 'Thermocline layer with peak shark activity and prey concentration',
     },
     150: {
-      image: '/Shark foraging prediction visualisation at 150 metres.png',
+      image: '/Shark%20foraging%20prediction%20visualisation%20at%20150%20metres.png',
       title: '150 Meters Depth',
       description: 'Deep foraging zones with eddy-driven nutrient upwelling',
     },
     200: {
-      image: '/Shark foraging prediction visualisation at 200 metres.png',
+      image: '/Shark%20foraging%20prediction%20visualisation%20at%20200%20metres.png',
       title: '200 Meters Depth',
       description: 'Mesopelagic predictions for deep-diving shark species',
     },
