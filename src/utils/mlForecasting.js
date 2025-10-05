@@ -165,9 +165,7 @@ export function getIntensityColor(intensity, min, max) {
   if (clamped < 0.25) {
     // Yellow to Orange
     const t = clamped / 0.25
-    return `rgb(${Math.floor(255)}, ${Math.floor(255 - t * 100)}, ${Math.floor(
-      102 - t * 102
-    )})`
+    return `rgb(${Math.floor(255)}, ${Math.floor(255 - t * 100)}, ${Math.floor(102 - t * 102)})`
   } else if (clamped < 0.5) {
     // Orange to Red
     const t = (clamped - 0.25) / 0.25

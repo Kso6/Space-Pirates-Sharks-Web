@@ -260,3 +260,5 @@ secrets.json
 # NASA API keys (if stored locally)
 nasa_api_key.txt
 api_keys.txt
+public/processed-data/
+MODIS DATA/

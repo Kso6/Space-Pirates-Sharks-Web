@@ -4,30 +4,34 @@
  */
 
 /**
- * Parse SSHA CSV data and filter valid values
+ * Parse SSHA CSV data and filter valid values (optimized)
  * @param {string} csvText - Raw CSV text content
  * @returns {Array} Array of {lat, lon, value} objects
  */
 export function parseSSHAData(csvText) {
   const lines = csvText.trim().split('\n')
-  const data = []
+  // Pre-allocate array for better performance
+  const data = new Array(lines.length - 1)
+  let validCount = 0
 
-  // Skip header
+  // Skip header and process lines
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim()
     if (!line) continue
 
-    const [latStr, lonStr, valueStr] = line.split(',').map((s) => s.trim())
-    const lat = parseFloat(latStr)
-    const lon = parseFloat(lonStr)
-    const value = parseFloat(valueStr)
+    const parts = line.split(',')
+    const lat = parseFloat(parts[0])
+    const lon = parseFloat(parts[1])
+    const value = parseFloat(parts[2])
 
     // Filter out invalid data (-999 is NoData value)
     if (!isNaN(lat) && !isNaN(lon) && !isNaN(value) && value !== -999) {
-      data.push({ lat, lon, value })
+      data[validCount++] = { lat, lon, value }
     }
   }
 
+  // Trim array to actual size
+  data.length = validCount
   return data
 }
 
@@ -140,7 +144,7 @@ export function binDataForTimeSeries(data, bins = 24) {
 }
 
 /**
- * Sample data for visualization (to avoid rendering too many points)
+ * Sample data for visualization (optimized for performance)
  * @param {Array} data - Full dataset
  * @param {number} maxPoints - Maximum points to return
  * @returns {Array} Sampled dataset
@@ -149,7 +153,15 @@ export function sampleData(data, maxPoints = 1000) {
   if (!data || data.length <= maxPoints) return data
 
   const step = Math.floor(data.length / maxPoints)
-  return data.filter((_, i) => i % step === 0)
+  const result = new Array(Math.ceil(data.length / step))
+  let resultIndex = 0
+
+  for (let i = 0; i < data.length; i += step) {
+    result[resultIndex++] = data[i]
+  }
+
+  result.length = resultIndex
+  return result
 }
 
 /**
