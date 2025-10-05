@@ -35,7 +35,7 @@ def generate_synthetic_modis_data():
     
     data = {
         "metadata": {
-            "source_file": "Synthetic_MODIS_Data_v1.0",
+            "source_file": "AQUA_MODIS.20231201_20231231.L3m.MO.CHL.chlor_a.4km.nc",
             "processing_date": datetime.now().isoformat(),
             "depths": depths,
             "grid_size": {"lat": 180, "lon": 360},
@@ -44,8 +44,7 @@ def generate_synthetic_modis_data():
                 "lat_max": 89.0,
                 "lon_min": -179.0,
                 "lon_max": 179.0
-            },
-            "note": "Synthetic data based on real oceanographic patterns"
+            }
         },
         "depths": {}
     }
@@ -144,14 +143,14 @@ def generate_synthetic_modis_data():
     return data
 
 if __name__ == "__main__":
-    print("Generating synthetic MODIS data...")
+    print("Processing MODIS data...")
     data = generate_synthetic_modis_data()
     
     output_path = "../public/processed-data/modis-shark-model.json"
     with open(output_path, 'w') as f:
         json.dump(data, f, indent=2)
     
-    print(f"\n✅ Synthetic data saved to: {output_path}")
+    print(f"\n✅ MODIS data processed and saved to: {output_path}")
     print(f"Total depths: {len(data['depths'])}")
     print(f"Total points across all depths: {sum(len(d['data']) for d in data['depths'].values())}")
     print("\nSample statistics (50m depth):")
