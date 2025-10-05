@@ -30,29 +30,29 @@ export default function MLForecasting() {
     const loadData = async () => {
       try {
         setLoading(true)
-        
+
         // Try multiple paths in case of deployment issues
         const paths = [
           '/processed-data/modis-shark-model.json',
           './processed-data/modis-shark-model.json',
           'processed-data/modis-shark-model.json',
         ]
-        
+
         let data = null
         let lastError = null
-        
+
         for (const path of paths) {
           try {
             console.log(`Attempting to load MODIS data from ${path}`)
             const response = await fetch(path)
             console.log(`Response status for ${path}:`, response.status, response.statusText)
-            
+
             if (response.ok) {
               data = await response.json()
               console.log('Data loaded successfully from:', path, {
                 hasMetadata: !!data.metadata,
                 hasDepths: !!data.depths,
-                depthKeys: data.depths ? Object.keys(data.depths) : []
+                depthKeys: data.depths ? Object.keys(data.depths) : [],
               })
               break
             }
@@ -61,7 +61,7 @@ export default function MLForecasting() {
             lastError = err
           }
         }
-        
+
         if (data) {
           setModisData(data)
         } else {
