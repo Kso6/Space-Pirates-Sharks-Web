@@ -30,15 +30,19 @@ export default function MLForecasting() {
     const loadData = async () => {
       try {
         setLoading(true)
+        console.log('Attempting to load MODIS data from /processed-data/modis-shark-model.json')
         const response = await fetch('/processed-data/modis-shark-model.json')
-        if (!response.ok) throw new Error('Failed to load MODIS data')
+        console.log('Response status:', response.status, response.statusText)
+        if (!response.ok) throw new Error(`Failed to load MODIS data: ${response.status}`)
         const data = await response.json()
+        console.log('Data loaded successfully:', {
+          hasMetadata: !!data.metadata,
+          hasDepths: !!data.depths,
+          depthKeys: data.depths ? Object.keys(data.depths) : []
+        })
         setModisData(data)
       } catch (err) {
-        // Centralized error handling with optional logging
-        if (import.meta.env.DEV) {
-          console.error('Error loading MODIS data:', err)
-        }
+        console.error('Error loading MODIS data:', err)
         // Optionally send to error tracking service in production
         // errorTrackingService.capture(err)
       } finally {
@@ -50,7 +54,10 @@ export default function MLForecasting() {
 
   // Process data with current depth (optimized)
   const forecastData = useMemo(() => {
-    if (!modisData || !modisData.depths) return null
+    if (!modisData || !modisData.depths) {
+      console.log('No MODIS data or depths available')
+      return null
+    }
 
     try {
       // Find the closest depth level in the data
@@ -59,12 +66,17 @@ export default function MLForecasting() {
         Math.abs(curr - depth) < Math.abs(prev - depth) ? curr : prev
       )
 
+      console.log(`Processing depth ${closestDepth}m (requested ${depth}m)`)
+
       // Get data for the closest depth
       const depthData = modisData.depths[closestDepth.toString()]
 
       if (!depthData || !depthData.data || depthData.data.length === 0) {
+        console.log('No depth data available')
         return null
       }
+
+      console.log(`Total data points at ${closestDepth}m: ${depthData.data.length}`)
 
       // Filter out invalid data points
       // Note: chlorophyll < 0 indicates fill values (-32767), but we'll be more lenient
@@ -78,7 +90,10 @@ export default function MLForecasting() {
           point.intensity > 0
       )
 
+      console.log(`Valid data points after filtering: ${validData.length}`)
+
       if (validData.length === 0) {
+        console.warn('No valid data points after filtering')
         return null
       }
 
@@ -86,6 +101,8 @@ export default function MLForecasting() {
       const maxPoints = 1000
       const samplingRate = Math.ceil(validData.length / maxPoints)
       const sampledData = validData.filter((_, index) => index % samplingRate === 0)
+
+      console.log(`Sampled ${sampledData.length} points for visualization`)
 
       // Return processed data with proper structure
       return sampledData.map((point) => ({
@@ -99,9 +116,7 @@ export default function MLForecasting() {
         depth: closestDepth,
       }))
     } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Error processing MODIS data:', error)
-      }
+      console.error('Error processing MODIS data:', error)
       return null
     }
   }, [modisData, depth])
