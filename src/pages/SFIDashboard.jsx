@@ -139,19 +139,25 @@ export default function SFIDashboard() {
 
   // SFI distribution for histogram
   const sfiDistribution = useMemo(() => {
-    if (!sfiData) return []
+    if (!sfiData || sfiData.length === 0) return []
 
     const bins = Array.from({ length: 20 }, (_, i) => ({
       range: (i * 0.1).toFixed(1),
       count: 0,
+      label: `${(i * 0.1).toFixed(1)}-${((i + 1) * 0.1).toFixed(1)}`,
     }))
 
     sfiData.forEach((d) => {
-      const binIndex = Math.min(Math.floor(d.sfi / 0.1), 19)
-      bins[binIndex].count++
+      if (d.sfi !== null && !isNaN(d.sfi) && d.sfi >= 0) {
+        const binIndex = Math.min(Math.floor(d.sfi / 0.1), 19)
+        if (binIndex >= 0 && binIndex < 20) {
+          bins[binIndex].count++
+        }
+      }
     })
 
-    return bins
+    // Filter out bins with zero count for cleaner visualization
+    return bins.filter((bin) => bin.count > 0)
   }, [sfiData])
 
   if (loading) {
@@ -268,30 +274,61 @@ export default function SFIDashboard() {
               </p>
             </div>
 
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={sfiDistribution}>
-                <defs>
-                  <linearGradient id="sfiGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.3} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis
-                  dataKey="range"
-                  stroke="#94a3b8"
-                  label={{ value: 'SFI Score', position: 'insideBottom', offset: -5 }}
-                />
-                <YAxis
-                  stroke="#94a3b8"
-                  label={{ value: 'Frequency', angle: -90, position: 'insideLeft' }}
-                />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #3b82f6' }}
-                />
-                <Bar dataKey="count" fill="url(#sfiGradient)" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {sfiDistribution && sfiDistribution.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={sfiDistribution} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
+                  <defs>
+                    <linearGradient id="sfiGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.3} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                  <XAxis
+                    dataKey="range"
+                    stroke="#94a3b8"
+                    label={{
+                      value: 'SFI Score',
+                      position: 'insideBottom',
+                      offset: -10,
+                      fill: '#94a3b8',
+                    }}
+                  />
+                  <YAxis
+                    stroke="#94a3b8"
+                    label={{
+                      value: 'Number of Points',
+                      angle: -90,
+                      position: 'insideLeft',
+                      fill: '#94a3b8',
+                    }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#1e293b',
+                      border: '1px solid #3b82f6',
+                      borderRadius: '8px',
+                    }}
+                    labelStyle={{ color: '#fff' }}
+                    formatter={(value) => [`${value} points`, 'Frequency']}
+                  />
+                  <Bar dataKey="count" fill="url(#sfiGradient)" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[300px] flex items-center justify-center bg-slate-900/30 rounded-xl">
+                <div className="text-center">
+                  <p className="text-gray-400 text-lg mb-2">No SFI data available</p>
+                  <p className="text-gray-500 text-sm">
+                    {!sfiData
+                      ? 'Loading data...'
+                      : sfiData.length === 0
+                      ? 'No valid data points found'
+                      : 'Processing data...'}
+                  </p>
+                </div>
+              </div>
+            )}
 
             <div className="mt-4 flex items-center justify-center gap-4 text-sm">
               <div className="flex items-center gap-2">
