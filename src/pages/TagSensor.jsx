@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion'
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
 import {
   LineChart,
   Line,
@@ -1324,95 +1322,54 @@ function ThreeDModelViewer() {
   }
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-slate-900/50 to-slate-800/50 rounded-lg overflow-hidden relative">
-      <Canvas camera={{ position: [0, 0, 8], fov: 50 }} className="w-full h-full">
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-        <pointLight position={[-10, -10, -5]} intensity={0.3} />
+    <div className="w-full h-full bg-gradient-to-br from-slate-900/50 to-slate-800/50 rounded-xl overflow-hidden relative">
+      {/* YC Startup-style image display */}
+      <div className="absolute inset-0 flex items-center justify-center p-8">
+        <div className="relative max-w-full max-h-full">
+          {/* Main image container with YC-style rounded corners and shadow */}
+          <div className="relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/10 hover:border-cyan-400/50 transition-all duration-300">
+            {/* Image with rounded corners */}
+            <img
+              src="/External Dorsal Fin.png"
+              alt="External Dorsal Fin Tag"
+              className="w-auto h-auto max-w-full max-h-96 object-contain rounded-xl shadow-lg"
+              style={{
+                filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
+                borderRadius: '16px'
+              }}
+            />
 
-        {/* OrbitControls for user interaction */}
-        <OrbitControls
-          enablePan={true}
-          enableZoom={true}
-          enableRotate={true}
-          minDistance={0.1}
-          maxDistance={30}
-          autoRotate={true}
-          autoRotateSpeed={0.5}
-        />
+            {/* YC-style floating badge */}
+            <div className="absolute -top-3 -right-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white/20">
+              NEW
+            </div>
 
-        {/* 3D representation of the External Dorsal Tag */}
-        <group>
-          {/* Main housing - represents the tag body */}
-          <mesh position={[0, 0, 0]} castShadow receiveShadow>
-            <boxGeometry args={[3, 1.5, 0.6]} />
-            <meshStandardMaterial color="#0e7490" metalness={0.3} roughness={0.4} />
-          </mesh>
+            {/* Subtle glow effect */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-400/10 to-blue-400/10 pointer-events-none"></div>
+          </div>
 
-          {/* Solar panel array */}
-          <mesh position={[0, 0.8, 0]} castShadow>
-            <boxGeometry args={[2.5, 0.2, 0.5]} />
-            <meshStandardMaterial color="#1e40af" metalness={0.1} roughness={0.2} />
-          </mesh>
-
-          {/* Satellite antenna */}
-          <group position={[0, 1.2, 0]}>
-            <mesh>
-              <cylinderGeometry args={[0.05, 0.05, 2]} />
-              <meshStandardMaterial color="#fbbf24" />
-            </mesh>
-            {/* Antenna tip */}
-            <mesh position={[0, 1.1, 0]}>
-              <sphereGeometry args={[0.15]} />
-              <meshStandardMaterial color="#f59e0b" emissive="#f59e0b" emissiveIntensity={0.2} />
-            </mesh>
-          </group>
-
-          {/* Inductive receiver coil */}
-          <mesh position={[0, -0.6, 0]}>
-            <torusGeometry args={[0.8, 0.15]} />
-            <meshStandardMaterial color="#ea580c" metalness={0.5} roughness={0.3} />
-          </mesh>
-
-          {/* Attachment bolts */}
-          <mesh position={[-1.2, -0.8, 0]}>
-            <cylinderGeometry args={[0.08, 0.08, 0.4]} />
-            <meshStandardMaterial color="#64748b" />
-          </mesh>
-          <mesh position={[1.2, -0.8, 0]}>
-            <cylinderGeometry args={[0.08, 0.08, 0.4]} />
-            <meshStandardMaterial color="#64748b" />
-          </mesh>
-
-          {/* Depth sensor window */}
-          <mesh position={[-1, 0, 0.31]}>
-            <sphereGeometry args={[0.2]} />
-            <meshStandardMaterial color="#7c3aed" transparent opacity={0.7} />
-          </mesh>
-        </group>
-
-        {/* Optional: Add a simple ground plane for reference */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]} receiveShadow>
-          <planeGeometry args={[20, 20]} />
-          <meshStandardMaterial color="#1a1a2e" transparent opacity={0.2} />
-        </mesh>
-      </Canvas>
-
-      {/* Control instructions overlay */}
-      <div className="absolute bottom-3 left-3 right-3 text-center">
-        <div className="text-cyan-300 text-xs font-mono bg-slate-900/60 px-2 py-1 rounded backdrop-blur-sm">
-          🖱️ Drag to rotate • 🔄 Scroll to zoom • 🖱️ Right-click to pan
+          {/* YC-style caption below */}
+          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+            <div className="bg-slate-900/80 backdrop-blur-sm rounded-lg px-4 py-2 border border-cyan-400/30">
+              <p className="text-cyan-300 text-sm font-medium text-center">
+                External Dorsal Fin Tag • Revolutionary Marine Technology
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Model info badge */}
-      <div className="absolute top-2 left-2 bg-cyan-600/90 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
-        Interactive 3D Model
+      {/* Minimalist overlay elements */}
+      <div className="absolute top-4 left-4">
+        <div className="bg-cyan-600/90 text-white text-sm font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+          Product Image
+        </div>
       </div>
 
-      {/* Note about actual model loading */}
-      <div className="absolute top-2 right-2 bg-slate-800/80 text-cyan-300 text-xs px-2 py-1 rounded backdrop-blur-sm">
-        OBJ Model Ready
+      <div className="absolute bottom-4 right-4">
+        <div className="bg-slate-800/80 text-cyan-300 text-xs px-2 py-1 rounded backdrop-blur-sm">
+          YC Startup Style
+        </div>
       </div>
     </div>
   )
