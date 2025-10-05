@@ -44,7 +44,6 @@ export default function MLForecasting() {
         if (!modisResponse.ok) throw new Error('Failed to load MODIS data')
         const modisParsed = await modisResponse.json()
         setModisData(modisParsed)
-
       } catch (err) {
         // Centralized error handling with optional logging
         if (import.meta.env.DEV) {
@@ -71,17 +70,22 @@ export default function MLForecasting() {
       if (!depthData || !depthData.data) return null
 
       // Filter out invalid data points
-      const validData = depthData.data.filter(point =>
-        point &&
-        typeof point.lat === 'number' &&
-        typeof point.lon === 'number' &&
-        typeof point.intensity === 'number' &&
-        typeof point.probability === 'number' &&
-        point.intensity > 0 &&
-        point.probability > 0 &&
-        !isNaN(point.lat) &&
-        !isNaN(point.lon) &&
-        !isNaN(point.intensity)
+      const validData = depthData.data.filter(
+        (point) =>
+          point &&
+          typeof point.lat === 'number' &&
+          typeof point.lon === 'number' &&
+          typeof point.intensity === 'number' &&
+          typeof point.probability === 'number' &&
+          point.intensity > 0 &&
+          point.probability > 0 &&
+          !isNaN(point.lat) &&
+          !isNaN(point.lon) &&
+          !isNaN(point.intensity) &&
+          point.chlorophyll > -1000 &&
+          point.chlorophyll < 1000 && // Filter out NoData chlorophyll values (reasonable range)
+          point.sst > 0 &&
+          point.sst < 50 // Filter out invalid SST values (reasonable range)
       )
 
       // Sample data for performance (limit to 2000 points for visualization)
@@ -95,17 +99,16 @@ export default function MLForecasting() {
       }
 
       // Add depth information and return processed data
-      return sampled.map(point => ({
+      return sampled.map((point) => ({
         lat: point.lat,
         lon: point.lon,
-        sst: point.sst || 24, // Default if not available
-        chlorophyll: point.chlorophyll || 0.5, // Default if not available
+        sst: point.sst,
+        chlorophyll: point.chlorophyll,
         ssha: 50, // Default normalized SSHA since MODIS data already includes processing
         probability: point.probability,
         intensity: point.intensity,
         depth: parseInt(depthKey),
       }))
-
     } catch (error) {
       if (import.meta.env.DEV) {
         console.error('Error processing MODIS forecast data:', error)
@@ -300,7 +303,7 @@ export default function MLForecasting() {
               <p className="text-gray-400">Loading forecast data...</p>
             </div>
           </div>
-        ) : forecastData ? (
+        ) : forecastData && forecastData.length > 0 ? (
           <>
             <ForecastMap data={forecastData} stats={stats} depth={depth} />
             <ModelMetrics data={forecastData} stats={stats} depth={depth} />
@@ -308,7 +311,11 @@ export default function MLForecasting() {
           </>
         ) : (
           <div className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 text-center">
-            <p className="text-gray-400">No data available. Please ensure data files are loaded.</p>
+            <p className="text-gray-400">
+              {modisData
+                ? 'No valid data points found for the selected depth. Try adjusting the depth slider.'
+                : 'No data available. Please ensure MODIS data files are loaded.'}
+            </p>
           </div>
         )}
 
@@ -724,7 +731,10 @@ function ParameterDistribution({ data }) {
 
 function ParameterCard({ title, data, unit, color }) {
   const stats = useMemo(() => {
-    const validData = data.filter((v) => !isNaN(v) && v !== null)
+    const validData = data.filter((v) => !isNaN(v) && v !== null && v !== -32767)
+    if (validData.length === 0) {
+      return { min: 0, max: 0, mean: 0 }
+    }
     const min = Math.min(...validData)
     const max = Math.max(...validData)
     const mean = validData.reduce((sum, v) => sum + v, 0) / validData.length
