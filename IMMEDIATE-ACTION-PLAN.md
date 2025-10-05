@@ -3,6 +3,7 @@
 ## Status: Ready to Execute
 
 ### ✅ COMPLETED
+
 1. Created `src/utils/oceanography.js` with real scientific calculations
 2. Documented all bugs in `COMPREHENSIVE-BUG-FIXES.md`
 3. Committed and pushed to repository
@@ -12,6 +13,7 @@
 ## 1. Fix DataVisualization.jsx Graphs Not Loading
 
 ### Problem:
+
 - Graphs showing "No Data" or not loading
 - Synthetic data mixed with real data
 - Random values instead of scientific calculations
@@ -19,22 +21,32 @@
 ### Solution - Replace These Sections:
 
 #### A. Ocean3DProfile Component (Lines 816-832)
+
 **CURRENT (BROKEN - Uses Math.random()):**
+
 ```javascript
 const depthProfile = useMemo(() => {
   return Array.from({ length: 20 }, (_, i) => ({
     depth: i * 50,
     temperature: Math.max(0, Math.min(1, (25 - i * 50 * 0.03 + Math.random() * 0.5) / 30)),
     chlorophyll: Math.max(0, Math.min(1, Math.exp(-i / 3) * (0.5 + Math.random() * 0.2))),
-    eddyIntensity: Math.max(0, Math.min(1, Math.exp(-Math.pow((i * 50 - 200) / 100, 2)) * (0.8 + Math.random() * 0.4))),
+    eddyIntensity: Math.max(
+      0,
+      Math.min(1, Math.exp(-Math.pow((i * 50 - 200) / 100, 2)) * (0.8 + Math.random() * 0.4))
+    ),
     sfi: Math.max(0, Math.min(1, Math.random() * 0.6 + 0.3)),
   }))
 }, [])
 ```
 
 **REPLACE WITH (FIXED - Uses Real Data):**
+
 ```javascript
-import { calculateTemperatureAtDepth, calculateChlorophyllAtDepth, calculateEddyIntensity } from '../utils/oceanography'
+import {
+  calculateTemperatureAtDepth,
+  calculateChlorophyllAtDepth,
+  calculateEddyIntensity,
+} from '../utils/oceanography'
 
 const depthProfile = useMemo(() => {
   if (!sshaData || sshaData.length === 0) {
@@ -44,11 +56,11 @@ const depthProfile = useMemo(() => {
   // Get average surface conditions from SSHA data
   const avgLat = sshaData.reduce((sum, p) => sum + p.lat, 0) / sshaData.length
   const avgSSHA = sshaData.reduce((sum, p) => sum + p.value, 0) / sshaData.length
-  
+
   // Use real oceanographic models
   const surfaceTemp = 24 // Base temperature, adjust based on region
   const surfaceChl = 0.5 // Base chlorophyll, adjust based on MODIS data if available
-  
+
   return Array.from({ length: 20 }, (_, i) => {
     const depth = i * 50
     return {
@@ -63,7 +75,9 @@ const depthProfile = useMemo(() => {
 ```
 
 #### B. ForagingHotspotMap - Remove Synthetic Fallback (Lines 363-393)
+
 **REMOVE THIS ENTIRE BLOCK:**
+
 ```javascript
 } else {
   // Generate synthetic data if no real data available
@@ -72,7 +86,7 @@ const depthProfile = useMemo(() => {
     'gulf-stream': { latMin: 25, latMax: 40, lonMin: -80, lonMax: -60 },
     // ... etc
   }
-  
+
   for (let i = 0; i < 50; i++) {
     data.push({
       lat: regionBounds.latMin + Math.random() * ...,
@@ -84,6 +98,7 @@ const depthProfile = useMemo(() => {
 ```
 
 **REPLACE WITH:**
+
 ```javascript
 } else {
   return null // No data available - will show proper message
@@ -91,18 +106,23 @@ const depthProfile = useMemo(() => {
 ```
 
 #### C. Fix Depth Assignment (Line 360)
+
 **CHANGE:**
+
 ```javascript
 depth: Math.floor(Math.random() * 500),
 ```
 
 **TO:**
+
 ```javascript
 depth: estimateThermoclineDepth(point.value, point.lat),
 ```
 
 #### D. SatelliteDataOverlay - Remove Synthetic Time Series (Lines 607-631)
+
 **REMOVE:**
+
 ```javascript
 } else if (dataset === 'modis-chlorophyll') {
   const depthFactor = Math.max(0.2, 1 - (seaDepth / 300) * 0.7)
@@ -117,6 +137,7 @@ depth: estimateThermoclineDepth(point.value, point.lat),
 ```
 
 **REPLACE WITH:**
+
 ```javascript
 } else {
   // No real data available for this dataset
@@ -125,7 +146,9 @@ depth: estimateThermoclineDepth(point.value, point.lat),
 ```
 
 #### E. Add "No Data" UI Component
+
 **ADD AFTER LINE 816:**
+
 ```javascript
 // Show message when no data available
 if (!depthProfile || depthProfile.length === 0) {
@@ -135,7 +158,9 @@ if (!depthProfile || depthProfile.length === 0) {
       <div className="h-96 flex items-center justify-center bg-slate-900/50 rounded-lg">
         <div className="text-center">
           <p className="text-gray-400 text-lg mb-2">Loading real oceanographic data...</p>
-          <p className="text-gray-500 text-sm">Please wait while we process NASA satellite measurements</p>
+          <p className="text-gray-500 text-sm">
+            Please wait while we process NASA satellite measurements
+          </p>
         </div>
       </div>
     </div>
@@ -150,6 +175,7 @@ if (!depthProfile || depthProfile.length === 0) {
 **LOCATION:** Lines 98-169 in `src/pages/TagSensor.jsx`
 
 **REPLACE THE ENTIRE SVG BLOCK (lines 102-164) WITH:**
+
 ```javascript
 <img
   src="/Internal Gastric Tag.png"
@@ -166,6 +192,7 @@ if (!depthProfile || depthProfile.length === 0) {
 **LOCATION:** Lines 239-247 in `src/pages/TagSensor.jsx`
 
 **CHANGE:**
+
 ```javascript
 <img
   src="/External Dorsal Fin.png"
@@ -179,6 +206,7 @@ if (!depthProfile || depthProfile.length === 0) {
 ```
 
 **TO:**
+
 ```javascript
 <img
   src="/External Dorsal Fin.png"
@@ -192,13 +220,15 @@ if (!depthProfile || depthProfile.length === 0) {
 ```
 
 **AND ALSO CHANGE Line 1342:**
+
 ```javascript
-className="w-auto h-auto max-w-full max-h-96 object-contain rounded-xl shadow-lg"
+className = 'w-auto h-auto max-w-full max-h-96 object-contain rounded-xl shadow-lg'
 ```
 
 **TO:**
+
 ```javascript
-className="w-auto h-auto max-w-full max-h-96 object-contain rounded-xl shadow-lg scale-75"
+className = 'w-auto h-auto max-w-full max-h-96 object-contain rounded-xl shadow-lg scale-75'
 ```
 
 ## 3. Keep Feeding Event Simulation (ALLOWED)
@@ -224,6 +254,7 @@ After making these changes, verify:
 ## 5. Import Statements to Add
 
 **ADD TO TOP OF DataVisualization.jsx:**
+
 ```javascript
 import {
   calculateTemperatureAtDepth,
@@ -256,12 +287,14 @@ npm run dev
 ## Expected Results
 
 ### Before:
+
 - ❌ Graphs showing random data
 - ❌ Fake ocean profiles
 - ❌ SVG placeholder for gastric tag
 - ❌ External dorsal fin too zoomed in
 
 ### After:
+
 - ✅ All graphs use real NASA data
 - ✅ Real oceanographic calculations
 - ✅ Actual product images
