@@ -50,12 +50,7 @@ export default function MLForecasting() {
 
   // Process data with current depth (optimized)
   const forecastData = useMemo(() => {
-    if (!modisData || !modisData.depths) {
-      if (import.meta.env.DEV) {
-        console.log('No MODIS data available')
-      }
-      return null
-    }
+    if (!modisData || !modisData.depths) return null
 
     try {
       // Find the closest depth level in the data
@@ -68,14 +63,7 @@ export default function MLForecasting() {
       const depthData = modisData.depths[closestDepth.toString()]
 
       if (!depthData || !depthData.data || depthData.data.length === 0) {
-        if (import.meta.env.DEV) {
-          console.log(`No data for depth ${closestDepth}m`)
-        }
         return null
-      }
-
-      if (import.meta.env.DEV) {
-        console.log(`Processing ${depthData.data.length} points for depth ${closestDepth}m`)
       }
 
       // Filter out invalid data points
@@ -90,14 +78,7 @@ export default function MLForecasting() {
           point.intensity > 0
       )
 
-      if (import.meta.env.DEV) {
-        console.log(`Valid points after filtering: ${validData.length}`)
-      }
-
       if (validData.length === 0) {
-        if (import.meta.env.DEV) {
-          console.warn('No valid data points after filtering')
-        }
         return null
       }
 
@@ -105,10 +86,6 @@ export default function MLForecasting() {
       const maxPoints = 1000
       const samplingRate = Math.ceil(validData.length / maxPoints)
       const sampledData = validData.filter((_, index) => index % samplingRate === 0)
-
-      if (import.meta.env.DEV) {
-        console.log(`Sampled ${sampledData.length} points for visualization`)
-      }
 
       // Return processed data with proper structure
       return sampledData.map((point) => ({
