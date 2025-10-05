@@ -194,10 +194,10 @@ export default function SFIDashboard() {
           </h1>
 
           <p className="text-2xl text-gray-300 max-w-4xl mx-auto mb-8">
-            The world's first real-time shark behavior prediction system.
+            A conceptual shark behavior prediction system demonstration.
             <br />
             <span className="text-cyan-400 font-semibold">
-              Powered by NASA MODIS satellite data.
+              Using NASA MODIS satellite data for proof of concept.
             </span>
           </p>
 
@@ -206,22 +206,22 @@ export default function SFIDashboard() {
             <MetricCard
               value={globalStats?.avgSFI || '0.00'}
               label="Global Avg SFI"
-              trend="+12%"
+              trend="Conceptual"
               color="cyan"
             />
             <MetricCard
               value={globalStats?.hotspots || 0}
-              label="Active Hotspots"
-              trend="+23"
+              label="Potential Hotspots"
+              trend="Simulated"
               color="green"
             />
             <MetricCard
               value={`${selectedDepth}m`}
               label="Analysis Depth"
-              trend="Real-time"
+              trend="Demo Model"
               color="blue"
             />
-            <MetricCard value="98.5%" label="Accuracy" trend="Validated" color="purple" />
+            <MetricCard value="Hypothetical" label="Model Status" trend="Proof of Concept" color="purple" />
           </div>
         </motion.div>
 
@@ -269,14 +269,17 @@ export default function SFIDashboard() {
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-white mb-2">SFI Distribution</h2>
               <p className="text-gray-400">
-                Real-time foraging intensity across {globalStats?.totalPoints.toLocaleString()}{' '}
-                ocean points
+                Simulated foraging intensity across {globalStats?.totalPoints.toLocaleString()}{' '}
+                ocean data points
               </p>
             </div>
 
             {sfiDistribution && sfiDistribution.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={sfiDistribution} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
+                <BarChart
+                  data={sfiDistribution}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+                >
                   <defs>
                     <linearGradient id="sfiGradient" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8} />
@@ -354,8 +357,8 @@ export default function SFIDashboard() {
             className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-2xl p-8"
           >
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white mb-2">Live Statistics</h2>
-              <p className="text-gray-400 text-sm">Updated in real-time</p>
+              <h2 className="text-2xl font-bold text-white mb-2">Model Statistics</h2>
+              <p className="text-gray-400 text-sm">Demonstration data</p>
             </div>
 
             <div className="space-y-6">
@@ -378,8 +381,8 @@ export default function SFIDashboard() {
 
             <div className="mt-6 pt-6 border-t border-white/10">
               <div className="flex items-center gap-2 text-sm text-gray-400">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span>Real-time NASA MODIS data</span>
+                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                <span>NASA MODIS data (demo)</span>
               </div>
             </div>
           </motion.div>
@@ -462,10 +465,10 @@ export default function SFIDashboard() {
           className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-12 text-center"
         >
           <h2 className="text-4xl font-bold text-white mb-4">
-            Ready to Save 100M+ Sharks Annually?
+            Hypothetical Conservation Framework
           </h2>
           <p className="text-white/90 text-xl mb-8 max-w-2xl mx-auto">
-            Join researchers, conservationists, and policymakers using SFI to protect marine
+            This conceptual SFI model could help researchers, conservationists, and policymakers protect marine
             ecosystems worldwide
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

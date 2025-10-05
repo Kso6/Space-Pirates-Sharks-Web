@@ -59,8 +59,8 @@ export default function About() {
             />
             <ProblemCard
               icon="🌍"
-              title="Transformative Impact"
-              description="Save 100M+ sharks annually, protect 1M+ km² of ocean, prevent 1000+ human encounters, educate 10,000+ students, enable breakthrough research worldwide."
+              title="Potential Impact"
+              description="This hypothetical framework could contribute to shark conservation, ocean protection, human-shark conflict reduction, marine education, and enable breakthrough research worldwide if implemented."
             />
           </div>
         </motion.div>

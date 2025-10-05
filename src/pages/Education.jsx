@@ -135,23 +135,23 @@ export default function Education() {
             <ImpactCard
               icon="🌊"
               title="Ecosystem Health"
-              description="Sharks are apex predators that regulate entire food webs. Without them, ecosystems collapse, affecting fish populations humans depend on. Our platform helps identify critical habitats to protect."
-              stat="1M+ km²"
-              statLabel="of ocean protected through our predictions"
+              description="Sharks are apex predators that regulate entire food webs. Without them, ecosystems collapse, affecting fish populations humans depend on. This hypothetical platform could help identify critical habitats to protect."
+              stat="Global"
+              statLabel="ocean coverage potential"
             />
             <ImpactCard
               icon="🌍"
               title="Climate Indicators"
               description="Shark behavior reflects ocean health and climate change impacts. NASA satellite data reveals how warming oceans affect shark movement patterns in real-time."
-              stat="100M+"
-              statLabel="sharks saved annually through conservation"
+              stat="Conceptual"
+              statLabel="conservation framework"
             />
             <ImpactCard
               icon="🏖️"
               title="Human Safety"
-              description="Predicting shark locations reduces conflicts by 95%. Real-time alerts keep beaches safe while protecting sharks. Knowledge replaces fear with coexistence."
-              stat="1000+"
-              statLabel="lives saved annually through predictions"
+              description="This hypothetical model could help predict shark locations and reduce conflicts. Real-time alerts could keep beaches safe while protecting sharks. Knowledge replaces fear with coexistence."
+              stat="Potential"
+              statLabel="conflict reduction framework"
             />
           </div>
         </motion.div>

@@ -827,7 +827,7 @@ function SatelliteDataOverlay({
         <div>
           <span className="text-gray-400">Coverage:</span>
           <span className="text-green-400 ml-2">
-            {dataset === 'noaa-ssha' && stats ? `${stats.count.toLocaleString()} pts` : '98.5%'}
+            {dataset === 'noaa-ssha' && stats ? `${stats.count.toLocaleString()} pts` : 'Global'}
           </span>
         </div>
         {dataset === 'noaa-ssha' && stats && (

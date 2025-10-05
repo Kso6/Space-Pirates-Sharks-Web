@@ -117,8 +117,8 @@ export default function MLForecasting() {
         >
           <div className="flex flex-col items-center gap-3 mb-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full">
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-              <span className="text-purple-400 text-sm font-semibold">ML-Powered Forecasting</span>
+            <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+            <span className="text-purple-400 text-sm font-semibold">ML-Powered Forecasting</span>
             </div>
             {modisData?.metadata && (
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
@@ -285,7 +285,7 @@ export default function MLForecasting() {
                   (latitude dependent)
                 </p>
               </div>
-            </div>
+          </div>
           </motion.div>
         </motion.div>
 
@@ -384,7 +384,7 @@ function ForecastMap({ data, stats, depth }) {
     ({ active, payload }) => {
       if (active && payload && payload[0]) {
         const d = payload[0].payload
-        return (
+  return (
           <div className="bg-slate-900 border border-cyan-500/30 rounded-lg px-4 py-3 text-sm">
             <div className="text-white font-semibold mb-2">Forecast Details</div>
             <div className="text-gray-300">Lat: {d.lat.toFixed(2)}°</div>
@@ -412,80 +412,80 @@ function ForecastMap({ data, stats, depth }) {
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8"
-      >
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Shark Foraging Intensity Map</h2>
-            <p className="text-gray-400">ML-predicted intensity (λ) at {depth}m depth</p>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-full">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-xs text-green-400 font-semibold">Live Forecast</span>
-          </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+      className="bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8"
+    >
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-white mb-2">Shark Foraging Intensity Map</h2>
+          <p className="text-gray-400">ML-predicted intensity (λ) at {depth}m depth</p>
         </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-full">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-xs text-green-400 font-semibold">Live Forecast</span>
+        </div>
+      </div>
 
-        <ResponsiveContainer width="100%" height={500}>
-          <ScatterChart margin={{ top: 20, right: 20, bottom: 60, left: 60 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis
-              type="number"
-              dataKey="lon"
-              name="Longitude"
-              stroke="#94a3b8"
-              domain={['dataMin', 'dataMax']}
-              label={{
-                value: 'Longitude (°)',
-                position: 'insideBottom',
-                offset: -10,
-                fill: '#94a3b8',
+      <ResponsiveContainer width="100%" height={500}>
+        <ScatterChart margin={{ top: 20, right: 20, bottom: 60, left: 60 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+          <XAxis
+            type="number"
+            dataKey="lon"
+            name="Longitude"
+            stroke="#94a3b8"
+            domain={['dataMin', 'dataMax']}
+            label={{
+              value: 'Longitude (°)',
+              position: 'insideBottom',
+              offset: -10,
+              fill: '#94a3b8',
+            }}
+          />
+          <YAxis
+            type="number"
+            dataKey="lat"
+            name="Latitude"
+            stroke="#94a3b8"
+            domain={['dataMin', 'dataMax']}
+            label={{ value: 'Latitude (°)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+          />
+          <ZAxis type="number" dataKey="intensity" name="Intensity" range={[50, 400]} />
+            <Tooltip content={CustomTooltip} />
+          <Scatter
+            name="Shark Intensity"
+            data={data}
+            fill="#06b6d4"
+            fillOpacity={0.6}
+              shape={renderShape}
+          />
+        </ScatterChart>
+      </ResponsiveContainer>
+
+      {/* Color Legend */}
+      <div className="mt-6 flex items-center justify-center gap-4">
+        <span className="text-gray-400 text-sm">Low Intensity</span>
+          <div className="flex h-6 w-64 rounded-full overflow-hidden shadow-lg">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              style={{
+                background: getIntensityColor(
+                  stats.p2 + ((stats.p98 - stats.p2) * i) / 19,
+                  stats.p2,
+                  stats.p98
+                ),
+                width: '5%',
               }}
             />
-            <YAxis
-              type="number"
-              dataKey="lat"
-              name="Latitude"
-              stroke="#94a3b8"
-              domain={['dataMin', 'dataMax']}
-              label={{ value: 'Latitude (°)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
-            />
-            <ZAxis type="number" dataKey="intensity" name="Intensity" range={[50, 400]} />
-            <Tooltip content={CustomTooltip} />
-            <Scatter
-              name="Shark Intensity"
-              data={data}
-              fill="#06b6d4"
-              fillOpacity={0.6}
-              shape={renderShape}
-            />
-          </ScatterChart>
-        </ResponsiveContainer>
-
-        {/* Color Legend */}
-        <div className="mt-6 flex items-center justify-center gap-4">
-          <span className="text-gray-400 text-sm">Low Intensity</span>
-          <div className="flex h-6 w-64 rounded-full overflow-hidden shadow-lg">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  background: getIntensityColor(
-                    stats.p2 + ((stats.p98 - stats.p2) * i) / 19,
-                    stats.p2,
-                    stats.p98
-                  ),
-                  width: '5%',
-                }}
-              />
-            ))}
-          </div>
-          <span className="text-gray-400 text-sm">High Intensity</span>
+          ))}
         </div>
-      </motion.div>
+        <span className="text-gray-400 text-sm">High Intensity</span>
+      </div>
+    </motion.div>
 
       {/* Global Ocean Intensity Map */}
       <GlobalIntensityMap data={data} stats={stats} depth={depth} />
@@ -1057,7 +1057,7 @@ function ModelInformation() {
                   .
                 </p>
               </motion.div>
-            </div>
+        </div>
           </div>
         </div>
       </div>
@@ -1187,8 +1187,8 @@ function GlobalPredictionMaps() {
               </div>
               <p className="text-gray-400 text-sm">
                 Peak foraging zones with optimal conditions for shark activity
-              </p>
-            </div>
+          </p>
+        </div>
 
             <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border border-orange-500/20 rounded-lg p-4">
               <div className="flex items-center gap-3 mb-2">
@@ -1219,22 +1219,22 @@ function GlobalPredictionMaps() {
               <span className="text-2xl">🌊</span>
               Global Hotspots Identified
             </h4>
-            <ul className="space-y-2 text-gray-300">
-              <li className="flex items-start gap-2">
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
                 <span className="text-orange-400 mt-1">•</span>
-                <span>
+              <span>
                   <strong>Gulf Stream:</strong> Intense activity along western Atlantic current
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
                 <span className="text-orange-400 mt-1">•</span>
-                <span>
+              <span>
                   <strong>Kuroshio Current:</strong> High intensity off Japan and Taiwan
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
                 <span className="text-orange-400 mt-1">•</span>
-                <span>
+              <span>
                   <strong>Agulhas Current:</strong> Peak foraging zones off South Africa
                 </span>
               </li>
@@ -1242,9 +1242,9 @@ function GlobalPredictionMaps() {
                 <span className="text-orange-400 mt-1">•</span>
                 <span>
                   <strong>Equatorial Upwelling:</strong> Continuous hotspot band across Pacific
-                </span>
-              </li>
-            </ul>
+              </span>
+            </li>
+          </ul>
           </div>
 
           <div className="bg-slate-900/50 rounded-xl p-6 border border-red-500/20">
@@ -1284,23 +1284,23 @@ function GlobalPredictionMaps() {
         {/* CTA */}
         <div className="mt-8 text-center">
           <div className="inline-block bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-white mb-3">Protecting 100M+ Sharks Annually</h3>
+            <h3 className="text-2xl font-bold text-white mb-3">Potential Conservation Impact</h3>
             <p className="text-white/90 mb-4 max-w-2xl">
-              These predictions enable targeted conservation efforts, reduce bycatch, and prevent
-              human-shark conflicts worldwide
+              This hypothetical model could enable targeted conservation efforts, reduce bycatch, and prevent
+              human-shark conflicts worldwide if implemented
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <div className="px-4 py-2 bg-white/20 rounded-lg">
-                <div className="text-2xl font-bold text-white">1M+ km²</div>
-                <div className="text-xs text-white/80">Ocean Protected</div>
+                <div className="text-2xl font-bold text-white">Global</div>
+                <div className="text-xs text-white/80">Ocean Coverage</div>
               </div>
               <div className="px-4 py-2 bg-white/20 rounded-lg">
-                <div className="text-2xl font-bold text-white">50+</div>
-                <div className="text-xs text-white/80">Countries Using</div>
+                <div className="text-2xl font-bold text-white">Worldwide</div>
+                <div className="text-xs text-white/80">Potential Reach</div>
               </div>
               <div className="px-4 py-2 bg-white/20 rounded-lg">
-                <div className="text-2xl font-bold text-white">98.5%</div>
-                <div className="text-xs text-white/80">Accuracy</div>
+                <div className="text-2xl font-bold text-white">Conceptual</div>
+                <div className="text-xs text-white/80">Model Status</div>
               </div>
             </div>
           </div>
