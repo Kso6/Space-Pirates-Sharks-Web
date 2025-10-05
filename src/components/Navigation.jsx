@@ -11,6 +11,7 @@ export default function Navigation({ currentPage, onNavigate, onReplayIntro }) {
     { id: 'ml-forecast', label: 'ML Model', icon: '🧠' },
     { id: 'model', label: 'How It Works', icon: '⚡' },
     { id: 'tag', label: 'Technology', icon: '🔬' },
+    { id: 'advanced', label: 'Advanced', icon: '📐' },
   ]
 
   const handleNavigate = (id) => {

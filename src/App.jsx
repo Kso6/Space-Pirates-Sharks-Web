@@ -52,6 +52,7 @@ const SFIDashboard = lazy(() => import('./pages/SFIDashboard'))
 const TagSensor = lazy(() => import('./pages/TagSensor'))
 const About = lazy(() => import('./pages/About'))
 const Education = lazy(() => import('./pages/Education'))
+const AdvancedReaders = lazy(() => import('./pages/AdvancedReaders'))
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
@@ -106,6 +107,8 @@ function App() {
               return <TagSensor />
             case 'about':
               return <About />
+            case 'advanced':
+              return <AdvancedReaders />
             default:
               return <Hero onNavigate={setCurrentPage} />
           }
