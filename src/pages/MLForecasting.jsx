@@ -133,8 +133,8 @@ export default function MLForecasting() {
             SHARK Gaussian Model
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
-            Machine Learning forecasting using multi-parameter Gaussian models to predict shark
-            foraging intensity across ocean depths
+            ML forecasting using multi-parameter Gaussian models to predict shark foraging intensity
+            across ocean depths
           </p>
 
           <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-6 max-w-4xl mx-auto">

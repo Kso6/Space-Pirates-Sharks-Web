@@ -28,9 +28,8 @@ export default function Hero({ onNavigate }) {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Revolutionary platform combining NASA satellite data, machine learning, and novel
-            bio-sensor innovation. Active shark prediction with live data and mathematical model
-            tuning with tag data to protect marine ecosystems and save lives worldwide.
+            Predicting active shark foraging habitats using live NASA satellite data and tagged shark
+            parameters to dynamically tune models, protecting marine ecosystems worldwide.
           </p>
 
           {/* CTA Buttons */}
@@ -176,15 +175,15 @@ export default function Hero({ onNavigate }) {
                 icon="🌊"
                 title="Marine Conservation"
                 description="Identify critical shark foraging habitats and migration patterns globally"
-                metric="Worldwide"
-                metricLabel="Coverage"
+                metric="Global"
+                metricLabel="Effective analysis"
               />
               <ImpactCard
                 icon="🏖️"
-                title="Coastal Safety"
+                title="Beach Safety"
                 description="Real-time prediction system for human-shark encounter prevention"
                 metric="Global"
-                metricLabel="Coverage potential"
+                metricLabel="Potential coverage"
               />
               <ImpactCard
                 icon="🎓"

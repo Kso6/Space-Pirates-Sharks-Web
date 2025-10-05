@@ -19,6 +19,7 @@ The **Simulated Feeding Event Response** graph in the TagSensor page is fully fu
 The graph displays real-time pH and NH₄⁺ concentration changes during a simulated shark feeding event:
 
 ### Visual Elements:
+
 - **Red Area Chart**: pH Level changes over time
 - **Green Area Chart**: NH₄⁺ (Ammonium) concentration in mM
 - **X-Axis**: Time in minutes (0-50 minutes)
@@ -29,10 +30,12 @@ The graph displays real-time pH and NH₄⁺ concentration changes during a simu
 ### Three Key Milestones Displayed:
 
 1. **FEEDING DETECTED** (t = 10 min)
+
    - ΔpH ≥ 0.4 threshold triggered
    - Red indicator card
 
 2. **PEAK RESPONSE** (t = 18 min)
+
    - Maximum NH₄⁺ signal detected
    - Green indicator card
 
@@ -55,17 +58,17 @@ const feedingData = useMemo(
       time: i,
       pH:
         i < 10
-          ? 1.5 + Math.random() * 0.3           // Baseline: pH 1.5-1.8
+          ? 1.5 + Math.random() * 0.3 // Baseline: pH 1.5-1.8
           : i < 25
-          ? 2.5 + Math.sin((i - 10) / 3) * 0.8  // Feeding: pH rises to 2.5-3.3
-          : 1.8 + Math.random() * 0.4,          // Recovery: pH returns to ~1.8-2.2
+          ? 2.5 + Math.sin((i - 10) / 3) * 0.8 // Feeding: pH rises to 2.5-3.3
+          : 1.8 + Math.random() * 0.4, // Recovery: pH returns to ~1.8-2.2
       nh4:
         i < 10
-          ? 0.2 + Math.random() * 0.1           // Baseline: 0.2-0.3 mM
+          ? 0.2 + Math.random() * 0.1 // Baseline: 0.2-0.3 mM
           : i < 30
-          ? 0.5 + Math.sin((i - 10) / 5) * 0.3  // Digestion: NH4+ rises to 0.5-0.8 mM
-          : 0.3 + Math.random() * 0.15,         // Recovery: Returns to ~0.3-0.45 mM
-      temp: 18 + Math.random() * 2,             // Stable temperature: 18-20°C
+          ? 0.5 + Math.sin((i - 10) / 5) * 0.3 // Digestion: NH4+ rises to 0.5-0.8 mM
+          : 0.3 + Math.random() * 0.15, // Recovery: Returns to ~0.3-0.45 mM
+      temp: 18 + Math.random() * 2, // Stable temperature: 18-20°C
     })),
   []
 )
@@ -76,11 +79,13 @@ const feedingData = useMemo(
 The synthetic data accurately represents real shark gastric physiology:
 
 1. **pH Changes:**
+
    - Baseline: 1.5-2.0 (highly acidic shark stomach)
    - Feeding: Rises to 2.5-3.5 (food buffers stomach acid)
    - Recovery: Returns to baseline over 30-45 minutes
 
 2. **NH₄⁺ Production:**
+
    - Baseline: Low levels (0.2-0.3 mM)
    - Digestion: Increases as proteins break down (0.5-0.8 mM)
    - Peak: Occurs after pH peak (protein digestion takes time)
@@ -95,6 +100,7 @@ The synthetic data accurately represents real shark gastric physiology:
 ## 🎨 Graph Styling
 
 ### Gradients:
+
 ```javascript
 <linearGradient id="pHGradient">
   <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
@@ -108,6 +114,7 @@ The synthetic data accurately represents real shark gastric physiology:
 ```
 
 ### Colors:
+
 - **pH**: Red (#ef4444) - represents acidity
 - **NH₄⁺**: Green (#10b981) - represents biological marker
 - **Grid**: Dark gray (#334155) with opacity
@@ -120,12 +127,14 @@ The synthetic data accurately represents real shark gastric physiology:
 This simulation is based on real research about shark gastric physiology:
 
 ### pH Detection Principle:
+
 - Sharks have highly acidic stomachs (pH 1-2)
 - Food consumption temporarily raises pH
 - This pH spike is detectable and indicates feeding
 - Recovery time provides information about meal size
 
 ### NH₄⁺ Detection Principle:
+
 - Protein digestion produces ammonium ions
 - NH₄⁺ concentration indicates prey type:
   - **High NH₄⁺**: Fish/squid (protein-rich)
@@ -139,7 +148,7 @@ This simulation is based on real research about shark gastric physiology:
 
 This is the **ONLY graph in the entire project** that uses synthetic data, and it's appropriate because:
 
-1. **It's a Simulation**: The graph demonstrates how a *hypothetical* gastric capsule would respond
+1. **It's a Simulation**: The graph demonstrates how a _hypothetical_ gastric capsule would respond
 2. **Educational Purpose**: Shows students and researchers the expected sensor behavior
 3. **No Real Data Exists**: This is a novel sensor design that hasn't been deployed yet
 4. **Clearly Labeled**: The section is titled "**Simulated** Feeding Event Response"
@@ -153,7 +162,7 @@ This is the **ONLY graph in the entire project** that uses synthetic data, and i
 ✅ **Linting Clean** - No code quality issues  
 ✅ **Graph Rendering** - Displays correctly in all browsers  
 ✅ **Interactive Features** - Tooltip and legend working  
-✅ **Responsive Design** - Scales properly on all screen sizes  
+✅ **Responsive Design** - Scales properly on all screen sizes
 
 ---
 
@@ -170,13 +179,13 @@ When users navigate to the **Tag Sensor** page and click the **Sensing** tab, th
 
 ## 🎯 Comparison with Other Graphs
 
-| Graph | Data Type | Reason |
-|-------|-----------|--------|
-| **Feeding Event Simulation** | ✅ Synthetic | Demonstration of hypothetical sensor |
-| SFI Dashboard | ❌ Real MODIS | Live NASA satellite data |
-| Data Visualization | ❌ Real SSHA | Real NASA SWOT data |
-| ML Forecasting | ❌ Real MODIS | Real NASA satellite data |
-| Ocean 3D Profile | ❌ Real Models | Oceanographic calculations |
+| Graph                        | Data Type      | Reason                               |
+| ---------------------------- | -------------- | ------------------------------------ |
+| **Feeding Event Simulation** | ✅ Synthetic   | Demonstration of hypothetical sensor |
+| SFI Dashboard                | ❌ Real MODIS  | Live NASA satellite data             |
+| Data Visualization           | ❌ Real SSHA   | Real NASA SWOT data                  |
+| ML Forecasting               | ❌ Real MODIS  | Real NASA satellite data             |
+| Ocean 3D Profile             | ❌ Real Models | Oceanographic calculations           |
 
 ---
 

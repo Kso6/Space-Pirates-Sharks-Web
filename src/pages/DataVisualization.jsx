@@ -181,7 +181,7 @@ export default function DataVisualization() {
             Interactive Forecasting Dashboard
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
-            Explore real-time oceanographic data and AI-powered predictions to identify shark
+            Explore real-time oceanographic data and ML-powered predictions to identify shark
             foraging hotspots
           </p>
 
@@ -862,11 +862,11 @@ function Ocean3DProfile() {
         <h2 className="text-3xl font-bold text-white mb-4">3D Ocean Profile Analysis</h2>
         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
           <p className="text-gray-300 text-sm leading-relaxed">
-            <span className="text-cyan-400 font-semibold">Point Cloud Visualization</span> →{' '}
+            <span className="text-cyan-400 font-semibold">Visualize 3D ocean data in real-time</span> →{' '}
             <span className="text-blue-400 font-semibold">Hotspot Prediction</span>: Using NASA SWOT
-            SSH anomaly data collected over a 10-day period, we analyze multi-parameter depth
-            profiles to identify optimal foraging zones where temperature, chlorophyll, and eddy
-            dynamics converge.
+            SSH anomaly data collected over a 10-day period, we analyze ocean thermal dynamics and
+            multi-parameter depth profiles to identify optimal foraging zones where temperature,
+            chlorophyll, and eddy dynamics converge.
           </p>
         </div>
       </div>
@@ -1046,7 +1046,7 @@ function HypotheticalFramework() {
       id: 3,
       title: 'Model Integration',
       icon: '🧠',
-      description: 'AI-powered analysis & prediction',
+      description: 'ML-powered analysis & prediction',
       items: [
         'SFI calculation',
         'Hotspot prediction',
