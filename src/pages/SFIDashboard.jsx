@@ -28,20 +28,55 @@ export default function SFIDashboard() {
   const [modisData, setModisData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [selectedDepth, setSelectedDepth] = useState(100)
-  const [selectedMetric, setSelectedMetric] = useState('intensity')
 
   // Load MODIS data
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('/processed-data/modis-shark-model.json')
-        if (!response.ok) throw new Error('Failed to load data')
-        const data = await response.json()
-        setModisData(data)
+        // Try multiple paths to ensure it works in both dev and deployed environments
+        const paths = [
+          '/processed-data/modis-shark-model.json',
+          './processed-data/modis-shark-model.json',
+          'processed-data/modis-shark-model.json',
+        ]
+
+        let data = null
+        let lastError = null
+
+        for (const path of paths) {
+          try {
+            if (import.meta.env.DEV) {
+              console.log(`Attempting to load MODIS data from ${path}`)
+            }
+            const response = await fetch(path)
+            if (response.ok) {
+              data = await response.json()
+              if (import.meta.env.DEV) {
+                console.log('Data loaded successfully from:', path, {
+                  hasMetadata: !!data.metadata,
+                  hasDepths: !!data.depths,
+                  depthKeys: data.depths ? Object.keys(data.depths) : [],
+                })
+              }
+              break
+            }
+          } catch (err) {
+            if (import.meta.env.DEV) {
+              console.warn(`Failed to load from ${path}:`, err.message)
+            }
+            lastError = err
+          }
+        }
+
+        if (data) {
+          setModisData(data)
+        } else {
+          throw lastError || new Error('Failed to load MODIS data from any path')
+        }
       } catch (err) {
-        // Silent error handling for production
         if (import.meta.env.DEV) {
           console.error('Error loading MODIS data:', err)
+          console.error('Please wait for GitHub Pages deployment to complete (2-3 minutes)')
         }
       } finally {
         setLoading(false)
@@ -49,6 +84,25 @@ export default function SFIDashboard() {
     }
     loadData()
   }, [])
+
+  const depthOptions = useMemo(() => {
+    if (!modisData) return []
+
+    const metadataDepths = modisData.metadata?.depths
+    if (Array.isArray(metadataDepths) && metadataDepths.length > 0) {
+      return [...metadataDepths].sort((a, b) => a - b)
+    }
+
+    const depthKeys = Object.keys(modisData.depths ?? {})
+    return depthKeys.map(Number).sort((a, b) => a - b)
+  }, [modisData])
+
+  useEffect(() => {
+    if (depthOptions.length === 0) return
+    if (!depthOptions.includes(selectedDepth)) {
+      setSelectedDepth(depthOptions[0])
+    }
+  }, [depthOptions, selectedDepth])
 
   // Process SFI data from MODIS
   const sfiData = useMemo(() => {
@@ -102,6 +156,15 @@ export default function SFIDashboard() {
       ),
     }
   }, [sfiData])
+
+  const statsDisplay = globalStats ?? {
+    avgSFI: '0.00',
+    maxSFI: '0.00',
+    minSFI: '0.00',
+    hotspots: 0,
+    totalPoints: 0,
+    avgIntensity: '0.000',
+  }
 
   // Regional breakdown
   const regionalData = useMemo(() => {
@@ -183,7 +246,7 @@ export default function SFIDashboard() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-full mb-6">
             <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
             <span className="text-blue-400 text-sm font-bold">
-              DEMO • Analyzing {globalStats?.totalPoints.toLocaleString()}+ Data Points
+              DEMO • Analyzing {(globalStats?.totalPoints ?? 0).toLocaleString()}+ Data Points
             </span>
           </div>
 
@@ -204,13 +267,13 @@ export default function SFIDashboard() {
           {/* YC-Style Metrics Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             <MetricCard
-              value={globalStats?.avgSFI || '0.00'}
+              value={statsDisplay.avgSFI}
               label="Global Avg SFI"
               trend="Conceptual"
               color="cyan"
             />
             <MetricCard
-              value={globalStats?.hotspots || 0}
+              value={statsDisplay.hotspots}
               label="Potential Hotspots"
               trend="Simulated"
               color="green"
@@ -221,12 +284,7 @@ export default function SFIDashboard() {
               trend="Demo Model"
               color="blue"
             />
-            <MetricCard
-              value="Hypothetical"
-              label="Model Status"
-              trend="Proof of Concept"
-              color="purple"
-            />
+            <MetricCard value="MODIS Demo" label="Dataset" trend="Synthetic Blend" color="purple" />
           </div>
         </motion.div>
 
@@ -245,7 +303,7 @@ export default function SFIDashboard() {
               </p>
             </div>
             <div className="flex gap-2 flex-wrap">
-              {[50, 100, 150, 200, 250, 300, 400, 500].map((depth) => (
+              {(depthOptions.length > 0 ? depthOptions : [selectedDepth]).map((depth) => (
                 <button
                   key={depth}
                   onClick={() => setSelectedDepth(depth)}
@@ -274,8 +332,8 @@ export default function SFIDashboard() {
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-white mb-2">SFI Distribution</h2>
               <p className="text-gray-400">
-                Simulated foraging intensity across {globalStats?.totalPoints.toLocaleString()}{' '}
-                ocean data points
+                Simulated foraging intensity across{' '}
+                {(globalStats?.totalPoints ?? 0).toLocaleString()} ocean data points
               </p>
             </div>
 
@@ -367,18 +425,18 @@ export default function SFIDashboard() {
             </div>
 
             <div className="space-y-6">
-              <StatItem label="Average SFI" value={globalStats?.avgSFI} unit="" color="cyan" />
-              <StatItem label="Maximum SFI" value={globalStats?.maxSFI} unit="" color="green" />
-              <StatItem label="Minimum SFI" value={globalStats?.minSFI} unit="" color="blue" />
+              <StatItem label="Average SFI" value={statsDisplay.avgSFI} unit="" color="cyan" />
+              <StatItem label="Maximum SFI" value={statsDisplay.maxSFI} unit="" color="green" />
+              <StatItem label="Minimum SFI" value={statsDisplay.minSFI} unit="" color="blue" />
               <StatItem
                 label="Active Hotspots"
-                value={globalStats?.hotspots}
+                value={statsDisplay.hotspots}
                 unit="zones"
                 color="orange"
               />
               <StatItem
                 label="Avg Intensity"
-                value={globalStats?.avgIntensity}
+                value={statsDisplay.avgIntensity}
                 unit=""
                 color="purple"
               />
@@ -406,9 +464,13 @@ export default function SFIDashboard() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {regionalData.map((region, idx) => (
-              <RegionalCard key={idx} region={region} />
-            ))}
+            {regionalData.length > 0 ? (
+              regionalData.map((region, idx) => <RegionalCard key={idx} region={region} />)
+            ) : (
+              <div className="md:col-span-2 lg:col-span-4 bg-slate-900/40 rounded-xl p-6 text-center text-gray-400">
+                No regional data available for this depth. Try selecting a different depth above.
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -457,32 +519,9 @@ export default function SFIDashboard() {
               SFI = (SSHA × 0.4) + (Chl-a × 0.3) + (SST × 0.3)
             </div>
             <div className="text-sm text-gray-400">
-              Conceptual model using {globalStats?.totalPoints.toLocaleString()}+ ocean data points
+              Conceptual model using {(globalStats?.totalPoints ?? 0).toLocaleString()}+ ocean data
+              points
             </div>
-          </div>
-        </motion.div>
-
-        {/* CTA Section - YC Style */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-12 text-center"
-        >
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Hypothetical Conservation Framework
-          </h2>
-          <p className="text-white/90 text-xl mb-8 max-w-2xl mx-auto">
-            This conceptual SFI model could help researchers, conservationists, and policymakers
-            protect marine ecosystems worldwide
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg">
-              Access API →
-            </button>
-            <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-xl hover:bg-white/10 transition-all">
-              View Documentation
-            </button>
           </div>
         </motion.div>
       </div>
