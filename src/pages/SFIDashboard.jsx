@@ -23,18 +23,22 @@ import {
   Radar,
 } from 'recharts'
 import { calculateSFI } from '../utils/dataProcessing'
+import fallbackModisSample from '../data/fallback-modis-sample.json'
 
 export default function SFIDashboard() {
   const [modisData, setModisData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [selectedDepth, setSelectedDepth] = useState(100)
+  const [dataWarning, setDataWarning] = useState(null)
 
   // Load MODIS data
   useEffect(() => {
     const loadData = async () => {
       try {
         // Try multiple paths to ensure it works in both dev and deployed environments
+        const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
         const paths = [
+          `${baseUrl}/processed-data/modis-shark-model.json`,
           '/processed-data/modis-shark-model.json',
           './processed-data/modis-shark-model.json',
           'processed-data/modis-shark-model.json',
@@ -68,16 +72,27 @@ export default function SFIDashboard() {
           }
         }
 
-        if (data) {
-          setModisData(data)
+        if (!data) {
+          const fallbackMessage =
+            'Showing cached sample data because the live MODIS dataset could not be loaded.'
+          setModisData(fallbackModisSample)
+          setDataWarning(fallbackMessage)
+          if (import.meta.env.DEV) {
+            console.error('Error loading MODIS data:', lastError)
+            console.warn(fallbackMessage)
+          }
         } else {
-          throw lastError || new Error('Failed to load MODIS data from any path')
+          setModisData(data)
+          setDataWarning(null)
         }
       } catch (err) {
         if (import.meta.env.DEV) {
-          console.error('Error loading MODIS data:', err)
-          console.error('Please wait for GitHub Pages deployment to complete (2-3 minutes)')
+          console.error('Unexpected error loading MODIS data:', err)
         }
+        setModisData(fallbackModisSample)
+        setDataWarning(
+          'Showing cached sample data because the live MODIS dataset could not be loaded.'
+        )
       } finally {
         setLoading(false)
       }
@@ -288,6 +303,14 @@ export default function SFIDashboard() {
           </div>
         </motion.div>
 
+        {dataWarning && (
+          <div className="mb-8">
+            <div className="bg-yellow-500/10 border border-yellow-400/40 text-yellow-300 text-sm md:text-base px-4 py-3 rounded-xl text-center">
+              {dataWarning}
+            </div>
+          </div>
+        )}
+
         {/* Depth Selector */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -386,7 +409,9 @@ export default function SFIDashboard() {
                 <div className="text-center">
                   <p className="text-gray-400 text-lg mb-2">No SFI data available</p>
                   <p className="text-gray-500 text-sm">
-                    {!sfiData
+                    {dataWarning
+                      ? dataWarning
+                      : !sfiData
                       ? 'Loading data...'
                       : sfiData.length === 0
                       ? 'No valid data points found'
