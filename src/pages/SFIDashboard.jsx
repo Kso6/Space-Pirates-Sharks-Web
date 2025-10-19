@@ -499,56 +499,6 @@ export default function SFIDashboard() {
           </div>
         </motion.div>
 
-        {/* SFI Formula Explainer */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-2xl p-8 mb-8"
-        >
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">How SFI Works</h2>
-            <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-              Our proprietary algorithm combines three key oceanographic factors to predict shark
-              foraging behavior
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <FormulaCard
-              icon="🌊"
-              title="Sea Surface Height"
-              weight="40%"
-              description="Detects eddies and fronts where prey concentrates"
-              color="from-blue-500 to-cyan-500"
-            />
-            <FormulaCard
-              icon="🌿"
-              title="Chlorophyll-a"
-              weight="30%"
-              description="Measures phytoplankton blooms that fuel food chains"
-              color="from-green-500 to-emerald-500"
-            />
-            <FormulaCard
-              icon="🌡️"
-              title="Sea Surface Temp"
-              weight="30%"
-              description="Identifies optimal temperature zones for shark species"
-              color="from-orange-500 to-red-500"
-            />
-          </div>
-
-          <div className="bg-slate-900/50 rounded-xl p-6 text-center">
-            <div className="text-sm text-gray-400 mb-2">The Formula</div>
-            <div className="text-2xl font-mono text-white mb-2">
-              SFI = (SSHA × 0.4) + (Chl-a × 0.3) + (SST × 0.3)
-            </div>
-            <div className="text-sm text-gray-400">
-              Conceptual model using {(globalStats?.totalPoints ?? 0).toLocaleString()}+ ocean data
-              points
-            </div>
-          </div>
-        </motion.div>
       </div>
     </div>
   )
