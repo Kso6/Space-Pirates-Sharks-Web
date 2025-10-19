@@ -23,93 +23,30 @@ import {
   Radar,
 } from 'recharts'
 import { calculateSFI } from '../utils/dataProcessing'
-import fallbackModisSample from '../data/fallback-modis-sample.json'
+import modisDataset from '../data/modis-shark-model.json'
 
 export default function SFIDashboard() {
-  const [modisData, setModisData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [selectedDepth, setSelectedDepth] = useState(100)
-  const [dataWarning, setDataWarning] = useState(null)
-
-  // Load MODIS data
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Try multiple paths to ensure it works in both dev and deployed environments
-        const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
-        const paths = [
-          `${baseUrl}/processed-data/modis-shark-model.json`,
-          '/processed-data/modis-shark-model.json',
-          './processed-data/modis-shark-model.json',
-          'processed-data/modis-shark-model.json',
-        ]
-
-        let data = null
-        let lastError = null
-
-        for (const path of paths) {
-          try {
-            if (import.meta.env.DEV) {
-              console.log(`Attempting to load MODIS data from ${path}`)
-            }
-            const response = await fetch(path)
-            if (response.ok) {
-              data = await response.json()
-              if (import.meta.env.DEV) {
-                console.log('Data loaded successfully from:', path, {
-                  hasMetadata: !!data.metadata,
-                  hasDepths: !!data.depths,
-                  depthKeys: data.depths ? Object.keys(data.depths) : [],
-                })
-              }
-              break
-            }
-          } catch (err) {
-            if (import.meta.env.DEV) {
-              console.warn(`Failed to load from ${path}:`, err.message)
-            }
-            lastError = err
-          }
-        }
-
-        if (!data) {
-          const fallbackMessage =
-            'Showing cached sample data because the live MODIS dataset could not be loaded.'
-          setModisData(fallbackModisSample)
-          setDataWarning(fallbackMessage)
-          if (import.meta.env.DEV) {
-            console.error('Error loading MODIS data:', lastError)
-            console.warn(fallbackMessage)
-          }
-        } else {
-          setModisData(data)
-          setDataWarning(null)
-        }
-      } catch (err) {
-        if (import.meta.env.DEV) {
-          console.error('Unexpected error loading MODIS data:', err)
-        }
-        setModisData(fallbackModisSample)
-        setDataWarning(
-          'Showing cached sample data because the live MODIS dataset could not be loaded.'
-        )
-      } finally {
-        setLoading(false)
-      }
+  const modisData = modisDataset
+  const [selectedDepth, setSelectedDepth] = useState(() => {
+    const metadataDepths = modisData.metadata?.depths
+    if (Array.isArray(metadataDepths) && metadataDepths.length > 0) {
+      return metadataDepths[0]
     }
-    loadData()
-  }, [])
+    const depthKeys = Object.keys(modisData.depths ?? {})
+    return depthKeys.length > 0 ? Number(depthKeys[0]) : 100
+  })
 
   const depthOptions = useMemo(() => {
-    if (!modisData) return []
+    if (!modisData?.depths) return []
 
     const metadataDepths = modisData.metadata?.depths
     if (Array.isArray(metadataDepths) && metadataDepths.length > 0) {
       return [...metadataDepths].sort((a, b) => a - b)
     }
 
-    const depthKeys = Object.keys(modisData.depths ?? {})
-    return depthKeys.map(Number).sort((a, b) => a - b)
+    return Object.keys(modisData.depths)
+      .map(Number)
+      .sort((a, b) => a - b)
   }, [modisData])
 
   useEffect(() => {
@@ -121,13 +58,13 @@ export default function SFIDashboard() {
 
   // Process SFI data from MODIS
   const sfiData = useMemo(() => {
-    if (!modisData || !modisData.depths) return null
+    if (!modisData || !modisData.depths) return []
 
     const depthKey = String(selectedDepth)
-    if (!modisData.depths[depthKey]) return null
+    if (!modisData.depths[depthKey]) return []
 
     const depthData = modisData.depths[depthKey].data
-    if (!depthData || !Array.isArray(depthData)) return null
+    if (!depthData || !Array.isArray(depthData)) return []
 
     // Filter valid data and calculate SFI
     const validData = depthData
@@ -155,7 +92,7 @@ export default function SFIDashboard() {
 
   // Calculate global statistics
   const globalStats = useMemo(() => {
-    if (!sfiData) return null
+    if (!sfiData || sfiData.length === 0) return null
 
     const sfiValues = sfiData.map((d) => d.sfi)
     const intensityValues = sfiData.map((d) => d.intensity)
@@ -183,7 +120,7 @@ export default function SFIDashboard() {
 
   // Regional breakdown
   const regionalData = useMemo(() => {
-    if (!sfiData) return []
+    if (!sfiData || sfiData.length === 0) return []
 
     const regions = [
       { name: 'Tropical', latMin: -23.5, latMax: 23.5, color: '#ef4444' },
@@ -238,17 +175,6 @@ export default function SFIDashboard() {
     return bins.filter((bin) => bin.count > 0)
   }, [sfiData])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-          <p className="text-gray-400 text-lg">Loading SFI data...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen px-4 py-24">
       <div className="max-w-7xl mx-auto">
@@ -299,17 +225,9 @@ export default function SFIDashboard() {
               trend="Demo Model"
               color="blue"
             />
-            <MetricCard value="MODIS Demo" label="Dataset" trend="Synthetic Blend" color="purple" />
+            <MetricCard value="MODIS Demo" label="Dataset" trend="NASA MODIS" color="purple" />
           </div>
         </motion.div>
-
-        {dataWarning && (
-          <div className="mb-8">
-            <div className="bg-yellow-500/10 border border-yellow-400/40 text-yellow-300 text-sm md:text-base px-4 py-3 rounded-xl text-center">
-              {dataWarning}
-            </div>
-          </div>
-        )}
 
         {/* Depth Selector */}
         <motion.div
@@ -409,12 +327,8 @@ export default function SFIDashboard() {
                 <div className="text-center">
                   <p className="text-gray-400 text-lg mb-2">No SFI data available</p>
                   <p className="text-gray-500 text-sm">
-                    {dataWarning
-                      ? dataWarning
-                      : !sfiData
-                      ? 'Loading data...'
-                      : sfiData.length === 0
-                      ? 'No valid data points found'
+                    {sfiData.length === 0
+                      ? 'No valid data points found for this depth.'
                       : 'Processing data...'}
                   </p>
                 </div>
@@ -498,7 +412,6 @@ export default function SFIDashboard() {
             )}
           </div>
         </motion.div>
-
       </div>
     </div>
   )
