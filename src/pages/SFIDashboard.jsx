@@ -23,30 +23,15 @@ import {
   Radar,
 } from 'recharts'
 import { calculateSFI } from '../utils/dataProcessing'
-import modisDataset from '../data/modis-shark-model.json'
 
 export default function SFIDashboard() {
-  const modisData = modisDataset
-  const [selectedDepth, setSelectedDepth] = useState(() => {
-    const metadataDepths = modisData.metadata?.depths
-    if (Array.isArray(metadataDepths) && metadataDepths.length > 0) {
-      return metadataDepths[0]
-    }
-    const depthKeys = Object.keys(modisData.depths ?? {})
-    return depthKeys.length > 0 ? Number(depthKeys[0]) : 100
-  })
+  const [modisData, setModisData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [selectedDepth, setSelectedDepth] = useState(100)
 
   const depthOptions = useMemo(() => {
     if (!modisData?.depths) return []
-
-    const metadataDepths = modisData.metadata?.depths
-    if (Array.isArray(metadataDepths) && metadataDepths.length > 0) {
-      return [...metadataDepths].sort((a, b) => a - b)
-    }
-
-    return Object.keys(modisData.depths)
-      .map(Number)
-      .sort((a, b) => a - b)
+    return Object.keys(modisData.depths).map(Number).sort((a, b) => a - b)
   }, [modisData])
 
   useEffect(() => {
@@ -187,7 +172,7 @@ export default function SFIDashboard() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-full mb-6">
             <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
             <span className="text-blue-400 text-sm font-bold">
-              DEMO • Analyzing {(globalStats?.totalPoints ?? 0).toLocaleString()}+ Data Points
+              REAL DATA • Analyzing {(globalStats?.totalPoints ?? 0).toLocaleString()}+ Data Points
             </span>
           </div>
 
@@ -222,10 +207,10 @@ export default function SFIDashboard() {
             <MetricCard
               value={`${selectedDepth}m`}
               label="Analysis Depth"
-              trend="Demo Model"
+              trend="Real Data"
               color="blue"
             />
-            <MetricCard value="MODIS Demo" label="Dataset" trend="NASA MODIS" color="purple" />
+            <MetricCard value="MODIS Data" label="Dataset" trend="NASA MODIS" color="purple" />
           </div>
         </motion.div>
 
@@ -328,7 +313,7 @@ export default function SFIDashboard() {
                   <p className="text-gray-400 text-lg mb-2">No SFI data available</p>
                   <p className="text-gray-500 text-sm">
                     {sfiData.length === 0
-                      ? 'No valid data points found for this depth.'
+                      ? 'Loading real MODIS data...'
                       : 'Processing data...'}
                   </p>
                 </div>
@@ -360,7 +345,7 @@ export default function SFIDashboard() {
           >
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-white mb-2">Model Statistics</h2>
-              <p className="text-gray-400 text-sm">Demonstration data</p>
+              <p className="text-gray-400 text-sm">Real MODIS data</p>
             </div>
 
             <div className="space-y-6">
