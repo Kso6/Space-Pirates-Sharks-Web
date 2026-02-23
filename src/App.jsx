@@ -28,7 +28,7 @@ class ErrorBoundary extends Component {
           <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-8 max-w-md w-full text-center">
             <h2 className="text-2xl font-bold text-white mb-4">Something went wrong</h2>
             <p className="text-gray-300 mb-6">
-              {this.state.error?.message || 'An unexpected error occurred'}
+              An unexpected error occurred. Please try reloading the page.
             </p>
             <button
               onClick={() => window.location.reload()}

@@ -99,15 +99,19 @@ export default function DataVisualization() {
 
   // Memoized event handlers
   const handleDatasetChange = useCallback((e) => {
-    setActiveDataset(e.target.value)
+    const allowed = ['modis-chlorophyll', 'noaa-ssha', 'nasa-sst']
+    if (allowed.includes(e.target.value)) setActiveDataset(e.target.value)
   }, [])
 
   const handleDepthChange = useCallback((e) => {
-    setSeaDepth(parseInt(e.target.value))
+    const allowed = [50, 100, 200, 250, 300]
+    const val = parseInt(e.target.value, 10)
+    if (allowed.includes(val)) setSeaDepth(val)
   }, [])
 
   const handleRegionChange = useCallback((e) => {
-    setSelectedRegion(e.target.value)
+    const allowed = ['gulf-stream', 'sargasso', 'california', 'australia']
+    if (allowed.includes(e.target.value)) setSelectedRegion(e.target.value)
   }, [])
 
   // Load SSHA data on mount (optimized with single loading state)
@@ -192,7 +196,7 @@ export default function DataVisualization() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-4">Something went wrong</h2>
-            <p className="text-gray-300 mb-6">{error.message || 'An unexpected error occurred'}</p>
+            <p className="text-gray-300 mb-6">An unexpected error occurred. Please try reloading the page.</p>
             <button
               onClick={() => window.location.reload()}
               className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg"
