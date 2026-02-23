@@ -43,21 +43,13 @@ export default function MLForecasting() {
 
         for (const path of paths) {
           try {
-            console.log(`Attempting to load MODIS data from ${path}`)
             const response = await fetch(path)
-            console.log(`Response status for ${path}:`, response.status, response.statusText)
 
             if (response.ok) {
               data = await response.json()
-              console.log('Data loaded successfully from:', path, {
-                hasMetadata: !!data.metadata,
-                hasDepths: !!data.depths,
-                depthKeys: data.depths ? Object.keys(data.depths) : [],
-              })
               break
             }
           } catch (err) {
-            console.warn(`Failed to load from ${path}:`, err.message)
             lastError = err
           }
         }
@@ -68,8 +60,7 @@ export default function MLForecasting() {
           throw lastError || new Error('Failed to load MODIS data from any path')
         }
       } catch (err) {
-        console.error('Error loading MODIS data:', err)
-        console.error('Please wait for GitHub Pages deployment to complete (2-3 minutes)')
+        // Data failed to load; UI will display the fallback empty state
       } finally {
         setLoading(false)
       }
@@ -91,17 +82,12 @@ export default function MLForecasting() {
         Math.abs(curr - depth) < Math.abs(prev - depth) ? curr : prev
       )
 
-      console.log(`Processing depth ${closestDepth}m (requested ${depth}m)`)
-
       // Get data for the closest depth
       const depthData = modisData.depths[closestDepth.toString()]
 
       if (!depthData || !depthData.data || depthData.data.length === 0) {
-        console.log('No depth data available')
         return null
       }
-
-      console.log(`Total data points at ${closestDepth}m: ${depthData.data.length}`)
 
       // Filter out invalid data points
       // Note: chlorophyll < 0 indicates fill values (-32767), but we'll be more lenient
@@ -115,10 +101,7 @@ export default function MLForecasting() {
           point.intensity > 0
       )
 
-      console.log(`Valid data points after filtering: ${validData.length}`)
-
       if (validData.length === 0) {
-        console.warn('No valid data points after filtering')
         return null
       }
 
@@ -126,8 +109,6 @@ export default function MLForecasting() {
       const maxPoints = 1000
       const samplingRate = Math.ceil(validData.length / maxPoints)
       const sampledData = validData.filter((_, index) => index % samplingRate === 0)
-
-      console.log(`Sampled ${sampledData.length} points for visualization`)
 
       // Return processed data with proper structure
       return sampledData.map((point) => ({
